@@ -19,10 +19,9 @@ function getDbConfig() {
     return { connectionString: process.env.DATABASE_URL };
   }
 
-  return {
-    connectionString:
-      'postgresql://postgres.evawbpodadolwqlqplgc:AksharMiyani%402005@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres',
-  };
+  throw new Error(
+    'DATABASE_URL not found! Please ensure .env or .env.local exists with a valid DATABASE_URL.'
+  );
 }
 
 async function resetDemoState() {
