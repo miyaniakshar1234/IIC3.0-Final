@@ -6,10 +6,6 @@ const { Client } = pg;
 
 // Load configuration securely from .env.local without hardcoding secrets in version control
 function getDbConfig() {
-  if (process.env.DATABASE_URL) {
-    return { connectionString: process.env.DATABASE_URL };
-  }
-
   if (fs.existsSync('.env.local')) {
     const content = fs.readFileSync('.env.local', 'utf8');
     for (const line of content.split('\n')) {
@@ -19,6 +15,10 @@ function getDbConfig() {
         return { connectionString: val };
       }
     }
+  }
+
+  if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('localhost')) {
+    return { connectionString: process.env.DATABASE_URL };
   }
 
   // Fallback to connection pooler default parameters
