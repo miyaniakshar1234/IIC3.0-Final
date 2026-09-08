@@ -129,7 +129,8 @@ ORDER BY sales_month DESC;`
   // Draft Save & API Notice Modal State
   const [lastSaved, setLastSaved] = useState<string | null>('Sep 08, 2026, 18:20 (Local Draft)');
   const [isSaving, setIsSaving] = useState(false);
-  const [showApiNoticeModal, setShowApiNoticeModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedResult, setSubmittedResult] = useState<any>(null);
 
   const handleSaveDraft = () => {
     setIsSaving(true);
@@ -138,6 +139,28 @@ ORDER BY sales_month DESC;`
       const now = new Date();
       setLastSaved(`Today at ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (Local Draft)`);
     }, 400);
+  };
+
+  const handleFinalize = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`/api/v1/submissions/80000000-0000-0000-0000-000000000001/finalize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: sqlCode,
+          contribution: contributionStatement,
+          links: externalLinks,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error?.message || 'Submission failed');
+      setSubmittedResult(json.data);
+    } catch (err: any) {
+      alert('Error finalizing submission in PostgreSQL: ' + (err?.message || err));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddLink = () => {
@@ -549,90 +572,73 @@ ORDER BY sales_month DESC;`
         </div>
 
         {/* 7. FINALIZATION CTA & NOTICE */}
-        <div className="pb-card p-6 sm:p-7 space-y-4 font-mono">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-base font-bold text-text-primary">
-                Finalize &amp; Submit Challenge
-              </h3>
-              <p className="text-xs text-text-muted mt-0.5 font-light">
-                Lock your revision and submit for rubric evaluation by an assigned evaluator.
-              </p>
+        {submittedResult ? (
+          <div className="bg-success/10 border border-success/30 rounded-3xl p-6 sm:p-8 space-y-4 font-mono animate-fade-in shadow-md">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-success/20 text-success border border-success/30 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-success">
+                  Challenge Solution Locked &amp; Submitted to PostgreSQL!
+                </h3>
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  Immutable revision created. SHA-256 integrity hash: <code className="text-accent bg-canvas px-2 py-0.5 rounded border border-border">{submittedResult.proof_hash}</code>
+                </p>
+                <p className="text-xs text-text-muted mt-1">
+                  Assigned Evaluator: <strong className="text-text-primary">{submittedResult.assigned_reviewer}</strong> · Status: <strong className="text-warning">Awaiting Rubric Evaluation</strong>
+                </p>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setShowApiNoticeModal(true)}
-              className="pb-btn-primary text-xs flex items-center gap-2"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              Finalize Submission →
-            </button>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Link
+                href="/reviewer/queue"
+                className="pb-btn-primary text-xs flex items-center gap-2"
+              >
+                Jump to Reviewer Queue →
+              </Link>
+              <Link
+                href="/student"
+                className="pb-btn-ghost text-xs"
+              >
+                Return to Student Dashboard
+              </Link>
+            </div>
           </div>
+        ) : (
+          <div className="pb-card p-6 sm:p-7 space-y-4 font-mono">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-base font-bold text-text-primary">
+                  Finalize &amp; Submit Challenge
+                </h3>
+                <p className="text-xs text-text-muted mt-0.5 font-light">
+                  Lock your revision and submit directly to the PostgreSQL database for rubric evaluation.
+                </p>
+              </div>
 
-          <div className="p-4 rounded-xl bg-canvas border border-border text-xs text-text-muted leading-relaxed flex items-start gap-2.5">
-            <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-            <span>
-              <strong className="text-text-primary">Draft State Notice:</strong> Your current work is maintained as a local client-side draft. In accordance with ProofBridge architecture, finalizing will trigger an immutable revision lock and submit the artifact to the backend review queue once API endpoints are active.
-            </span>
+              <button
+                type="button"
+                onClick={handleFinalize}
+                disabled={isSubmitting}
+                className="pb-btn-primary text-xs flex items-center gap-2 cursor-pointer"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                {isSubmitting ? 'Locking in DB...' : 'Finalize & Submit to DB →'}
+              </button>
+            </div>
+
+            <div className="p-4 rounded-xl bg-canvas border border-border text-xs text-text-muted leading-relaxed flex items-start gap-2.5">
+              <ShieldCheck className="w-4 h-4 text-success shrink-0 mt-0.5" />
+              <span>
+                <strong className="text-text-primary">Live Database Ledger:</strong> Submitting calls the live ProofBridge PostgreSQL API, generates a cryptographic SHA-256 proof hash of your SQL queries, and queues the submission for Dr. Alok Sharma.
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
-
-      {/* BACKEND INTEGRATION STATUS MODAL */}
-      {showApiNoticeModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-          <div
-            className="w-full max-w-md bg-surface text-text-primary rounded-3xl shadow-lg border border-border-accent p-6 sm:p-7 animate-in zoom-in-95 duration-150 space-y-4 font-mono"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="api-modal-title"
-          >
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-warning/10 border border-warning/30 flex items-center justify-center text-warning">
-                <Layers className="w-5 h-5" />
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowApiNoticeModal(false)}
-                className="p-1 text-text-muted hover:text-text-primary rounded-lg"
-                aria-label="Close dialog"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-1.5">
-              <h4 id="api-modal-title" className="text-base font-bold text-text-primary">
-                Backend Submission API Integration Pending
-              </h4>
-              <p className="text-xs text-text-muted leading-relaxed font-light">
-                The challenge submission endpoint (<code className="font-mono bg-canvas text-accent px-1.5 py-0.5 rounded text-[11px] border border-border">POST /api/v1/submissions/[id]/finalize</code>) is currently being implemented by the Backend Lead.
-              </p>
-            </div>
-
-            <div className="bg-canvas p-4 rounded-2xl border border-border text-xs text-text-secondary space-y-1.5">
-              <span className="font-semibold text-text-primary block">Architectural Status:</span>
-              <ul className="space-y-1 list-disc list-inside text-[11px] text-text-muted">
-                <li>Local workspace inputs remain intact in this browser session.</li>
-                <li>No fake submission records or mock reviewer scores have been created.</li>
-                <li>Full end-to-end locking will be enabled once backend endpoints are connected.</li>
-              </ul>
-            </div>
-
-            <div className="flex items-center justify-end pt-2">
-              <button
-                type="button"
-                onClick={() => setShowApiNoticeModal(false)}
-                className="pb-btn-primary text-xs"
-              >
-                Return to Workspace
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </AppShell>
   );
 }

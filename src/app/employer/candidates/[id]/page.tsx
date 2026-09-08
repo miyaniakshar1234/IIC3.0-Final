@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusBadge, ApplicationStatus } from '@/components/employer/StatusBadge';
@@ -20,7 +20,30 @@ import {
 } from 'lucide-react';
 
 export default function CandidateEvidenceSnapshotPage({ params }: { params: { id: string } }) {
-  const [candidate, setCandidate] = useState({
+  const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLive() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (err) {}
+    }
+    loadLive();
+    const interval = setInterval(loadLive, 3000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const candidate = {
     application_id: '70000000-0000-0000-0000-000000000001',
     version: 1,
     student_name: 'Meera Patel',
@@ -30,21 +53,22 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
     status: 'submitted' as ApplicationStatus,
     applied_at: '2026-09-08T15:10:00Z',
     scoring_version: 'coverage-v1',
-    reviewed_coverage: 96,
+    reviewed_coverage: hasVerifiedSql ? 96 : 61,
     skills: [
       {
         skill_id: '10000000-0000-0000-0000-000000000001',
         skill_name: 'SQL Querying & Data Cleaning',
         required_level: 3,
-        reviewed_level: 3,
+        reviewed_level: hasVerifiedSql ? 3 : 0,
         weight: 35,
-        contribution: 35,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-08T16:00:00Z',
+        contribution: hasVerifiedSql ? 35 : 0,
+        reviewer_name: hasVerifiedSql ? 'Dr. Sharma' : 'Pending Evaluation',
+        reviewed_at: hasVerifiedSql ? '2026-09-08T16:00:00Z' : 'Pending',
         evidence_title: 'Cleaned Monthly Sales Pipeline & Cohort Aggregates',
         criterion_title: 'Query Logic, Filtering & Multi-Table Aggregation',
-        rationale:
-          'Excellent use of CTEs and window LAG for month-over-month growth. Handled null division with NULLIF and validated sentinel values properly.',
+        rationale: hasVerifiedSql
+          ? 'Excellent use of CTEs and window LAG for month-over-month growth. Handled null division with NULLIF and validated sentinel values properly.'
+          : 'Submission locked and in faculty evaluation queue. Awaiting rubric scoring.',
       },
       {
         skill_id: '10000000-0000-0000-0000-000000000002',
@@ -91,12 +115,18 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
     ],
     contribution_statement:
       'I wrote all the SQL queries independently using PostgreSQL 16 syntax. I used Claude 3.5 Sonnet to help construct the initial regex pattern to extract cleaned digits from inconsistent phone and ID fields, which I then manually tested and adapted. If I had more time, I would add partition pruning and composite indexes on (transaction_date, customer_id) for datasets exceeding 10M rows.',
-  });
+  };
 
+  const [currentStatus, setCurrentStatus] = useState<ApplicationStatus>('submitted');
   const [targetStatus, setTargetStatus] = useState<ApplicationStatus>('shortlisted');
   const [transitionReason, setTransitionReason] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const displayCandidate = {
+    ...candidate,
+    status: currentStatus,
+  };
 
   const handleTransition = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,11 +135,7 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 600));
 
-    setCandidate((prev) => ({
-      ...prev,
-      status: targetStatus,
-      version: prev.version + 1,
-    }));
+    setCurrentStatus(targetStatus);
 
     setIsSubmitting(false);
     setTransitionReason('');

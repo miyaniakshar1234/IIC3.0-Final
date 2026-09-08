@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import {
@@ -28,7 +28,62 @@ import {
 
 export default function HomePage() {
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
+  const [isOperating, setIsOperating] = useState(false);
   const currentScore = hasVerifiedSql ? 96 : 61;
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (err) {}
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 3000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const handleToggleDb = async () => {
+    setIsOperating(true);
+    try {
+      if (hasVerifiedSql) {
+        await fetch('/api/v1/demo/reset', { method: 'POST' });
+        setHasVerifiedSql(false);
+      } else {
+        await fetch('/api/v1/reviews/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            submission_id: '80000000-0000-0000-0000-000000000001',
+            reviewer_id: '20000000-0000-0000-0000-000000000001',
+            overall_level: 3,
+            rubric_scores: [
+              {
+                criterion_id: '60000000-0000-0000-0000-000000000001',
+                score: 3,
+                rationale: 'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.',
+              },
+            ],
+            qualitative_notes: 'Meera demonstrated solid production-grade data cleansing practices.',
+          }),
+        });
+        setHasVerifiedSql(true);
+      }
+    } catch (err) {
+      console.error('Error toggling DB state:', err);
+    } finally {
+      setIsOperating(false);
+    }
+  };
 
   const pillars = [
     {
@@ -140,17 +195,22 @@ export default function HomePage() {
 
             {/* Toggle */}
             <button
-              onClick={() => setHasVerifiedSql(!hasVerifiedSql)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md border ${
+              onClick={handleToggleDb}
+              disabled={isOperating}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md border cursor-pointer ${
                 hasVerifiedSql
-                  ? 'bg-success/10 text-success border-success/30 shadow-success/10'
+                  ? 'bg-success/10 text-success border-success/30 shadow-success/10 hover:bg-warning/10 hover:text-warning hover:border-warning/30'
                   : 'bg-accent-soft text-accent border-border-accent shadow-accent/10 hover:bg-accent/20'
               }`}
+              title={hasVerifiedSql ? 'Click to reset database back to 61% baseline' : 'Click to publish Level 3 review directly to PostgreSQL'}
             >
-              {hasVerifiedSql
-                ? <><Check className="w-4 h-4" /><span>SQL Level 3 Published ✓</span></>
-                : <><Zap className="w-4 h-4" /><span>Click → Publish SQL Review</span></>
-              }
+              {isOperating ? (
+                <span>Writing to Supabase...</span>
+              ) : hasVerifiedSql ? (
+                <><Check className="w-4 h-4" /><span>SQL Level 3 in DB ✓ (Click to Reset)</span></>
+              ) : (
+                <><Zap className="w-4 h-4" /><span>Click → Publish Review to PostgreSQL</span></>
+              )}
             </button>
           </div>
 

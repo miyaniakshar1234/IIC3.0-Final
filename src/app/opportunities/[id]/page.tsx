@@ -44,15 +44,17 @@ interface MatchData {
 
 export default function OpportunityDetailPage({ params }: { params: { id: string } }) {
   const [hasSqlReview, setHasSqlReview] = useState(false);
+  const [isOperating, setIsOperating] = useState(false);
   const [data, setData] = useState<MatchData | null>(null);
   const [showFormula, setShowFormula] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
 
-  useEffect(() => {
-    fetch(`/api/v1/opportunities/${params.id}/match?include_sql_review=${hasSqlReview}`)
-      .then((res) => res.json())
-      .then((json) => {
+  const loadMatchData = async () => {
+    try {
+      const res = await fetch(`/api/v1/opportunities/${params.id}/match?student_id=00000000-0000-0000-0000-000000000001`, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
         if (json.data) {
           setData({
             opportunityId: json.data.opportunityId,
@@ -61,10 +63,51 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
             reviewedCoverage: json.data.reviewedCoverage,
             skills: json.data.skills,
           });
+          setHasSqlReview(Boolean(json.data.has_verified_sql));
         }
-      })
-      .catch((err) => console.error('Failed to load match:', err));
-  }, [params.id, hasSqlReview]);
+      }
+    } catch (err) {
+      console.error('Failed to load match:', err);
+    }
+  };
+
+  useEffect(() => {
+    loadMatchData();
+    const interval = setInterval(loadMatchData, 3000);
+    return () => clearInterval(interval);
+  }, [params.id]);
+
+  const handleToggleDb = async () => {
+    setIsOperating(true);
+    try {
+      if (hasSqlReview) {
+        await fetch('/api/v1/demo/reset', { method: 'POST' });
+      } else {
+        await fetch('/api/v1/reviews/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            submission_id: '80000000-0000-0000-0000-000000000001',
+            reviewer_id: '20000000-0000-0000-0000-000000000001',
+            overall_level: 3,
+            rubric_scores: [
+              {
+                criterion_id: '60000000-0000-0000-0000-000000000001',
+                score: 3,
+                rationale: 'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.',
+              },
+            ],
+            qualitative_notes: 'Meera demonstrated solid production-grade data cleansing practices.',
+          }),
+        });
+      }
+      await loadMatchData();
+    } catch (err) {
+      console.error('Error toggling DB in opportunity page:', err);
+    } finally {
+      setIsOperating(false);
+    }
+  };
 
   const coverage = data?.reviewedCoverage ?? (hasSqlReview ? 96 : 61);
   const isHighMatch = coverage >= 90;
@@ -100,19 +143,24 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
 
             {/* Simulation toggle */}
             <div className="bg-canvas p-3 rounded-xl flex flex-col items-start sm:items-end shrink-0 border border-border space-y-1.5">
-              <span className="section-label text-[9px]">Simulation Cockpit</span>
+              <span className="section-label text-[9px]">Live PostgreSQL Ledger</span>
               <button
-                onClick={() => setHasSqlReview(!hasSqlReview)}
-                className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl font-bold transition-all shadow-md ${
+                onClick={handleToggleDb}
+                disabled={isOperating}
+                className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl font-bold transition-all shadow-md cursor-pointer ${
                   hasSqlReview
-                    ? 'bg-success/10 text-success border border-success/30 shadow-success/10'
+                    ? 'bg-success/10 text-success border border-success/30 shadow-success/10 hover:bg-warning/10 hover:text-warning hover:border-warning/30'
                     : 'pb-btn-primary py-2 px-4 text-xs'
                 }`}
+                title={hasSqlReview ? 'Click to reset database back to 61% baseline' : 'Click to publish Level 3 review directly to PostgreSQL'}
               >
-                {hasSqlReview
-                  ? <><Check className="w-3.5 h-3.5" /> SQL Reviewed: 96% Match</>
-                  : <><Zap className="w-3.5 h-3.5" /> Simulate SQL Review (+35%)</>
-                }
+                {isOperating ? (
+                  <span>Syncing DB...</span>
+                ) : hasSqlReview ? (
+                  <><Check className="w-3.5 h-3.5" /> SQL in DB: 96% Match (Click to Reset)</>
+                ) : (
+                  <><Zap className="w-3.5 h-3.5" /> Publish Review to PostgreSQL (+35%)</>
+                )}
               </button>
             </div>
           </div>

@@ -28,9 +28,71 @@ export function AppShell({ children }: AppShellProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
 
+  const [liveScore, setLiveScore] = useState<number | null>(null);
+  const [hasVerifiedSql, setHasVerifiedSql] = useState<boolean>(false);
+  const [isDbOperating, setIsDbOperating] = useState(false);
+
   useEffect(() => {
-    setMounted(true);
+    let isMounted = true;
+    async function checkState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setLiveScore(json.data.match_coverage?.reviewed_coverage ?? 61);
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (err) {}
+    }
+    checkState();
+    const interval = setInterval(checkState, 3000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
+
+  const triggerPublish = async () => {
+    setIsDbOperating(true);
+    try {
+      await fetch('/api/v1/reviews/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          submission_id: '80000000-0000-0000-0000-000000000001',
+          reviewer_id: '20000000-0000-0000-0000-000000000001',
+          overall_level: 3,
+          rubric_scores: [
+            {
+              criterion_id: '60000000-0000-0000-0000-000000000001',
+              score: 3,
+              rationale: 'Verified deduplication using ROW_NUMBER() and NULLIF division guard.',
+            },
+          ],
+          qualitative_notes: 'Meera demonstrated solid production-grade data cleansing practices.',
+        }),
+      });
+      window.location.reload();
+    } catch (err) {
+      alert('DB Error publishing: ' + err);
+    } finally {
+      setIsDbOperating(false);
+    }
+  };
+
+  const triggerReset = async () => {
+    setIsDbOperating(true);
+    try {
+      await fetch('/api/v1/demo/reset', { method: 'POST' });
+      window.location.reload();
+    } catch (err) {
+      alert('DB Error resetting: ' + err);
+    } finally {
+      setIsDbOperating(false);
+    }
+  };
 
   const isDark = mounted ? (resolvedTheme || theme) === 'dark' : true;
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark');
@@ -114,14 +176,33 @@ export function AppShell({ children }: AppShellProps) {
 
           {/* Right actions */}
           <div className="flex items-center gap-2.5">
-            {/* Match engine CTA */}
-            <Link
-              href="/opportunities/40000000-0000-0000-0000-000000000001"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-accent bg-accent-soft hover:bg-accent/20 border border-border-accent transition-all shadow-sm"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              <span className="font-mono">61% → 96%</span>
-            </Link>
+            {/* Live DB State & Control Pill */}
+            <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-surface border border-border text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-text-muted text-[11px]">
+                <span className={`w-2 h-2 rounded-full ${hasVerifiedSql ? 'bg-success animate-pulse' : 'bg-warning animate-pulse'}`} />
+                <span>DB:</span>
+                <strong className={hasVerifiedSql ? 'text-success' : 'text-warning'}>
+                  {liveScore !== null ? `${liveScore}%` : '...'}
+                </strong>
+              </span>
+
+              <button
+                onClick={hasVerifiedSql ? triggerReset : triggerPublish}
+                disabled={isDbOperating}
+                className={`ml-1 text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                  hasVerifiedSql
+                    ? 'bg-warning/10 text-warning border-warning/30 hover:bg-warning/20'
+                    : 'bg-success/10 text-success border-success/30 hover:bg-success/20'
+                }`}
+                title={hasVerifiedSql ? 'Click to reset database to 61% baseline' : 'Click to publish Level 3 review to PostgreSQL (96%)'}
+              >
+                {isDbOperating
+                  ? 'Syncing DB...'
+                  : hasVerifiedSql
+                  ? '🔄 Reset DB (61%)'
+                  : '⚡ Publish DB (96%)'}
+              </button>
+            </div>
 
             {/* Theme toggle */}
             <button
