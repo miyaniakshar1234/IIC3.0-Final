@@ -5,6 +5,10 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'ProofBridge — Evidence-Based Opportunity Portal',
   description: 'Connecting industry requirements to verifiable student proof. Developed for IIC 3.0 MUJ.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
