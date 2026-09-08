@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { StudentNav } from '@/components/student/StudentNav'
-import { CoverageBar } from '@/components/student/CoverageBar'
-import { StatusChip } from '@/components/student/StatusChip'
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { AppShell } from '@/components/ui/AppShell';
+import { CoverageBar } from '@/components/student/CoverageBar';
+import { StatusChip } from '@/components/student/StatusChip';
 import { 
   ArrowRight, 
   Sparkles, 
@@ -14,39 +14,41 @@ import {
   AlertCircle, 
   Briefcase, 
   Award,
-  BookOpen
-} from 'lucide-react'
+  BookOpen,
+  LayoutDashboard,
+  GraduationCap
+} from 'lucide-react';
 
 export default function StudentDashboardPage() {
-  const [showCalculation, setShowCalculation] = useState(false)
-  const [isEmptyAccount, setIsEmptyAccount] = useState(false)
+  const [showCalculation, setShowCalculation] = useState(false);
+  const [isEmptyAccount, setIsEmptyAccount] = useState(false);
 
   // Synthetic Data for Meera (Demo Student)
   const targetOpportunity = {
-    id: 'opp-data-analyst-001',
+    id: '40000000-0000-0000-0000-000000000001',
     title: 'Junior Data Analyst Intern',
     employer: 'Sample Analytics Studio',
     currentCoverage: 61,
     unmetSkill: 'SQL',
     unmetSkillWeight: 35,
     requiredLevel: 3,
-  }
+  };
 
   const recommendedChallenge = {
-    id: 'chl-sql-001',
+    id: '50000000-0000-0000-0000-000000000001',
     title: 'Explain Monthly Sales from Messy Dataset',
     estimatedTime: '2 hours',
     skillCovered: 'SQL (Structured Query Language)',
     weight: 35,
     difficulty: 'Intermediate',
     whyRecommended: 'Covering this 35-weight requirement will raise your reviewed coverage for Junior Data Analyst Intern from 61% to 96%.',
-  }
+  };
 
   const recentFeedback = [
     {
       skill: 'Spreadsheets',
       level: 3,
-      reviewer: 'Dr. Sharma',
+      reviewer: 'Dr. Alok Sharma',
       date: 'Sep 06, 2026',
       challenge: 'Clean and Audit Financial Ledger CSV',
       notes: 'Demonstrates clean formulas, VLOOKUP, and pivot summaries with accurate error checking.',
@@ -54,12 +56,12 @@ export default function StudentDashboardPage() {
     {
       skill: 'Written Communication',
       level: 3,
-      reviewer: 'Prof. Ananya',
+      reviewer: 'Prof. Ananya Sen',
       date: 'Sep 04, 2026',
       challenge: 'Technical Briefing: Database Normalization Tradeoffs',
       notes: 'Clear structural organization and well-justified technical decisions.',
     }
-  ]
+  ];
 
   const activeApplications = [
     {
@@ -71,22 +73,60 @@ export default function StudentDashboardPage() {
       appliedDate: 'Sep 07, 2026',
       coverageAtApplication: '61%',
     }
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-canvas pb-16">
-      <StudentNav />
+    <AppShell>
+      <div className="space-y-8">
+        {/* Student Workspace Subnavigation & Identity Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border rounded-xl p-4 sm:p-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent-soft text-accent flex items-center justify-center font-bold">
+              <GraduationCap className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-bold text-text-primary">Meera Patel</h1>
+                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                  Verified Candidate
+                </span>
+              </div>
+              <p className="text-xs text-text-secondary">
+                Master of Computer Applications (2026) • Demo College of Computing
+              </p>
+            </div>
+          </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        
+          <div className="flex items-center gap-2">
+            <Link
+              href="/student"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-soft text-accent"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/student/passport"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition"
+            >
+              Evidence Passport
+            </Link>
+            <Link
+              href="/student/applications"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition"
+            >
+              My Applications
+            </Link>
+          </div>
+        </div>
+
         {/* Toggle Empty Account View for testing */}
         <div className="flex items-center justify-between bg-surface px-4 py-2 rounded-lg border border-border text-xs text-text-secondary">
-          <span>Demo Account Context: <strong>Meera (MCA 2026)</strong></span>
+          <span>Simulation Mode: <strong>{isEmptyAccount ? 'New Student Account (0 Evidence)' : 'Seeded Candidate (Meera - 61% Baseline)'}</strong></span>
           <button
             onClick={() => setIsEmptyAccount(!isEmptyAccount)}
-            className="text-accent hover:underline font-medium"
+            className="text-accent hover:underline font-semibold"
           >
-            {isEmptyAccount ? 'Switch to Seeded Account (Meera)' : 'Simulate New/Empty Student Account'}
+            {isEmptyAccount ? 'Switch to Seeded Account (Meera)' : 'Simulate Empty/New Student Account'}
           </button>
         </div>
 
@@ -102,8 +142,8 @@ export default function StudentDashboardPage() {
             </p>
             <div className="pt-2">
               <Link
-                href="/challenges/chl-sql-001"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-blue-700 transition shadow-sm"
+                href={`/challenges/${recommendedChallenge.id}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition shadow-sm"
               >
                 Start Beginner Challenge: Explain Monthly Sales
                 <ArrowRight className="w-4 h-4" />
@@ -122,9 +162,9 @@ export default function StudentDashboardPage() {
                   YOUR NEXT STEP FOR MATCHING
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                   Demonstrate <span className="text-blue-400">SQL</span> to increase your match for {targetOpportunity.title}
-                </h1>
+                </h2>
 
                 <p className="text-sm text-slate-300 leading-relaxed">
                   Your current reviewed coverage is <span className="font-bold text-white">61%</span>. You hold reviewed attainments in Spreadsheets, Communication, and Reasoning. Completing the SQL challenge will unlock the missing <span className="font-bold text-amber-300">35-weight requirement</span>.
@@ -143,7 +183,7 @@ export default function StudentDashboardPage() {
                     href={`/opportunities/${targetOpportunity.id}`}
                     className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition border border-slate-700"
                   >
-                    View Role Requirements
+                    View Role Requirements & Match
                   </Link>
                 </div>
               </div>
@@ -209,7 +249,7 @@ export default function StudentDashboardPage() {
                           <td className="p-2.5 font-bold text-emerald-700">25 pts</td>
                         </tr>
                         <tr>
-                          <td className="p-2.5 font-medium text-text-primary">Communication</td>
+                          <td className="p-2.5 font-medium text-text-primary">Written Communication</td>
                           <td className="p-2.5">4</td>
                           <td className="p-2.5 text-emerald-700 font-semibold">Level 3</td>
                           <td className="p-2.5">16</td>
@@ -227,7 +267,7 @@ export default function StudentDashboardPage() {
 
                     <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-center justify-between">
                       <span>Total Current Reviewed Coverage: <strong>61%</strong></span>
-                      <span>After SQL Level 3 Review: <strong className="text-accent text-sm">96%</strong></span>
+                      <span>After SQL Level 3 Review: <strong className="text-accent text-sm font-bold">96%</strong></span>
                     </div>
                   </div>
                 )}
@@ -260,7 +300,7 @@ export default function StudentDashboardPage() {
                     </div>
                     <Link
                       href={`/challenges/${recommendedChallenge.id}`}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent text-white font-semibold hover:bg-blue-700 transition"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent text-white font-semibold hover:bg-accent-hover transition"
                     >
                       Start Challenge Workspace
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -293,7 +333,7 @@ export default function StudentDashboardPage() {
                         </div>
                         <div className="flex items-center justify-between text-xs text-text-secondary pt-1 border-t border-gray-200">
                           <span>Applied: {app.appliedDate}</span>
-                          <span>Coverage Shared: {app.coverageAtApplication}</span>
+                          <span>Coverage: {app.coverageAtApplication}</span>
                         </div>
                       </div>
                     ))}
@@ -347,7 +387,7 @@ export default function StudentDashboardPage() {
           </>
         )}
 
-      </main>
-    </div>
-  )
+      </div>
+    </AppShell>
+  );
 }
