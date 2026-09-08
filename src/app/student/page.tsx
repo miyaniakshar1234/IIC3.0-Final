@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusChip } from '@/components/student/StatusChip';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
+import { BridgeMeSimulator } from '@/components/student/BridgeMeSimulator';
 import {
   GraduationCap,
   ArrowRight,
@@ -23,14 +26,19 @@ import {
   Target,
   Code2,
   Eye,
+  Sparkles,
+  Sliders,
+  Building2,
 } from 'lucide-react';
 
 export default function StudentDashboardPage() {
+  const { user } = useAuth();
   const [isEmptyAccount, setIsEmptyAccount] = useState(false);
   const [showCalculation, setShowCalculation] = useState(false);
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
   const [liveCoverage, setLiveCoverage] = useState(61);
   const [submissionStatus, setSubmissionStatus] = useState<'submitted' | 'reviewed'>('submitted');
+  const [isBridgeMeOpen, setIsBridgeMeOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -58,10 +66,12 @@ export default function StudentDashboardPage() {
   }, []);
 
   const student = {
-    name: 'Meera Patel',
-    avatarInitial: 'MP',
-    program: 'MCA 2026',
-    institution: 'Demo College of Computing',
+    name: user?.name || 'Meera Patel',
+    avatarInitial: user?.avatarInitials || 'MP',
+    program: user?.program || 'MCA 2026',
+    institution: user?.institutionName || 'Manipal University Jaipur (MUJ)',
+    rollNumber: user?.rollNumber || 'MCA-2026-042',
+    affiliationStatus: user?.affiliationStatus || 'approved',
     headline: hasVerifiedSql
       ? 'Aspiring Data Analyst · 4 Verified Attainments (SQL Verified)'
       : 'Aspiring Data Analyst · 3 Verified Attainments',
@@ -95,7 +105,6 @@ export default function StudentDashboardPage() {
   ];
 
   const recentSubmissions = [
-    { id: 'sub-sheet-001', title: 'Dynamic Budget Tracker', skill: 'Spreadsheets', status: 'reviewed' as const, reviewedDate: 'Sep 6' },
     {
       id: 'sub-sql-001',
       title: 'Explain Monthly Sales from Messy Dataset',
@@ -121,13 +130,37 @@ export default function StudentDashboardPage() {
             <div>
               <div className="section-label mb-0.5">Student Workspace</div>
               <h1 className="text-xl font-black text-text-primary">{student.name}</h1>
-              <p className="text-xs text-text-muted font-mono">{student.program} · {student.institution}</p>
+              <div className="flex flex-wrap items-center gap-2 mt-0.5 font-mono text-xs">
+                <span className="text-text-muted">{student.program} · {student.institution}</span>
+                {student.affiliationStatus === 'approved' ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/10 text-success border border-success/30" title="Officially verified by University Registrar">
+                    <ShieldCheck className="w-3 h-3" />
+                    Verified University Student
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-warning/10 text-warning border border-warning/30" title="Awaiting Registrar confirmation">
+                    <Clock className="w-3 h-3" />
+                    Affiliation Pending Approval
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Bridge Me Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsBridgeMeOpen(true)}
+              className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-accent text-white hover:bg-accent/90 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Zap className="w-3.5 h-3.5 fill-white/20" />
+              <span>⚡ Bridge Me</span>
+            </button>
+
             <button
               onClick={() => setIsEmptyAccount(!isEmptyAccount)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                 isEmptyAccount
                   ? 'bg-warning/10 text-warning border-warning/30'
                   : 'bg-surface-raised text-text-secondary border-border hover:border-border-bright'
@@ -135,12 +168,31 @@ export default function StudentDashboardPage() {
             >
               {isEmptyAccount ? '⚡ Show Populated State' : '🔲 Show Empty State'}
             </button>
+
             <Link href={`/opportunities/${targetOpportunity.id}`} className="pb-btn-primary py-1.5 px-3 text-xs">
               <Eye className="w-3.5 h-3.5" />
               Full Match View
             </Link>
           </div>
         </div>
+
+        {/* ── AFFILIATION PENDING ALERT (IF UNVERIFIED) ── */}
+        {student.affiliationStatus === 'pending_approval' && (
+          <div className="p-4 rounded-2xl bg-warning/10 border border-warning/30 text-warning text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+            <div className="flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>
+                <strong>University Affiliation Pending:</strong> Your enrollment under <strong>{student.institution}</strong> (Roll: {student.rollNumber}) has been submitted to the Registrar&apos;s Office.
+              </span>
+            </div>
+            <Link
+              href="/institution/approvals"
+              className="px-3 py-1 rounded-lg bg-warning/20 border border-warning/40 text-warning font-bold text-[11px] hover:bg-warning/30 transition shrink-0 self-start sm:self-center"
+            >
+              <span>Review in Dean&apos;s Queue →</span>
+            </Link>
+          </div>
+        )}
 
         {/* ── STAT BENTO ROW ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -152,155 +204,166 @@ export default function StudentDashboardPage() {
           ].map(({ label, value, sub, icon: Icon, color }) => (
             <div key={label} className="pb-card p-4 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="section-label text-[9px]">{label}</span>
-                <Icon className={`w-3.5 h-3.5 ${color}`} />
+                <span className="section-label text-[10px]">{label}</span>
+                <Icon className={`w-4 h-4 ${color}`} />
               </div>
-              <div className={`metric-value text-3xl ${color}`}>{value}</div>
-              <p className="text-[10px] text-text-muted">{sub}</p>
+              <div className={`metric-value text-2xl sm:text-3xl ${color}`}>{value}</div>
+              <p className="text-[11px] text-text-muted font-mono">{sub}</p>
             </div>
           ))}
         </div>
 
-        {/* ── MAIN GRID ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* ── LIVE PROOF CHAIN (PROVENANCE GRAPH) ── */}
+        <div className="pb-card p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="section-label text-xs">Proof Provenance Graph</span>
+              <h2 className="text-base font-bold text-text-primary mt-0.5">
+                Cryptographic Evidence Chain (Live State)
+              </h2>
+            </div>
+            <span className="text-[11px] font-mono text-text-muted">
+              {hasVerifiedSql ? '✓ Level 3 Attainment Anchored' : '⏳ Awaiting Reviewer Signoff'}
+            </span>
+          </div>
+          <ProofChainViewer
+            isVerified={hasVerifiedSql}
+            studentName={student.name}
+            roleTitle={targetOpportunity.title}
+            reviewedLevel={hasVerifiedSql ? 3 : 0}
+            weight={35}
+            reviewDate={hasVerifiedSql ? 'Just now' : 'Pending'}
+          />
+        </div>
 
-          {/* Coverage breakdown — spans 2 */}
-          <div className="lg:col-span-2 pb-card p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="section-label mb-0.5">Coverage Engine v1</div>
-                <h2 className="text-base font-black text-text-primary">Skill Match Breakdown</h2>
-                <p className="text-[11px] text-text-muted font-mono">{targetOpportunity.title} · {targetOpportunity.employer}</p>
+        {/* ── TARGET ROLE & LIVE COVERAGE CARD ── */}
+        <div className="pb-card-accent p-6 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-accent" />
+                <span className="section-label text-xs">Primary Target Opportunity</span>
               </div>
+              <h2 className="text-xl font-black text-text-primary">{targetOpportunity.title}</h2>
+              <p className="text-xs text-text-secondary font-mono">{targetOpportunity.employer} · Active Role</p>
+            </div>
+            <div className="text-right">
+              <span className="section-label text-xs">Reviewed Coverage</span>
+              <div className="text-3xl sm:text-4xl font-black text-accent mt-0.5">
+                {coverageScore}%
+              </div>
+              <span className="text-[11px] text-text-muted font-mono">Formula: coverage-v1</span>
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex justify-between text-xs font-mono text-text-secondary">
+              <span>Qualification Progress</span>
+              <span>{coverageScore}% of 70% threshold</span>
+            </div>
+            <div className="h-2.5 bg-canvas rounded-full overflow-hidden border border-border">
+              <div
+                className={`h-full transition-all duration-700 ${coverageScore >= 70 ? 'bg-success' : 'bg-warning'}`}
+                style={{ width: `${coverageScore}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Skill Breakdown Rows */}
+          <div className="space-y-2 pt-2 border-t border-border">
+            <div className="flex items-center justify-between">
+              <span className="section-label text-xs">Required Skill Breakdown (4 Skills)</span>
               <button
                 onClick={() => setShowCalculation(!showCalculation)}
-                className="flex items-center gap-1.5 text-[11px] font-semibold text-text-muted hover:text-accent transition-colors"
+                className="text-xs font-mono text-accent hover:underline flex items-center gap-1 cursor-pointer"
               >
-                Formula {showCalculation ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                <span>{showCalculation ? 'Hide Formula' : 'Show Math Engine'}</span>
+                {showCalculation ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </button>
             </div>
 
-            {showCalculation && (
-              <div className="bg-canvas rounded-xl p-3 border border-border font-mono text-[10px] space-y-0.5 text-text-secondary">
-                <p className="text-text-muted">-- coverage-v1 formula</p>
-                <p>coverage_score = SUM(weight × min(reviewed/required, 1)) / total_weight × 100</p>
-                <p className="text-accent">= (25+12+24+0) / (25+16+24+35) × 100 = <span className="font-black">61%</span></p>
-              </div>
-            )}
-
-            {/* Score bar */}
-            {!isEmptyAccount && (
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-[11px] font-mono">
-                  <span className="text-text-muted">Current: <span className="text-accent font-bold">61%</span></span>
-                  <span className="text-text-muted">Potential: <span className="text-success font-bold">96%</span></span>
-                </div>
-                <div className="relative h-3 bg-surface-raised rounded-full overflow-hidden">
-                  <div className="absolute h-full bg-success/20 rounded-full" style={{ width: '96%' }} />
-                  <div className="absolute h-full bg-accent rounded-full transition-all duration-700" style={{ width: `${coverageScore}%` }} />
-                </div>
-                <p className="text-[10px] text-text-muted font-mono">Gap: SQL Missing (35 pts) · Publish SQL review to reach 96%</p>
-              </div>
-            )}
-
-            {/* Skill rows */}
-            <div className="space-y-2">
-              {(isEmptyAccount ? [] : skillBreakdown).map((s) => (
-                <div key={s.skill} className="flex items-center gap-3 p-3 bg-canvas rounded-xl border border-border">
-                  <div className={`w-2 h-2 rounded-full shrink-0 ${
-                    s.status === 'reviewed' ? 'bg-success' : s.status === 'awaiting-review' ? 'bg-warning' : 'bg-border-bright'
-                  }`} />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-semibold text-text-primary truncate">{s.skill}</span>
-                      <span className="text-[10px] font-mono text-text-muted shrink-0">w={s.weight}</span>
+            <div className="divide-y divide-border border border-border rounded-xl overflow-hidden bg-canvas">
+              {skillBreakdown.map((item) => (
+                <div key={item.skill} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                  <div className="space-y-0.5">
+                    <div className="font-bold text-text-primary">{item.skill}</div>
+                    <div className="text-[10px] text-text-muted font-mono">
+                      Weight: {item.weight}% · Required: Level {item.requiredLevel} · Attained: Level {item.reviewedLevel}
                     </div>
-                    {s.reviewer && (
-                      <p className="text-[10px] text-text-muted">{s.reviewer} · {s.reviewedDate}</p>
+                  </div>
+                  <div className="flex items-center gap-3 font-mono">
+                    {showCalculation && (
+                      <span className="text-[11px] text-text-secondary bg-surface px-2 py-0.5 rounded border border-border">
+                        {item.formulaNote}
+                      </span>
                     )}
-                  </div>
-                  <div className="text-right shrink-0">
-                    <StatusChip status={s.status} />
-                    <p className="text-[10px] font-mono text-text-muted mt-0.5">
-                      {s.contribution > 0 ? `+${s.contribution} pts` : '0 pts'}
-                    </p>
+                    <span className="font-bold text-text-primary">+{item.contribution}%</span>
+                    <StatusChip status={item.status} />
                   </div>
                 </div>
               ))}
-              {isEmptyAccount && (
-                <div className="text-center py-8 text-text-muted">
-                  <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                  <p className="text-sm font-semibold">No submissions yet</p>
-                  <p className="text-xs">Submit a challenge to start building proof</p>
-                </div>
-              )}
             </div>
-          </div>
-
-          {/* Right column */}
-          <div className="space-y-4">
-
-            {/* Recommended challenge */}
-            <div className="pb-card-accent p-5 space-y-3">
-              <div className="section-label">Recommended Next Step</div>
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent-soft border border-border-accent flex items-center justify-center shrink-0">
-                  <Zap className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-text-primary leading-snug">{recommendedChallenge.title}</h3>
-                  <p className="text-[10px] font-mono text-text-muted mt-0.5">{recommendedChallenge.skillCovered}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-                <span className="pb-badge"><Clock className="w-3 h-3" />{recommendedChallenge.estimatedTime}</span>
-                <span className="pb-badge"><Award className="w-3 h-3" />{recommendedChallenge.requiredLevel}</span>
-                <span className="pb-badge pb-badge-accent col-span-2">+{recommendedChallenge.weight} pts potential</span>
-              </div>
-              <Link href={`/challenges/${recommendedChallenge.id}`} className="pb-btn-primary w-full justify-center text-xs py-2">
-                <Terminal className="w-3.5 h-3.5" />
-                Start Challenge
-              </Link>
-            </div>
-
-            {/* Recent submissions */}
-            <div className="pb-card p-5 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="section-label">Recent Submissions</div>
-                <Link href="/student/submissions" className="text-[10px] text-accent font-semibold hover:underline">View all</Link>
-              </div>
-              {(isEmptyAccount ? [] : recentSubmissions).map((sub) => (
-                <Link
-                  key={sub.id}
-                  href={`/student/submissions/${sub.id}`}
-                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer group"
-                >
-                  <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${sub.status === 'reviewed' ? 'bg-success' : 'bg-warning'}`} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-semibold text-text-primary group-hover:text-accent transition-colors truncate">{sub.title}</p>
-                    <p className="text-[10px] text-text-muted">{sub.skill}</p>
-                  </div>
-                  <StatusChip status={sub.status} />
-                </Link>
-              ))}
-              {isEmptyAccount && (
-                <p className="text-[11px] text-text-muted text-center py-4">No submissions yet</p>
-              )}
-            </div>
-
-            {/* Passport quick link */}
-            <Link href="/student/passport" className="pb-card p-4 flex items-center gap-3 hover:border-border-accent group transition-all">
-              <div className="w-8 h-8 rounded-lg bg-info/10 border border-info/20 flex items-center justify-center">
-                <Fingerprint className="w-4 h-4 text-info" />
-              </div>
-              <div className="flex-1">
-                <p className="text-xs font-bold text-text-primary">Skill Passport</p>
-                <p className="text-[10px] text-text-muted">View your verified attainments</p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-accent transition-colors" />
-            </Link>
           </div>
         </div>
+
+        {/* ── RECOMMENDED CHALLENGE BANNER ── */}
+        {!hasVerifiedSql && (
+          <div className="pb-card p-6 border-2 border-accent/30 bg-accent-soft/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-accent" />
+                <span className="text-xs font-bold text-accent font-mono">HIGHEST ROI INTERVENTION</span>
+              </div>
+              <h3 className="text-base font-bold text-text-primary">
+                {recommendedChallenge.title}
+              </h3>
+              <p className="text-xs text-text-secondary">
+                Completing this challenge and receiving faculty signoff at Level 3 will leap your match from <strong>61% to 96%</strong>.
+              </p>
+            </div>
+            <Link
+              href="/challenges/30000000-0000-0000-0000-000000000001"
+              className="pb-btn-primary text-xs py-2.5 px-4 shrink-0 flex items-center gap-2"
+            >
+              <span>Launch In-Browser SQL Runner</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
+
+        {/* ── RECENT SUBMISSIONS TABLE ── */}
+        <div className="pb-card p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold text-text-primary">Recent Code Submissions</h2>
+            <Link href="/student/submissions" className="text-xs font-mono text-accent hover:underline">
+              View All Submissions →
+            </Link>
+          </div>
+          <div className="divide-y divide-border border border-border rounded-xl overflow-hidden bg-canvas">
+            {recentSubmissions.map((sub) => (
+              <div key={sub.id} className="p-3.5 flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-bold text-text-primary">{sub.title}</div>
+                  <div className="text-[10px] text-text-muted font-mono">{sub.skill} · ID: {sub.id}</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {sub.reviewedDate && (
+                    <span className="text-[10px] text-text-muted font-mono">{sub.reviewedDate}</span>
+                  )}
+                  <StatusChip status={sub.status} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── BRIDGE ME SIMULATOR MODAL ── */}
+        <BridgeMeSimulator
+          isOpen={isBridgeMeOpen}
+          onClose={() => setIsBridgeMeOpen(false)}
+          currentCoverage={liveCoverage}
+          hasVerifiedSql={hasVerifiedSql}
+        />
 
       </div>
     </AppShell>

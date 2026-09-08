@@ -142,7 +142,7 @@ export default function StudentSubmissionsListPage() {
               My Challenge Submissions
             </h1>
             <p className="text-xs sm:text-sm text-text-secondary font-mono max-w-2xl leading-relaxed">
-              Every submission is immutably versioned with cryptographic hashes and audited by verified academic faculty.
+              Each synthetic demo submission keeps a frozen revision, server-calculated digest, and named human review record.
             </p>
           </div>
 

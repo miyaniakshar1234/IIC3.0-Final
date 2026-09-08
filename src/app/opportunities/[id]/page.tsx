@@ -23,6 +23,8 @@ import {
   Fingerprint,
   Target,
 } from 'lucide-react';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
+import { BridgeMeSimulator } from '@/components/student/BridgeMeSimulator';
 
 interface SkillRow {
   skillId: string;
@@ -49,6 +51,7 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
   const [showFormula, setShowFormula] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
+  const [isBridgeMeOpen, setIsBridgeMeOpen] = useState(false);
 
   const loadMatchData = async () => {
     try {
@@ -77,37 +80,7 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
     return () => clearInterval(interval);
   }, [params.id]);
 
-  const handleToggleDb = async () => {
-    setIsOperating(true);
-    try {
-      if (hasSqlReview) {
-        await fetch('/api/v1/demo/reset', { method: 'POST' });
-      } else {
-        await fetch('/api/v1/reviews/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            submission_id: '80000000-0000-0000-0000-000000000001',
-            reviewer_id: '20000000-0000-0000-0000-000000000001',
-            overall_level: 3,
-            rubric_scores: [
-              {
-                criterion_id: '60000000-0000-0000-0000-000000000001',
-                score: 3,
-                rationale: 'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.',
-              },
-            ],
-            qualitative_notes: 'Meera demonstrated solid production-grade data cleansing practices.',
-          }),
-        });
-      }
-      await loadMatchData();
-    } catch (err) {
-      console.error('Error toggling DB in opportunity page:', err);
-    } finally {
-      setIsOperating(false);
-    }
-  };
+
 
   const coverage = data?.reviewedCoverage ?? (hasSqlReview ? 96 : 61);
   const isHighMatch = coverage >= 90;
@@ -141,28 +114,7 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
               </h1>
             </div>
 
-            {/* Simulation toggle */}
-            <div className="bg-canvas p-3 rounded-xl flex flex-col items-start sm:items-end shrink-0 border border-border space-y-1.5">
-              <span className="section-label text-[9px]">Live PostgreSQL Ledger</span>
-              <button
-                onClick={handleToggleDb}
-                disabled={isOperating}
-                className={`flex items-center gap-2 text-xs px-4 py-2 rounded-xl font-bold transition-all shadow-md cursor-pointer ${
-                  hasSqlReview
-                    ? 'bg-success/10 text-success border border-success/30 shadow-success/10 hover:bg-warning/10 hover:text-warning hover:border-warning/30'
-                    : 'pb-btn-primary py-2 px-4 text-xs'
-                }`}
-                title={hasSqlReview ? 'Click to reset database back to 61% baseline' : 'Click to publish Level 3 review directly to PostgreSQL'}
-              >
-                {isOperating ? (
-                  <span>Syncing DB...</span>
-                ) : hasSqlReview ? (
-                  <><Check className="w-3.5 h-3.5" /> SQL in DB: 96% Match (Click to Reset)</>
-                ) : (
-                  <><Zap className="w-3.5 h-3.5" /> Publish Review to PostgreSQL (+35%)</>
-                )}
-              </button>
-            </div>
+            {/* Simulation toggle removed - users must use the real Bridge Me -> Challenge -> Reviewer flow */}
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] text-text-muted font-mono pt-2 border-t border-border">
@@ -183,13 +135,23 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
               </h2>
               <p className="text-xs text-text-muted mt-0.5">Mathematically compiled from accredited faculty rubrics. Zero AI hallucinations.</p>
             </div>
-            <div className="flex items-baseline gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className={`metric-value text-5xl transition-all duration-500 ${isHighMatch ? 'text-success' : 'text-accent'}`}>
                 {coverage}%
               </span>
               <span className="text-xs font-semibold text-text-muted font-mono">
                 {isHighMatch ? '(Shortlist Ready)' : '(Actionable Gap)'}
               </span>
+              {!isHighMatch && (
+                <button
+                  type="button"
+                  onClick={() => setIsBridgeMeOpen(true)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-accent text-white hover:bg-accent/90 flex items-center gap-1.5 transition-all shadow-sm"
+                >
+                  <Zap className="w-3.5 h-3.5 fill-white/20" />
+                  <span>⚡ Bridge Me (+35%)</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -304,6 +266,26 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
             </div>
           </div>
         </div>
+
+        {/* ── LIVE EVIDENCE PROVENANCE CHAIN ── */}
+        <ProofChainViewer
+          isVerified={hasSqlReview || coverage >= 90}
+          studentName="Meera Patel"
+          roleTitle={data?.opportunityTitle || 'Junior Data Analyst Intern'}
+          reviewedLevel={hasSqlReview ? 3 : 0}
+          weight={35}
+          reviewDate={hasSqlReview ? 'Just now' : 'Pending'}
+        />
+
+        {/* ── BRIDGE ME SIMULATOR MODAL ── */}
+        <BridgeMeSimulator
+          isOpen={isBridgeMeOpen}
+          onClose={() => setIsBridgeMeOpen(false)}
+          currentCoverage={coverage}
+          hasVerifiedSql={hasSqlReview}
+          targetRoleTitle={data?.opportunityTitle || 'Junior Data Analyst Intern'}
+          targetEmployer={data?.employerName || 'Sample Analytics Studio'}
+        />
 
         {/* ── APPLY MODAL ── */}
         {isApplyModalOpen && (

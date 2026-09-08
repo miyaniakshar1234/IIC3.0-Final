@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
+import { SqlTestRunner } from '@/components/student/SqlTestRunner';
 import { 
   Clock, 
   Sparkles, 
@@ -24,12 +25,84 @@ import {
   Zap,
 } from 'lucide-react';
 
+const STARTER_SQL = `-- ============================================================================
+-- STARTER EXAMPLE ONLY — NOT SUBMITTED
+-- Instructions: Write your PostgreSQL solution below.
+-- Handle NULL dates, filter for COMPLETED transactions, and calculate MoM growth.
+-- ============================================================================
+
+WITH monthly_summary AS (
+    SELECT 
+        DATE_TRUNC('month', transaction_date) AS sales_month,
+        product_category,
+        SUM(amount) AS total_revenue,
+        COUNT(DISTINCT customer_id) AS active_buyers
+    FROM raw_sales_transactions
+    WHERE transaction_status = 'COMPLETED'
+      AND transaction_date IS NOT NULL
+    GROUP BY 1, 2
+)
+SELECT 
+    sales_month,
+    product_category,
+    total_revenue,
+    active_buyers
+    -- TODO: Add LAG window function for Month-over-Month growth
+FROM monthly_summary
+ORDER BY sales_month DESC;`;
+
+const EXEMPLAR_SQL = `-- Monthly Sales Aggregation & Cohort Metrics
+-- Author: Meera Patel (MCA 2026) • Target: PostgreSQL 16
+-- Challenge: Monthly Sales Breakdown
+
+WITH clean_transactions AS (
+    SELECT
+        transaction_id,
+        COALESCE(
+            NULLIF(transaction_date, '')::timestamp,
+            '1970-01-01'::timestamp
+        ) AS clean_date,
+        REGEXP_REPLACE(customer_raw_id, '[^0-9]', '', 'g')::bigint AS customer_id,
+        CASE
+            WHEN amount_minor <= 0 OR amount_minor = 999999 THEN NULL
+            ELSE amount_minor
+        END AS validated_amount_minor,
+        payment_status
+    FROM raw_sales_feed
+    WHERE is_test_record IS NOT TRUE
+),
+monthly_metrics AS (
+    SELECT
+        DATE_TRUNC('month', clean_date) AS sales_month,
+        COUNT(DISTINCT customer_id) AS unique_buyers,
+        COUNT(transaction_id) AS order_volume,
+        SUM(validated_amount_minor) / 100.0 AS gross_revenue_inr,
+        ROUND(AVG(validated_amount_minor) / 100.0, 2) AS aov_inr
+    FROM clean_transactions
+    WHERE payment_status = 'completed'
+      AND clean_date >= '2026-01-01'
+    GROUP BY DATE_TRUNC('month', clean_date)
+)
+SELECT
+    sales_month,
+    unique_buyers,
+    order_volume,
+    gross_revenue_inr,
+    aov_inr,
+    ROUND(
+        (gross_revenue_inr - LAG(gross_revenue_inr, 1) OVER (ORDER BY sales_month))
+        / NULLIF(LAG(gross_revenue_inr, 1) OVER (ORDER BY sales_month), 0) * 100.0,
+        2
+    ) AS mom_revenue_growth_pct
+FROM monthly_metrics
+ORDER BY sales_month ASC;`;
+
 export default function ChallengeWorkspacePage({ params }: { params: { id: string } }) {
   // Candidate Context (Meera Patel)
   const student = {
     name: 'Meera Patel',
     program: 'MCA 2026',
-    institution: 'Demo College of Computing',
+    institution: 'Manipal University Jaipur (MUJ)',
     currentCoverage: 61,
     potentialCoverage: 96,
   };
@@ -82,35 +155,7 @@ export default function ChallengeWorkspacePage({ params }: { params: { id: strin
   };
 
   const [submissionTitle, setSubmissionTitle] = useState('Monthly Sales Analysis and SQL Solution');
-
-  const [sqlCode, setSqlCode] = useState(
-`-- ============================================================================
--- STARTER EXAMPLE ONLY — NOT SUBMITTED
--- Instructions: Write your PostgreSQL solution below.
--- Handle NULL dates, filter for COMPLETED transactions, and calculate MoM growth.
--- ============================================================================
-
-WITH monthly_summary AS (
-    SELECT 
-        DATE_TRUNC('month', transaction_date) AS sales_month,
-        product_category,
-        SUM(amount) AS total_revenue,
-        COUNT(DISTINCT customer_id) AS active_buyers
-    FROM raw_sales_transactions
-    WHERE transaction_status = 'COMPLETED'
-      AND transaction_date IS NOT NULL
-    GROUP BY 1, 2
-)
-SELECT 
-    sales_month,
-    product_category,
-    total_revenue,
-    active_buyers
-    -- TODO: Add LAG window function for Month-over-Month growth
-FROM monthly_summary
-ORDER BY sales_month DESC;`
-  );
-
+  const [sqlCode, setSqlCode] = useState(STARTER_SQL);
   const [contributionStatement, setContributionStatement] = useState(
     'I developed the query structure using PostgreSQL syntax. I identified missing transaction dates and implemented explicit filters for completed orders. I referenced documentation for date truncation syntax, but developed all aggregations and window logic independently.'
   );
@@ -126,11 +171,23 @@ ORDER BY sales_month DESC;`
   const [newLinkInput, setNewLinkInput] = useState('');
   const [linkError, setLinkError] = useState<string | null>(null);
 
-  // Draft Save & API Notice Modal State
+  // Draft Save & API State
   const [lastSaved, setLastSaved] = useState<string | null>('Sep 08, 2026, 18:20 (Local Draft)');
   const [isSaving, setIsSaving] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedResult, setSubmittedResult] = useState<any>(null);
+
+  const handleLoadExemplar = () => {
+    setSqlCode(EXEMPLAR_SQL);
+    setContributionStatement('I independently cleaned 14 missing date fields using PostgreSQL COALESCE and NULLIF guards, and constructed all multi-table joins without automated scaffolding. I used ChatGPT solely to verify regex digit replacement syntax for corrupted customer IDs, which I tested and tuned against edge-case anomalies.');
+    setAiDisclosure('ai-syntax');
+  };
+
+  const handleResetStarter = () => {
+    setSqlCode(STARTER_SQL);
+    setContributionStatement('I developed the query structure using PostgreSQL syntax. I identified missing transaction dates and implemented explicit filters for completed orders. I referenced documentation for date truncation syntax, but developed all aggregations and window logic independently.');
+    setAiDisclosure('no-ai');
+  };
 
   const handleSaveDraft = () => {
     setIsSaving(true);
@@ -148,6 +205,7 @@ ORDER BY sales_month DESC;`
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          title: submissionTitle,
           code: sqlCode,
           contribution: contributionStatement,
           links: externalLinks,
@@ -193,7 +251,7 @@ ORDER BY sales_month DESC;`
 
   return (
     <AppShell>
-      <div className="space-y-6 max-w-6xl mx-auto animate-fade-in">
+      <div className="space-y-6 max-w-6xl mx-auto animate-fade-in pb-16">
         
         {/* Top Breadcrumb / Back Link */}
         <div className="flex items-center justify-between">
@@ -217,13 +275,14 @@ ORDER BY sales_month DESC;`
             <div className="space-y-2">
               <div className="flex items-center gap-2.5 flex-wrap">
                 <span className="pb-badge pb-badge-accent font-mono font-bold">
-                  Target Skill: {challengeDetails.skill}
-                </span>
-                <span className="pb-badge font-mono font-semibold text-warning border-warning/30 bg-warning/10">
-                  {challengeDetails.status}
+                  {challengeDetails.requiredLevel}
                 </span>
                 <span className="text-xs font-mono text-text-muted">
-                  Target Level: <strong className="text-text-primary">{challengeDetails.requiredLevel}</strong>
+                  Weight: <strong className="text-accent">{challengeDetails.weight}%</strong> toward Target Match
+                </span>
+                <span className="text-xs font-mono text-warning bg-warning/10 border border-warning/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  {challengeDetails.estimatedTime}
                 </span>
               </div>
 
@@ -231,91 +290,78 @@ ORDER BY sales_month DESC;`
                 {challengeDetails.title}
               </h1>
 
-              <p className="text-xs text-text-muted font-mono">
-                Linked Role: <strong className="text-text-secondary">{targetOpportunity.title}</strong> at {targetOpportunity.employer} ({targetOpportunity.location})
+              <p className="text-xs sm:text-sm text-text-muted font-mono">
+                Target Role: <strong className="text-text-secondary">{targetOpportunity.title}</strong> at {targetOpportunity.employer} ({targetOpportunity.compensation})
               </p>
             </div>
 
-            {/* Metrics Chips */}
-            <div className="flex items-center gap-3 shrink-0 flex-wrap">
-              <div className="bg-canvas px-4 py-2.5 rounded-2xl border border-border text-left shadow-inner font-mono">
-                <span className="text-[10px] uppercase font-bold text-text-muted block">Requirement Weight</span>
-                <span className="metric-value text-xl text-accent">35 Points (35%)</span>
+            {/* Match Impact Box */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 bg-canvas p-4 rounded-2xl border border-border shrink-0 shadow-inner">
+              <div className="text-center px-3">
+                <span className="text-[10px] uppercase tracking-wider text-text-muted font-mono block">Baseline Match</span>
+                <span className="metric-value text-2xl text-text-secondary">{student.currentCoverage}%</span>
               </div>
-              <div className="bg-canvas px-4 py-2.5 rounded-2xl border border-border text-left shadow-inner font-mono">
-                <span className="text-[10px] uppercase font-bold text-text-muted block">Estimated Effort</span>
-                <span className="metric-value text-base text-text-primary flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-accent" />
-                  {challengeDetails.estimatedTime}
-                </span>
+              <div className="text-accent font-bold text-lg hidden sm:block">→</div>
+              <div className="text-center px-3">
+                <span className="text-[10px] uppercase tracking-wider text-success font-mono block">After L3 Attainment</span>
+                <span className="metric-value text-2xl text-success font-black">{student.potentialCoverage}%</span>
               </div>
             </div>
           </div>
 
-          {/* Contextual Coverage Leap Explanation */}
-          <div className="p-4 rounded-2xl bg-canvas border border-border-accent text-xs text-text-secondary flex flex-col sm:flex-row sm:items-start justify-between gap-4 relative z-10 font-mono">
-            <div className="flex items-start gap-3">
-              <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-bold text-accent block">
-                  Deterministic Skill Mapping &amp; Coverage Context:
-                </span>
-                <p className="leading-relaxed text-text-secondary">
-                  Your current reviewed coverage is <strong className="text-warning font-bold">61%</strong>. If an assigned faculty evaluator assesses this SQL submission at <strong className="text-text-primary">Level 3</strong> or above against the anchored rubric, your reviewed coverage will rise to <strong className="text-success font-bold">96%</strong>!
-                </p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-text-secondary relative z-10">
+            <div className="flex items-start gap-2.5">
+              <Sparkles className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+              <span>Demonstrate competence on realistic messy industry data rather than textbook syntax trivia.</span>
             </div>
-            <span className="pb-badge text-[11px] font-bold text-info bg-info/10 border-info/30 shrink-0 self-start sm:self-center">
-              Requires Human Review
-            </span>
+            <div className="flex items-start gap-2.5">
+              <ShieldCheck className="w-4 h-4 text-success shrink-0 mt-0.5" />
+              <span>Your code is reviewed and signed off by qualified faculty (Dr. Alok Sharma), locking an unalterable SHA-256 hash.</span>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <Award className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+              <span>Passing Level 3 satisfies the 35% SQL requirement for Sample Analytics Studio and 14 other partner roles.</span>
+            </div>
           </div>
         </div>
 
-        {/* 2. PROBLEM & REQUIREMENTS SECTION */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 pb-card p-6 sm:p-7 space-y-4">
-            <h2 className="section-label flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Problem Brief &amp; Analytical Objectives
-            </h2>
-
-            <p className="text-sm text-text-secondary leading-relaxed font-light">
+        {/* 2. PROBLEM STATEMENT & DELIVERABLES */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="lg:col-span-7 pb-card p-6 sm:p-7 space-y-4">
+            <h2 className="section-label text-xs">Problem Overview &amp; Data Challenges</h2>
+            <p className="text-xs text-text-secondary leading-relaxed font-mono">
               {challengeDetails.problemStatement.overview}
             </p>
 
-            <div className="space-y-2 pt-2 font-mono">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-text-primary">
-                Identified Data Quality Challenges:
-              </h3>
-              <ul className="space-y-1.5 text-xs text-text-muted list-disc list-inside">
+            <div className="space-y-2 pt-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-text-primary block font-mono">
+                Specific Dataset Anomalies to Solve:
+              </span>
+              <ul className="space-y-1.5 text-xs text-text-muted list-disc list-inside font-mono">
                 {challengeDetails.problemStatement.dataIssues.map((issue, idx) => (
-                  <li key={idx} className="leading-relaxed">
-                    <span className="text-text-secondary">{issue}</span>
-                  </li>
+                  <li key={idx} className="leading-relaxed">{issue}</li>
                 ))}
               </ul>
             </div>
 
-            <div className="space-y-2 pt-2 font-mono">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-text-primary">
+            <div className="space-y-2 pt-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-accent block font-mono">
                 Expected Deliverables:
-              </h3>
-              <ul className="space-y-1.5 text-xs text-text-muted list-disc list-inside">
-                {challengeDetails.problemStatement.deliverables.map((deliv, idx) => (
-                  <li key={idx} className="leading-relaxed">
-                    <span className="text-text-secondary">{deliv}</span>
-                  </li>
+              </span>
+              <ul className="space-y-1.5 text-xs text-text-primary list-disc list-inside font-mono">
+                {challengeDetails.problemStatement.deliverables.map((del, idx) => (
+                  <li key={idx} className="leading-relaxed">{del}</li>
                 ))}
               </ul>
             </div>
           </div>
 
-          {/* Anchored Rubric Criteria */}
-          <div className="pb-card p-6 sm:p-7 space-y-4 font-mono">
-            <h2 className="section-label flex items-center gap-2">
-              <Award className="w-4 h-4 text-success" />
-              Evaluation Rubric
-            </h2>
+          <div className="lg:col-span-5 pb-card p-6 sm:p-7 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="section-label text-xs">Attainment Rubric</h2>
+              <span className="text-[11px] font-mono text-accent">Human Evaluation</span>
+            </div>
+
             <p className="text-xs text-text-muted">
               Reviewers evaluate your submission against these standardized anchors:
             </p>
@@ -335,19 +381,19 @@ ORDER BY sales_month DESC;`
           </div>
         </div>
 
-        {/* 3. SQL WORKSPACE / SOLUTION EDITOR */}
+        {/* 3. SQL WORKSPACE / SOLUTION EDITOR & TEST RUNNER */}
         <div className="pb-card p-6 sm:p-7 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
             <div>
               <div className="flex items-center gap-2">
                 <Terminal className="w-5 h-5 text-accent" />
-                <h2 className="text-lg font-bold text-text-primary font-mono">SQL Solution Workspace</h2>
-                <span className="pb-badge text-[10px] font-bold text-warning bg-warning/10 border-warning/30">
-                  Starter Example
+                <h2 className="text-lg font-bold text-text-primary font-mono">SQL Solution Workspace &amp; Test Runner</h2>
+                <span className="pb-badge text-[10px] font-bold text-accent bg-accent/10 border-accent/30">
+                  PostgreSQL 16 Interactive
                 </span>
               </div>
               <p className="text-xs text-text-muted mt-0.5 font-light font-mono">
-                Draft your PostgreSQL query. Starter queries below are provided as examples and do not constitute a completed solution.
+                Draft your PostgreSQL query and execute test cases before locking revision into the database.
               </p>
             </div>
           </div>
@@ -367,26 +413,13 @@ ORDER BY sales_month DESC;`
             />
           </div>
 
-          {/* SQL Code Textarea */}
-          <div className="space-y-1.5 font-mono">
-            <div className="flex items-center justify-between">
-              <label htmlFor="sql-code-editor" className="block text-xs font-bold uppercase tracking-wider text-text-secondary">
-                PostgreSQL Query &amp; Data Logic
-              </label>
-              <span className="text-[11px] font-medium text-warning bg-warning/10 px-2.5 py-0.5 rounded-full border border-warning/30">
-                Example Only — Edit to Implement Full Solution
-              </span>
-            </div>
-
-            <textarea
-              id="sql-code-editor"
-              rows={14}
-              value={sqlCode}
-              onChange={(e) => setSqlCode(e.target.value)}
-              className="w-full p-4 rounded-xl border border-border bg-canvas text-success font-mono text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-accent shadow-inner selection:bg-accent selection:text-[var(--text-inverse)]"
-              spellCheck={false}
-            />
-          </div>
+          {/* Integrated Interactive SQL Test Runner */}
+          <SqlTestRunner
+            sqlCode={sqlCode}
+            onCodeChange={setSqlCode}
+            onLoadExemplar={handleLoadExemplar}
+            onResetStarter={handleResetStarter}
+          />
         </div>
 
         {/* 4. CONTRIBUTION STATEMENT */}
@@ -447,7 +480,7 @@ ORDER BY sales_month DESC;`
               />
               <div className="text-xs">
                 <span className="font-bold text-text-primary block">No AI Used</span>
-                <span className="text-[11px] text-text-muted">Completed entirely without AI code generation.</span>
+                <span className="text-[11px] text-text-muted block mt-0.5">Completely independent authoring</span>
               </div>
             </label>
 
@@ -465,8 +498,8 @@ ORDER BY sales_month DESC;`
                 className="mt-0.5 text-accent focus:ring-accent"
               />
               <div className="text-xs">
-                <span className="font-bold text-text-primary block">AI for Syntax Verification</span>
-                <span className="text-[11px] text-text-muted">Used for query debugging, syntax checks, or documentation.</span>
+                <span className="font-bold text-text-primary block">AI Syntax &amp; Regex Check</span>
+                <span className="text-[11px] text-text-muted block mt-0.5">ChatGPT/Claude for syntax assistance</span>
               </div>
             </label>
 
@@ -484,14 +517,14 @@ ORDER BY sales_month DESC;`
                 className="mt-0.5 text-accent focus:ring-accent"
               />
               <div className="text-xs">
-                <span className="font-bold text-text-primary block">Custom Script / Tool</span>
-                <span className="text-[11px] text-text-muted">Utilized local python scripts, linters, or db tools.</span>
+                <span className="font-bold text-text-primary block">Custom IDE / Copilot</span>
+                <span className="text-[11px] text-text-muted block mt-0.5">Autocomplete tool during drafting</span>
               </div>
             </label>
           </div>
         </div>
 
-        {/* 6. EXTERNAL PROOF LINKS */}
+        {/* 6. EXTERNAL HTTPS PROOF LINKS */}
         <div className="pb-card p-6 sm:p-7 space-y-4 font-mono">
           <div className="flex items-center justify-between">
             <h2 className="section-label flex items-center gap-1.5">
@@ -580,10 +613,10 @@ ORDER BY sales_month DESC;`
               </div>
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-success">
-                  Challenge Solution Locked &amp; Submitted to PostgreSQL!
+                  New Evidence Revision Stored in PostgreSQL
                 </h3>
                 <p className="text-xs text-text-secondary leading-relaxed">
-                  Immutable revision created. SHA-256 integrity hash: <code className="text-accent bg-canvas px-2 py-0.5 rounded border border-border">{submittedResult.proof_hash}</code>
+                  Frozen revision #{submittedResult.revision_no} created. Server-calculated SHA-256 digest: <code className="text-accent bg-canvas px-2 py-0.5 rounded border border-border">{submittedResult.proof_hash}</code>
                 </p>
                 <p className="text-xs text-text-muted mt-1">
                   Assigned Evaluator: <strong className="text-text-primary">{submittedResult.assigned_reviewer}</strong> · Status: <strong className="text-warning">Awaiting Rubric Evaluation</strong>
@@ -632,7 +665,7 @@ ORDER BY sales_month DESC;`
             <div className="p-4 rounded-xl bg-canvas border border-border text-xs text-text-muted leading-relaxed flex items-start gap-2.5">
               <ShieldCheck className="w-4 h-4 text-success shrink-0 mt-0.5" />
               <span>
-                <strong className="text-text-primary">Live Database Ledger:</strong> Submitting calls the live ProofBridge PostgreSQL API, generates a cryptographic SHA-256 proof hash of your SQL queries, and queues the submission for Dr. Alok Sharma.
+                <strong className="text-text-primary">Synthetic demo transaction:</strong> submitting creates a new frozen PostgreSQL revision, stores the contribution and HTTPS links, calculates a SHA-256 digest, and creates a reviewer assignment atomically. Production authentication is not represented in this sandbox.
               </span>
             </div>
           </div>

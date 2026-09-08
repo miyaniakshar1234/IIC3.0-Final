@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusChip } from '@/components/student/StatusChip';
 import { EvidenceDrawer, EvidenceDetail } from '@/components/student/EvidenceDrawer';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
 import {
   Award,
   CheckCircle2,
@@ -24,6 +26,7 @@ import {
 } from 'lucide-react';
 
 export default function EvidencePassportPage() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'all' | 'reviewed' | 'gaps' | 'declared'>('all');
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetail | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -54,10 +57,12 @@ export default function EvidencePassportPage() {
 
   // Student Identity Context
   const student = {
-    name: 'Meera Patel',
-    program: 'MCA 2026',
-    institution: 'Demo College of Computing',
-    avatarInitial: 'MP',
+    name: user?.name || 'Meera Patel',
+    program: user?.program || 'MCA 2026',
+    institution: user?.institutionName || 'Manipal University Jaipur (MUJ)',
+    rollNumber: user?.rollNumber || 'MCA-2026-042',
+    affiliationStatus: user?.affiliationStatus || 'approved',
+    avatarInitial: user?.avatarInitials || 'MP',
   };
 
   // Audited Evidence Dataset for Meera Patel
@@ -201,16 +206,27 @@ export default function EvidencePassportPage() {
             </div>
             <div>
               <div className="section-label mb-0.5">Verified Profile</div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xl font-bold text-text-primary tracking-tight">{student.name}</span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info/10 text-info border border-info/30 font-mono">
                   <GraduationCap className="w-3.5 h-3.5" />
                   {student.program}
                 </span>
+                {student.affiliationStatus === 'approved' ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/30 font-mono" title="Officially verified by University Registrar">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Verified University Student
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-warning/10 text-warning border border-warning/30 font-mono" title="Awaiting Registrar confirmation">
+                    <Clock className="w-3.5 h-3.5" />
+                    Affiliation Pending Approval
+                  </span>
+                )}
               </div>
               <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5 font-mono">
                 <Building2 className="w-3.5 h-3.5 text-accent" />
-                {student.institution}
+                {student.institution} · Roll: {student.rollNumber}
               </p>
             </div>
           </div>
@@ -236,6 +252,24 @@ export default function EvidencePassportPage() {
             </Link>
           </nav>
         </div>
+
+        {/* Affiliation Pending Alert */}
+        {student.affiliationStatus === 'pending_approval' && (
+          <div className="p-4 rounded-2xl bg-warning/10 border border-warning/30 text-warning text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+            <div className="flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <span>
+                <strong>University Affiliation Pending Verification:</strong> Your registration request has been submitted to the Registrar&apos;s Office at <strong>{student.institution}</strong> (Roll: {student.rollNumber}).
+              </span>
+            </div>
+            <Link
+              href="/institution/approvals"
+              className="px-3 py-1 rounded-lg bg-warning/20 border border-warning/40 text-warning font-bold text-[11px] hover:bg-warning/30 transition shrink-0 self-start sm:self-center"
+            >
+              <span>Review in Dean&apos;s Queue →</span>
+            </Link>
+          </div>
+        )}
 
         {/* 2. PASSPORT CRYPTOGRAPHIC HEADER & STATS BENTO */}
         <div className="pb-card-accent p-6 sm:p-8 space-y-6 relative overflow-hidden">
@@ -284,7 +318,31 @@ export default function EvidencePassportPage() {
               <strong className="text-text-primary">Review Principle:</strong> &quot;Reviewed&quot; indicates that a named faculty evaluator assessed submitted code against anchored rubrics. Self-declared skills receive 0% weight until human verification completes.
             </span>
           </div>
+
+          {/* Public Verification Action Bar */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 relative z-10 border-t border-border font-mono">
+            <div className="flex items-center gap-2 text-xs text-text-muted">
+              <ShieldCheck className="w-4 h-4 text-success shrink-0" />
+              <span>External Auditor Verification Gateway is active for this passport.</span>
+            </div>
+            <Link
+              href="/verify/4f8a9b2c7e1d5a6f8b0c2e4a6d8f0b2c4e6a8d0f2b4c6e8a0d2f4b6c8e0a2d4f"
+              className="pb-btn-primary text-xs py-2 px-4 flex items-center justify-center gap-2 shrink-0"
+            >
+              <span>🔗 Open Public Verification Certificate →</span>
+            </Link>
+          </div>
         </div>
+
+        {/* 2.5 LIVE PROOF CHAIN */}
+        <ProofChainViewer
+          isVerified={hasVerifiedSql}
+          studentName={student.name}
+          roleTitle="Junior Data Analyst Intern"
+          reviewedLevel={hasVerifiedSql ? 3 : 0}
+          weight={35}
+          reviewDate={hasVerifiedSql ? 'Just now' : 'Pending'}
+        />
 
         {/* 3. TAB FILTERS */}
         <div className="flex items-center gap-1.5 p-1 bg-surface rounded-xl border border-border w-fit font-mono overflow-x-auto">

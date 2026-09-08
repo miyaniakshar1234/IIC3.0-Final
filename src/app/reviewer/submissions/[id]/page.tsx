@@ -260,8 +260,8 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
         }),
       });
       const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json.error?.message || 'Failed to publish review');
+      if (!res.ok || json.data?.persistence?.live_db_synced === false) {
+        throw new Error(json.error?.message || 'The authoritative review transaction was not confirmed.');
       }
       setIsPublishing(false);
       setShowPublishModal(false);
@@ -348,8 +348,8 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
                   Review Successfully Published & Attributed!
                 </h3>
                 <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-mono">
-                  <strong className="text-text-primary">Atomic Transaction Complete:</strong> SQL evidence has been formally attributed to student <strong className="text-text-primary">Meera Patel</strong> at <strong className="text-success">Level 3</strong>.
-                  Tamper-proof skill attainments have been written to the ledger, instantly updating her opportunity match coverage from <strong className="text-warning font-bold">61% to 96%</strong>.
+                  <strong className="text-text-primary">Atomic transaction confirmed:</strong> SQL evidence has been attributed to synthetic student <strong className="text-text-primary">Meera Patel</strong> at <strong className="text-success">Level 3</strong>.
+                  Published review and attainment records now update her deterministic opportunity coverage from <strong className="text-warning font-bold">61% to 96%</strong>.
                 </p>
               </div>
             </div>
@@ -449,7 +449,7 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
             <div className="flex items-center space-x-2 text-xs text-text-secondary font-mono">
               <ShieldCheck className="w-4 h-4 text-success shrink-0" />
               <span>
-                <strong className="text-text-primary">Academic Integrity:</strong> Publishing creates immutable verified attainments signed by Dr. Alok Sharma.
+                <strong className="text-text-primary">Review boundary:</strong> publishing creates attributed attainment records for the assigned synthetic demo reviewer.
               </span>
             </div>
 
@@ -525,7 +525,7 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
 
                   <div className="p-4 bg-accent-soft border border-border-accent rounded-xl text-xs text-text-primary">
                     <strong className="text-accent block mb-1 font-bold">What happens next?</strong>
-                    This action is permanent and creates immutable <code className="text-accent font-mono bg-canvas px-1 rounded border border-border">skill_attainments</code>. Linked employers will immediately see updated skill coverage scores leaping from 61% to 96%.
+                    This action publishes <code className="text-accent font-mono bg-canvas px-1 rounded border border-border">skill_attainments</code> in the atomic review transaction. The synthetic demo coverage will update from 61% to 96% after the server confirms persistence.
                   </div>
                 </div>
 

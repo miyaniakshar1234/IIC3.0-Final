@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { calculateCoverage, RequiredSkill, StudentAttainment } from '@/lib/matching';
 import { getDbPool } from '@/lib/server/db';
-import { getAdminClient } from '@/lib/server/supabase';
 
 // Strict schema validation according to Prompt 2.1 specifications
 const RubricScoreItemSchema = z.object({
@@ -16,16 +15,11 @@ const RubricScoreItemSchema = z.object({
 
 const PublishReviewSchema = z.object({
   submission_id: z.string().uuid('submission_id must be a valid UUID'),
-  reviewer_id: z
-    .string()
-    .uuid('reviewer_id must be a valid UUID')
-    .default('20000000-0000-0000-0000-000000000001'), // Dr. Alok Sharma per evaluation instructions
   overall_level: z.number().int().min(1).max(4),
   rubric_scores: z
     .array(RubricScoreItemSchema)
     .min(1, 'At least one rubric score is required'),
   qualitative_notes: z.string().optional().default(''),
-  assignment_id: z.string().uuid().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -50,20 +44,17 @@ export async function POST(request: NextRequest) {
 
     const {
       submission_id,
-      reviewer_id,
       overall_level,
       rubric_scores,
       qualitative_notes,
-      assignment_id: requestedAssignmentId,
     } = validation.data;
 
     let reviewId = crypto.randomUUID();
     let studentId = '00000000-0000-0000-0000-000000000001'; // Meera Patel
     let studentName = 'Meera Patel';
     const sqlSkillId = '30000000-0000-0000-0000-000000000001'; // SQL
-    const defaultAssignmentId = requestedAssignmentId || '82000000-0000-0000-0000-000000000001';
-    let revisionId = '81000000-0000-0000-0000-000000000001';
     let liveDbUpdated = false;
+    let actorId = '';
 
     // Normalizing rubric scores array for PostgreSQL JSONB parameter
     const formattedScores = rubric_scores.map((s) => ({
@@ -97,16 +88,18 @@ export async function POST(request: NextRequest) {
           [submission_id]
         );
 
-        let targetAssignmentId = defaultAssignmentId;
-        let actorId = '00000000-0000-0000-0000-000000000010'; // Dr. Alok Sharma canonical profile
+        let targetAssignmentId = '';
 
-        if (subRes.rows.length > 0) {
-          const row = subRes.rows[0];
-          studentId = row.student_id || studentId;
-          studentName = row.student_name || studentName;
-          revisionId = row.revision_id || revisionId;
-          if (row.assignment_id) targetAssignmentId = row.assignment_id;
-          if (row.assigned_reviewer_id) actorId = row.assigned_reviewer_id;
+        if (subRes.rows.length === 0) {
+          throw new Error('Submission or current revision was not found.');
+        }
+        const row = subRes.rows[0];
+        studentId = row.student_id;
+        studentName = row.student_name;
+        targetAssignmentId = row.assignment_id;
+        actorId = row.assigned_reviewer_id;
+        if (!targetAssignmentId || !actorId) {
+          throw new Error('The current revision has no assigned reviewer.');
         }
 
         // Try executing the atomic stored procedure publish_review(p_assignment_id, p_actor_id, p_scores)
@@ -121,89 +114,18 @@ export async function POST(request: NextRequest) {
             liveDbUpdated = true;
           }
         } catch (rpcErr) {
-          // If assignment was already completed or already evaluated, update or ensure idempotency in a transaction
-          console.warn('[ProofBridge API] publish_review RPC fallback:', (rpcErr as Error).message);
-
-          await client.query('BEGIN');
-
-          // Ensure review record exists
-          const existingReview = await client.query(
-            `SELECT id FROM reviews WHERE assignment_id = $1 OR revision_id = $2 LIMIT 1;`,
-            [targetAssignmentId, revisionId]
-          );
-
-          if (existingReview.rows.length > 0) {
-            reviewId = existingReview.rows[0].id;
-            await client.query(
-              `UPDATE reviews SET status = 'published', published_at = now() WHERE id = $1;`,
-              [reviewId]
-            );
-          } else {
-            const insReview = await client.query(
-              `INSERT INTO reviews (id, assignment_id, revision_id, reviewer_id, status, published_at)
-               VALUES ($1, $2, $3, $4, 'published', now())
-               RETURNING id;`,
-              [reviewId, targetAssignmentId, revisionId, actorId]
-            );
-            reviewId = insReview.rows[0].id;
-          }
-
-          // Insert / update scores
-          for (const item of formattedScores) {
-            await client.query(
-              `INSERT INTO review_scores (review_id, criterion_id, level, rationale)
-               VALUES ($1, $2, $3, $4)
-               ON CONFLICT (review_id, criterion_id) 
-               DO UPDATE SET level = EXCLUDED.level, rationale = EXCLUDED.rationale;`,
-              [reviewId, item.criterion_id, item.level, item.rationale]
-            );
-
-            if (item.level > 0) {
-              await client.query(
-                `INSERT INTO skill_attainments (student_id, skill_id, review_id, criterion_id, level, reviewed_at)
-                 VALUES ($1, $2, $3, $4, $5, now())
-                 ON CONFLICT (review_id, criterion_id)
-                 DO UPDATE SET level = EXCLUDED.level, reviewed_at = now();`,
-                [studentId, sqlSkillId, reviewId, item.criterion_id, item.level]
-              );
-            }
-          }
-
-          // Complete assignment & mark submission reviewed
-          await client.query(
-            `UPDATE reviewer_assignments SET status = 'completed', updated_at = now() WHERE id = $1;`,
-            [targetAssignmentId]
-          );
-          await client.query(
-            `UPDATE submissions SET status = 'reviewed', updated_at = now() WHERE id = $1;`,
-            [submission_id]
-          );
-
-          // Write event to outbox_events
-          await client.query(
-            `INSERT INTO outbox_events (type, payload_json, status)
-             VALUES ('REVIEW_PUBLISHED', $1::jsonb, 'pending');`,
-            [
-              JSON.stringify({
-                review_id: reviewId,
-                student_id: studentId,
-                reviewer_id,
-                submission_id,
-                skill: 'SQL',
-                level: overall_level,
-                published_at: new Date().toISOString(),
-              }),
-            ]
-          );
-
-          await client.query('COMMIT');
-          liveDbUpdated = true;
+          throw new Error(`Atomic review publication failed: ${(rpcErr as Error).message}`);
         }
       } catch (dbErr) {
         console.error('[ProofBridge API] Database transaction error:', (dbErr as Error).message);
+        throw dbErr;
       } finally {
         client.release();
       }
+    }
+
+    if (!liveDbUpdated) {
+      throw new Error('Atomic review publication did not return a persisted review ID.');
     }
 
     // ── 2. RE-CALCULATE DETERMINISTIC MATCH COVERAGE (coverage-v1) ──
@@ -215,60 +137,22 @@ export async function POST(request: NextRequest) {
       { skillId: '30000000-0000-0000-0000-000000000004', skillName: 'Analytical Reasoning', requiredLevel: 3, weight: 24 },
     ];
 
-    // Attempt to read current active attainments from PostgreSQL for Meera
-    let studentAttainments: StudentAttainment[] = [];
-    if (pool) {
-      try {
-        const attRes = await pool.query(
-          `SELECT skill_id, level, reviewed_at 
-           FROM skill_attainments 
-           WHERE student_id = $1 
-           ORDER BY reviewed_at DESC;`,
-          [studentId]
-        );
+    const attRes = await pool.query(
+      `SELECT id, skill_id, level, reviewed_at
+       FROM skill_attainments
+       WHERE student_id = $1
+       ORDER BY reviewed_at DESC, id ASC;`,
+      [studentId]
+    );
+    const studentAttainments: StudentAttainment[] = attRes.rows.map((row) => ({
+      attainmentId: row.id,
+      skillId: row.skill_id,
+      level: Number(row.level),
+      reviewedAt: new Date(row.reviewed_at).toISOString(),
+    }));
 
-        if (attRes.rows.length > 0) {
-          studentAttainments = attRes.rows.map((r) => ({
-            skillId: r.skill_id,
-            level: Number(r.level),
-            reviewedAt: new Date(r.reviewed_at).toISOString(),
-          }));
-        }
-      } catch (attErr) {
-        console.warn('[ProofBridge API] Attainment read notice:', (attErr as Error).message);
-      }
-    }
-
-    // If database attainments were empty or incomplete, synthesize the verified set
-    // Baseline: Spreadsheets (25), Comm (12), Reasoning (24) + Newly Verified SQL (35) = 96%
-    if (!studentAttainments.some((a) => a.skillId === sqlSkillId)) {
-      studentAttainments.push({
-        skillId: sqlSkillId,
-        level: overall_level,
-        reviewedAt: new Date().toISOString(),
-        revisionId,
-      });
-    }
-    if (!studentAttainments.some((a) => a.skillId === '30000000-0000-0000-0000-000000000002')) {
-      studentAttainments.push({
-        skillId: '30000000-0000-0000-0000-000000000002',
-        level: 3,
-        reviewedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
-      });
-    }
-    if (!studentAttainments.some((a) => a.skillId === '30000000-0000-0000-0000-000000000003')) {
-      studentAttainments.push({
-        skillId: '30000000-0000-0000-0000-000000000003',
-        level: 3,
-        reviewedAt: new Date(Date.now() - 8 * 86400000).toISOString(),
-      });
-    }
-    if (!studentAttainments.some((a) => a.skillId === '30000000-0000-0000-0000-000000000004')) {
-      studentAttainments.push({
-        skillId: '30000000-0000-0000-0000-000000000004',
-        level: 3,
-        reviewedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-      });
+    if (!studentAttainments.some((attainment) => attainment.skillId === sqlSkillId)) {
+      throw new Error('Review was persisted without the expected SQL attainment.');
     }
 
     // Deterministic coverage computation
@@ -285,7 +169,7 @@ export async function POST(request: NextRequest) {
           submission_id,
           student_id: studentId,
           student_name: studentName,
-          reviewer_id,
+          reviewer_id: actorId,
           reviewer_name: 'Dr. Alok Sharma (Faculty Reviewer)',
           overall_level,
           qualitative_notes,
@@ -295,7 +179,7 @@ export async function POST(request: NextRequest) {
             level: overall_level,
             points_awarded: overall_level >= 3 ? 35 : Math.round((overall_level / 3) * 35),
             verified: true,
-            verified_by: 'Dr. Alok Sharma (Faculty Reviewer)',
+            verified_by: 'Assigned synthetic demo reviewer',
             verified_at: new Date().toISOString(),
           },
           match_coverage: {

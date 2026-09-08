@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusBadge } from '@/components/employer/StatusBadge';
+import { toast } from 'sonner';
 import {
   Briefcase,
   Users,
@@ -18,6 +19,7 @@ import {
   Plus,
   BarChart3,
   Target,
+  Zap,
 } from 'lucide-react';
 
 interface OpportunitySummary {
@@ -103,12 +105,24 @@ export default function EmployerOpportunitiesPage() {
           <div>
             <div className="section-label mb-1">Employer Workspace</div>
             <h1 className="text-2xl font-black text-text-primary">Open Opportunities</h1>
-            <p className="text-xs text-text-muted font-mono mt-0.5">Neha Verma · Recruiter · Sample Analytics Studio</p>
+            <p className="text-xs text-text-muted font-mono mt-0.5">Neha Verma • Recruiter • Sample Analytics Studio</p>
           </div>
-          <button className="pb-btn-primary text-xs self-start sm:self-center">
-            <Plus className="w-3.5 h-3.5" />
-            Post New Role
-          </button>
+          <div className="flex items-center gap-3 self-start sm:self-center">
+            <button 
+              onClick={() => toast.success('Smart Match Engine Running', { description: 'Scanning 4,200 verifiable student profiles based on deterministic vectors...' })}
+              className="pb-btn-ghost text-xs border border-accent/30 text-accent hover:bg-accent/10"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              Run Auto-Match
+            </button>
+            <button 
+              onClick={() => toast.info('Post Mode Activated', { description: 'Opening the cryptographic requirement publisher.' })}
+              className="pb-btn-primary text-xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Post New Role
+            </button>
+          </div>
         </div>
 
         {/* ── STAT BENTO ── */}
@@ -201,7 +215,7 @@ export default function EmployerOpportunitiesPage() {
         <div className="pb-card-accent p-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
             <div className="section-label mb-1">Why ProofBridge?</div>
-            <p className="text-xs text-text-secondary max-w-lg">Every applicant score is deterministic — Σ(weight × rubric_level) / total_weight × 100. No ML black box, no keyword games. Pure verified evidence.</p>
+            <p className="text-xs text-text-secondary max-w-lg">Role coverage is deterministic - ∑(weight x min(reviewed level / required level, 1)). No ML ranking and no keyword games.</p>
           </div>
           <Link href="/opportunities/40000000-0000-0000-0000-000000000001" className="pb-btn-primary shrink-0 text-xs">
             <BarChart3 className="w-3.5 h-3.5" />

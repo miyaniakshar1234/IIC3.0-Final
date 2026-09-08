@@ -45,7 +45,7 @@ function resolveDatabaseUrl(): string {
  * Returns a pooled PostgreSQL client connected via DATABASE_URL
  * Configured with SSL support for Supabase pooler / direct database.
  */
-export function getDbPool(): Pool | null {
+export function getDbPool(): Pool {
   const connectionString = resolveDatabaseUrl();
 
   if (!pool) {

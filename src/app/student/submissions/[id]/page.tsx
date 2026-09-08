@@ -33,6 +33,7 @@ interface SubmissionData {
   title: string;
   body: string;
   contribution: string;
+  proof_hash: string;
   external_links: string[];
   review?: {
     id: string;
@@ -106,6 +107,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
               title: data.title || 'Monthly Sales Analysis and SQL Solution',
               body: data.body || '',
               contribution: data.contribution || '',
+              proof_hash: data.proof_hash,
               external_links:
                 data.external_links && data.external_links.length > 0
                   ? data.external_links
@@ -145,9 +147,6 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
   }, [params.id]);
 
   const isReviewed = submission?.status === 'reviewed' || hasVerifiedSql;
-
-  // Compute deterministic mock hash for demonstration
-  const proofHash = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
   return (
     <AppShell>
@@ -350,21 +349,21 @@ ORDER BY 1;`}
             </div>
           )}
 
-          {/* Cryptographic Ledger Proof */}
+          {/* Content digest */}
           <div className="space-y-3 pt-3 border-t border-border">
             <h3 className="section-label flex items-center gap-2 text-info">
               <Fingerprint className="w-4 h-4" />
-              <span>Cryptographic Integrity & Ledger Audit Proof</span>
+              <span>Server-Calculated Revision Digest</span>
             </h3>
             <div className="p-4 rounded-2xl bg-canvas border border-border space-y-2 font-mono text-[11px]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-text-muted">
                 <span>SHA-256 Content Digest:</span>
-                <span className="text-text-primary select-all break-all">{proofHash}</span>
+                <span className="text-text-primary select-all break-all">{submission?.proof_hash || 'Unavailable'}</span>
               </div>
               <div className="flex items-center justify-between text-text-muted pt-1 border-t border-border/40">
                 <span>PostgreSQL State:</span>
                 <span className="text-success font-semibold flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Immutable Lock Confirmed
+                  <Check className="w-3.5 h-3.5" /> Frozen Revision Confirmed
                 </span>
               </div>
             </div>

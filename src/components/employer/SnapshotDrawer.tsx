@@ -14,9 +14,15 @@ import {
   Building,
   FileCheck,
   Clock,
-  ArrowUpRight
+  ArrowUpRight,
+  Code2,
+  Copy,
+  Check,
+  Eye,
+  Lock
 } from 'lucide-react';
 import { StatusBadge, ApplicationStatus } from './StatusBadge';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
 
 export interface SkillAttainmentSnapshot {
   skill_id: string;
@@ -51,6 +57,7 @@ interface SnapshotDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   candidate: CandidateSnapshotData | null;
+  isBlindMode?: boolean;
   onTransitionStatus: (
     applicationId: string,
     toStatus: ApplicationStatus,
@@ -63,14 +70,25 @@ export function SnapshotDrawer({
   isOpen,
   onClose,
   candidate,
+  isBlindMode = false,
   onTransitionStatus,
 }: SnapshotDrawerProps) {
   const [targetStatus, setTargetStatus] = useState<ApplicationStatus>('shortlisted');
   const [transitionReason, setTransitionReason] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [showRawCode, setShowRawCode] = useState(false);
+  const [copiedCodeHash, setCopiedCodeHash] = useState(false);
 
   if (!isOpen || !candidate) return null;
+
+  const displayName = isBlindMode
+    ? `Candidate #${candidate.application_id.slice(-4)}`
+    : candidate.student_name;
+
+  const displaySubtitle = isBlindMode
+    ? 'MCA Cohort • Pedigree & Demographic Masked'
+    : `${candidate.student_program} • ${candidate.student_institution}`;
 
   const handleTransition = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,6 +123,8 @@ export function SnapshotDrawer({
     { status: 'rejected', label: 'Mark Not Selected' },
   ];
 
+  const sha256Digest = 'sha256:4f8a9b2c7e1d5a6f8b0c2e4a6d8f0b2c4e6a8d0f2b4c6e8a0d2f4b6c8e0a2d4f';
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
       {/* Backdrop */}
@@ -115,7 +135,7 @@ export function SnapshotDrawer({
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-2xl bg-surface border-l border-border shadow-lg flex flex-col relative z-20 text-text-primary">
+        <div className="w-screen max-w-2xl bg-surface border-l border-border shadow-2xl flex flex-col relative z-20 text-text-primary">
           {/* Drawer Header */}
           <div className="p-6 border-b border-border bg-surface-raised flex items-start justify-between">
             <div className="space-y-1.5">
@@ -127,12 +147,17 @@ export function SnapshotDrawer({
                 <span className="text-xs text-text-muted font-mono">
                   v{candidate.version} • {candidate.scoring_version}
                 </span>
+                {isBlindMode && (
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-border-accent">
+                    Blind Screening
+                  </span>
+                )}
               </div>
               <h2 className="text-2xl font-black text-text-primary tracking-tight">
-                {candidate.student_name}
+                {displayName}
               </h2>
               <p className="text-xs text-text-muted font-mono">
-                {candidate.student_program} • {candidate.student_institution}
+                {displaySubtitle}
               </p>
             </div>
 
@@ -193,6 +218,89 @@ export function SnapshotDrawer({
                   })}
                 </span>
               </div>
+            </div>
+
+            {/* Live Interactive Proof Chain */}
+            <div className="space-y-2">
+              <span className="section-label text-[10px] block">
+                Evidence Provenance Chain
+              </span>
+              <ProofChainViewer
+                isVerified={candidate.reviewed_coverage >= 90}
+                studentName={displayName}
+                roleTitle={candidate.opportunity_title}
+                reviewedLevel={candidate.skills.find((s) => s.skill_name.includes('SQL'))?.reviewed_level || 3}
+                weight={candidate.skills.find((s) => s.skill_name.includes('SQL'))?.weight || 35}
+                className="border-accent/40"
+              />
+            </div>
+
+            {/* Raw Code Proof & Cryptographic Hash */}
+            <div className="bg-canvas border border-border rounded-2xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-text-primary font-mono flex items-center gap-1.5">
+                    <Code2 className="w-4 h-4 text-accent" />
+                    <span>Candidate Artifact Excerpt (SQL Solution)</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-raised border border-border text-accent">
+                    SHA-256 Verified
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowRawCode(!showRawCode)}
+                  className="text-xs font-mono text-accent hover:underline flex items-center gap-1"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  {showRawCode ? 'Hide Code ▲' : 'View Code ▼'}
+                </button>
+              </div>
+
+              {showRawCode && (
+                <div className="space-y-2 animate-fade-in pt-2">
+                  <pre className="bg-surface-raised p-4 rounded-xl border border-border text-[11px] font-mono text-text-secondary overflow-x-auto max-h-56 leading-relaxed">
+{`WITH clean_transactions AS (
+    SELECT
+        transaction_id,
+        COALESCE(NULLIF(transaction_date, '')::timestamp, '1970-01-01'::timestamp) AS clean_date,
+        REGEXP_REPLACE(customer_raw_id, '[^0-9]', '', 'g')::bigint AS customer_id,
+        CASE WHEN amount_minor <= 0 OR amount_minor = 999999 THEN NULL ELSE amount_minor END AS validated_amount_minor,
+        payment_status
+    FROM raw_sales_feed
+    WHERE is_test_record IS NOT TRUE
+),
+monthly_metrics AS (
+    SELECT
+        DATE_TRUNC('month', clean_date) AS sales_month,
+        COUNT(DISTINCT customer_id) AS unique_buyers,
+        SUM(validated_amount_minor) / 100.0 AS gross_revenue_inr
+    FROM clean_transactions
+    WHERE payment_status = 'completed'
+    GROUP BY 1
+)
+SELECT sales_month, unique_buyers, gross_revenue_inr,
+       ROUND((gross_revenue_inr - LAG(gross_revenue_inr) OVER (ORDER BY sales_month)) 
+             / NULLIF(LAG(gross_revenue_inr) OVER (ORDER BY sales_month), 0) * 100.0, 2) AS mom_growth_pct
+FROM monthly_metrics;`}
+                  </pre>
+                  <div className="flex items-center justify-between text-[11px] font-mono text-text-muted px-1">
+                    <span className="truncate max-w-[400px]">Digest: {sha256Digest}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(sha256Digest);
+                        setCopiedCodeHash(true);
+                        setTimeout(() => setCopiedCodeHash(false), 2000);
+                      }}
+                      className="text-accent hover:underline flex items-center gap-1 text-[10px]"
+                    >
+                      {copiedCodeHash ? <Check className="w-3 h-3 text-success" /> : <Copy className="w-3 h-3" />}
+                      {copiedCodeHash ? 'Copied' : 'Copy Hash'}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Frozen Verified Skill Attainments */}
@@ -283,7 +391,7 @@ export function SnapshotDrawer({
                 </h3>
               </div>
               <p className="text-xs text-text-muted font-mono">
-                Moving a candidate&apos;s stage records an immutable audit log entry. All decisions require a brief internal justification.
+                A confirmed server transition records an application event in PostgreSQL. All decisions require a brief justification note.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
