@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MediBridge — Technology Stack</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="slide-container" data-screen-label="06 Tech Stack">
+
+  <div data-object="true" data-object-type="shape" class="orb orb-emerald" style="position:absolute;left:-200px;top:-200px;width:800px;height:800px;opacity:0.35;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:1400px;top:500px;width:800px;height:800px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="grid-overlay" style="z-index:2;"></div>
+
+  <!-- Chrome -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:72px;width:600px;z-index:10;">
+    <span class="pill"><span class="dot"></span>05 · Technology Stack</span>
+  </div>
+  <div data-object="true" data-object-type="image" style="position:absolute;left:1720px;top:64px;width:120px;height:72px;z-index:10;">
+    <img src="../assets/iic3-logo.png" alt="IIC 3.0" style="width:100%;height:100%;object-fit:contain;object-position:right center;opacity:0.85;">
+  </div>
+
+  <!-- Title -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:140px;width:1400px;z-index:10;">
+    <div class="h1" style="font-size:72px;color:#F8FAFC;">Zero-Cost. <span style="color:#22D3EE;">Production-Grade.</span> Scalable.</div>
+  </div>
+
+  <!-- Constraints strip -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:264px;width:1728px;height:80px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:280px;width:1664px;height:48px;z-index:10;padding:6px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="eyebrow">Constraints Met</div>
+      <div style="display:flex;gap:16px;font-family:var(--font-mono);font-size:14px;color:#F8FAFC;letter-spacing:0.10em;">
+        <span style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981;">✓</span>100% ZERO-COST APIs</span>
+        <span style="opacity:0.3;">·</span>
+        <span style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981;">✓</span>WEB-FIRST RESPONSIVE</span>
+        <span style="opacity:0.3;">·</span>
+        <span style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981;">✓</span>PYTHON BACKEND</span>
+        <span style="opacity:0.3;">·</span>
+        <span style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981;">✓</span>NO VENDOR LOCK-IN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 category cards -->
+
+  <!-- AI/OCR Pipeline -->
+  <div data-object="true" data-object-type="shape" class="glass-strong" style="position:absolute;left:96px;top:376px;width:706px;height:308px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:404px;width:642px;height:252px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#22D3EE,#0F766E);display:flex;align-items:center;justify-content:center;font-size:24px;">🧠</div>
+      <div>
+        <div class="eyebrow" style="color:#22D3EE;">Layer 01</div>
+        <div class="h3" style="font-size:24px;color:#F8FAFC;margin-top:2px;">AI / OCR Pipeline</div>
+      </div>
+      <div style="margin-left:auto;padding:6px 12px;border-radius:999px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);font-family:var(--font-mono);font-size:11px;color:#10B981;letter-spacing:0.12em;">NO PAID APIs</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-top:20px;font-size:15px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">EasyOCR</span> <span style="color:rgba(248,250,252,0.55);">— primary</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">PaddleOCR</span> <span style="color:rgba(248,250,252,0.55);">— cross-validation</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">OpenCV</span> <span style="color:rgba(248,250,252,0.55);">— denoise / deskew</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">spaCy NLP</span> <span style="color:rgba(248,250,252,0.55);">— entity extraction</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;grid-column:1 / span 2;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">RapidFuzz</span> <span style="color:rgba(248,250,252,0.55);">— fuzzy matching against medicine database</span></div></div>
+    </div>
+  </div>
+
+  <!-- Frontend -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:832px;top:376px;width:496px;height:308px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:864px;top:404px;width:432px;height:252px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#06B6D4,#22D3EE);display:flex;align-items:center;justify-content:center;font-size:24px;">💠</div>
+      <div>
+        <div class="eyebrow">Layer 02</div>
+        <div class="h3" style="font-size:24px;color:#F8FAFC;margin-top:2px;">Frontend & UI</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px;font-size:15px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">React 19 + Vite</span> <span style="color:rgba(248,250,252,0.55);">— fast, modern build</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">Framer Motion</span> <span style="color:rgba(248,250,252,0.55);">— micro-animations</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#22D3EE;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">Vanilla CSS</span> <span style="color:rgba(248,250,252,0.55);">— custom Glassmorphism</span></div></div>
+    </div>
+  </div>
+
+  <!-- Free Mapping -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:1358px;top:376px;width:466px;height:308px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1390px;top:404px;width:402px;height:252px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#10B981,#0F766E);display:flex;align-items:center;justify-content:center;font-size:24px;">🗺</div>
+      <div>
+        <div class="eyebrow" style="color:#10B981;">Layer 03</div>
+        <div class="h3" style="font-size:24px;color:#F8FAFC;margin-top:2px;">Free Mapping</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px;font-size:15px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#10B981;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">Leaflet.js</span></div></div>
+      <div style="display:flex;align-items:flex-start;gap:10px;"><span style="color:#10B981;font-family:var(--font-mono);font-size:12px;margin-top:3px;">◆</span><div><span style="color:#F8FAFC;font-weight:600;">OpenStreetMap</span></div></div>
+      <div style="margin-top:8px;padding:10px 12px;border-radius:10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);font-family:var(--font-mono);font-size:12px;color:rgba(248,250,252,0.85);letter-spacing:0.06em;">
+        Bypasses expensive<br>Google Maps APIs
+      </div>
+    </div>
+  </div>
+
+  <!-- Backend & Database -->
+  <div data-object="true" data-object-type="shape" class="glass-strong" style="position:absolute;left:96px;top:712px;width:1232px;height:270px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:740px;width:1168px;height:214px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#0F766E,#10B981);display:flex;align-items:center;justify-content:center;font-size:24px;">⚙️</div>
+      <div>
+        <div class="eyebrow" style="color:#10B981;">Layer 04</div>
+        <div class="h3" style="font-size:24px;color:#F8FAFC;margin-top:2px;">Backend & Database</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:22px;">
+      <div style="padding:14px 16px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);">
+        <div class="h3" style="font-size:18px;color:#F8FAFC;">Python FastAPI</div>
+        <div class="body" style="font-size:14px;margin-top:6px;">Async, typed, high-performance API layer</div>
+      </div>
+      <div style="padding:14px 16px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);">
+        <div class="h3" style="font-size:18px;color:#F8FAFC;">Celery + Redis</div>
+        <div class="body" style="font-size:14px;margin-top:6px;">Background OCR & matching jobs</div>
+      </div>
+      <div style="padding:14px 16px;border-radius:12px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.35);">
+        <div class="h3" style="font-size:18px;color:#F8FAFC;">PostgreSQL + PostGIS</div>
+        <div class="body" style="font-size:14px;margin-top:6px;">Spatial queries for location-aware inventory</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right accent: architecture visual -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:1358px;top:712px;width:466px;height:270px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1390px;top:740px;width:402px;height:214px;z-index:10;padding:8px;">
+    <div class="eyebrow">System Flow</div>
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;color:#F8FAFC;">
+      <div style="padding:6px 10px;background:rgba(34,211,238,0.10);border:1px solid rgba(34,211,238,0.3);border-radius:6px;">📷 IMAGE UPLOAD</div>
+      <div style="text-align:center;color:#22D3EE;font-size:10px;line-height:1;">▼</div>
+      <div style="padding:6px 10px;background:rgba(34,211,238,0.10);border:1px solid rgba(34,211,238,0.3);border-radius:6px;">🧠 OCR + NLP + FUZZY</div>
+      <div style="text-align:center;color:#22D3EE;font-size:10px;line-height:1;">▼</div>
+      <div style="padding:6px 10px;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.3);border-radius:6px;">🗄 POSTGIS SPATIAL QUERY</div>
+      <div style="text-align:center;color:#10B981;font-size:10px;line-height:1;">▼</div>
+      <div style="padding:6px 10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.45);border-radius:6px;color:#F8FAFC;font-weight:600;">✓ FULFILLMENT MATCH</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1024px;width:900px;z-index:10;">
+    <span class="chrome-page">MEDIBRIDGE · TECHNOLOGY STACK</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1024px;width:220px;z-index:10;text-align:right;">
+    <span class="chrome-page">06 / 09</span>
+  </div>
+
+</div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>

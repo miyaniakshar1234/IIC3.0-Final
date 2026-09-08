@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MediBridge — The Core Problem</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="slide-container" data-screen-label="02 Problem">
+
+  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:-250px;top:-200px;width:800px;height:800px;opacity:0.35;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-teal" style="position:absolute;left:1300px;top:600px;width:900px;height:900px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="grid-overlay" style="z-index:2;"></div>
+
+  <!-- Chrome: IIC3 logo top-right + section header -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:72px;width:600px;z-index:10;">
+    <span class="pill"><span class="dot" style="background:#F59E0B;box-shadow:0 0 12px #F59E0B;"></span>01 · The Core Problem</span>
+  </div>
+  <div data-object="true" data-object-type="image" style="position:absolute;left:1720px;top:64px;width:120px;height:72px;z-index:10;">
+    <img src="../assets/iic3-logo.png" alt="IIC 3.0" style="width:100%;height:100%;object-fit:contain;object-position:right center;opacity:0.85;">
+  </div>
+
+  <!-- Section title -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:140px;width:1500px;z-index:10;">
+    <div class="h1" style="font-size:76px;color:#F8FAFC;">A prescription doesn't <span style="color:#22D3EE;">guarantee</span> access.</div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:264px;width:1400px;z-index:10;">
+    <div class="body" style="font-size:22px;color:rgba(248,250,252,0.65);max-width:1200px;">The seemingly simple path from doctor to medicine hides a network-level failure that costs patients time, money and — in critical cases — health outcomes.</div>
+  </div>
+
+  <!-- The linear-looking flow (that actually breaks) -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:350px;width:1728px;height:130px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:370px;width:1664px;height:90px;z-index:10;padding:8px;">
+    <div class="eyebrow" style="color:#F59E0B;">The illusion of a simple flow</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-family:var(--font-display);font-size:24px;font-weight:600;color:#F8FAFC;">
+      <div style="display:flex;align-items:center;gap:14px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(34,211,238,0.15);border:1px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;">👨‍⚕️</div>Doctor</div>
+      <div style="color:#22D3EE;font-family:var(--font-mono);letter-spacing:0.2em;">──▶</div>
+      <div style="display:flex;align-items:center;gap:14px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(34,211,238,0.15);border:1px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;">📝</div>Prescription</div>
+      <div style="color:#22D3EE;font-family:var(--font-mono);letter-spacing:0.2em;">──▶</div>
+      <div style="display:flex;align-items:center;gap:14px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;">🏪</div><span style="color:#F59E0B;">Pharmacy?</span></div>
+      <div style="color:#F59E0B;font-family:var(--font-mono);letter-spacing:0.2em;">──✕──</div>
+      <div style="display:flex;align-items:center;gap:14px;"><div style="width:44px;height:44px;border-radius:12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;">💊</div><span style="color:#F59E0B;">Medicine?</span></div>
+    </div>
+  </div>
+
+  <!-- Three problem cards -->
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:520px;width:560px;height:460px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:552px;width:496px;height:400px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#06B6D4 0%,#0F766E 100%);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:22px;color:#F8FAFC;">01</div>
+      <div class="eyebrow">The Reality</div>
+    </div>
+    <div class="h2" style="font-size:32px;color:#F8FAFC;margin-top:20px;">Prescription in hand<br>≠ Medicine in hand.</div>
+    <div class="body" style="font-size:17px;margin-top:20px;line-height:1.6;">
+      Obtaining a medicine <em>seems</em> simple: <span style="color:#F8FAFC;font-weight:500;">Doctor → Prescription → Pharmacy → Medicine.</span>
+    </div>
+    <div class="body" style="font-size:17px;margin-top:14px;line-height:1.6;">
+      But a valid prescription does not guarantee access — <span style="color:#F59E0B;">the patient has no way of knowing where the required medicine is actually available</span>.
+    </div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:680px;top:520px;width:560px;height:460px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:712px;top:552px;width:496px;height:400px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#F59E0B 0%,#0F766E 100%);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:22px;color:#F8FAFC;">02</div>
+      <div class="eyebrow" style="color:#F59E0B;">Rural & Semi-Urban Crisis</div>
+    </div>
+    <div class="h2" style="font-size:32px;color:#F8FAFC;margin-top:20px;">The problem multiplies outside major cities.</div>
+    <div class="body" style="font-size:17px;margin-top:20px;line-height:1.6;">
+      Patients face large distances between pharmacies, limited transportation, and <span style="color:#F8FAFC;font-weight:500;">zero centralized stock information</span>.
+    </div>
+    <div style="margin-top:22px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:12px;color:rgba(248,250,252,0.75);font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;"></span>Sparse pharmacy density</div>
+      <div style="display:flex;align-items:center;gap:12px;color:rgba(248,250,252,0.75);font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;"></span>Limited or costly transport</div>
+      <div style="display:flex;align-items:center;gap:12px;color:rgba(248,250,252,0.75);font-size:15px;"><span style="width:6px;height:6px;border-radius:50%;background:#F59E0B;"></span>No shared inventory visibility</div>
+    </div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:1264px;top:520px;width:560px;height:460px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1296px;top:552px;width:496px;height:400px;z-index:10;padding:8px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#10B981 0%,#0F766E 100%);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:22px;color:#F8FAFC;">03</div>
+      <div class="eyebrow" style="color:#10B981;">The Pain Point</div>
+    </div>
+    <div class="h2" style="font-size:32px;color:#F8FAFC;margin-top:20px;">A medicine search becomes a physical journey.</div>
+    <div class="body" style="font-size:17px;margin-top:20px;line-height:1.6;">
+      Patients travel pharmacy-to-pharmacy, wasting <span style="color:#F8FAFC;font-weight:500;">money, fuel and critical time</span> — often decoding hard-to-read handwritten prescriptions along the way.
+    </div>
+    <div style="margin-top:26px;display:flex;gap:12px;">
+      <div style="flex:1;padding:14px;border-radius:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);">
+        <div style="font-family:var(--font-mono);font-size:11px;color:#F59E0B;letter-spacing:0.14em;">WASTED</div>
+        <div style="font-family:var(--font-display);font-size:18px;color:#F8FAFC;margin-top:4px;">Fuel & fare</div>
+      </div>
+      <div style="flex:1;padding:14px;border-radius:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);">
+        <div style="font-family:var(--font-mono);font-size:11px;color:#F59E0B;letter-spacing:0.14em;">LOST</div>
+        <div style="font-family:var(--font-display);font-size:18px;color:#F8FAFC;margin-top:4px;">Critical hours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1024px;width:900px;z-index:10;">
+    <span class="chrome-page">MEDIBRIDGE · THE CORE PROBLEM</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1024px;width:220px;z-index:10;text-align:right;">
+    <span class="chrome-page">02 / 09</span>
+  </div>
+
+</div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>

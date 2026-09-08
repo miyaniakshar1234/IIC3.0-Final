@@ -71,11 +71,17 @@ const modeStyle: Record<string, string> = {
   onsite:  'bg-warning/10 text-warning border-warning/25',
 };
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function EmployerOpportunitiesPage() {
-  const [opportunities, setOpportunities] = useState<OpportunitySummary[]>(DEMO_OPPORTUNITIES);
+  const { user } = useAuth();
+  const isDemoEmployer = user?.email?.includes('neha.verma') ?? false;
+  
+  const [opportunities, setOpportunities] = useState<OpportunitySummary[]>(isDemoEmployer ? DEMO_OPPORTUNITIES : []);
 
   React.useEffect(() => {
     async function loadOpportunities() {
+      if (!isDemoEmployer) return;
       try {
         const res = await fetch('/api/v1/opportunities', { cache: 'no-store' });
         if (res.ok) {
@@ -89,7 +95,7 @@ export default function EmployerOpportunitiesPage() {
       }
     }
     loadOpportunities();
-  }, []);
+  }, [isDemoEmployer]);
 
   const published = opportunities.filter(o => o.status === 'published').length;
   const drafts    = opportunities.filter(o => o.status === 'draft').length;
@@ -105,7 +111,9 @@ export default function EmployerOpportunitiesPage() {
           <div>
             <div className="section-label mb-1">Employer Workspace</div>
             <h1 className="text-2xl font-black text-text-primary">Open Opportunities</h1>
-            <p className="text-xs text-text-muted font-mono mt-0.5">Neha Verma • Recruiter • Sample Analytics Studio</p>
+            <p className="text-xs text-text-muted font-mono mt-0.5">
+              {user?.name || 'Employer'} • Recruiter • {user?.institutionName || 'Organization'}
+            </p>
           </div>
           <div className="flex items-center gap-3 self-start sm:self-center">
             <button 
@@ -145,70 +153,89 @@ export default function EmployerOpportunitiesPage() {
 
         {/* ── OPPORTUNITY CARDS ── */}
         <div className="space-y-4">
-          {opportunities.map((opp) => (
-            <div key={opp.id} className="pb-card p-6 space-y-4 hover:border-border-accent transition-all group">
-              {/* Row 1: Title + status */}
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusBadge status={opp.status} />
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border capitalize ${modeStyle[opp.work_mode]}`}>
-                      {opp.work_mode}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-black text-text-primary leading-snug">{opp.title}</h3>
-                  <div className="flex items-center gap-1.5 text-xs text-text-muted">
-                    <Building className="w-3 h-3" />
-                    <span>{opp.org_name}</span>
-                  </div>
-                </div>
-                <Link
-                  href={`/employer/opportunities/${opp.id}/applicants`}
-                  className="pb-btn-primary shrink-0 text-xs py-2 px-3 group-hover:scale-105"
-                >
-                  <Users className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">View Applicants</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+          {opportunities.length === 0 ? (
+            <div className="pb-card p-12 text-center flex flex-col items-center justify-center border-dashed">
+              <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-border-accent flex items-center justify-center text-accent mb-4">
+                <Briefcase className="w-6 h-6" />
               </div>
-
-              {/* Row 2: Meta */}
-              <div className="flex flex-wrap gap-3 text-[11px] text-text-muted">
-                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{opp.location_text}</span>
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{opp.duration_text}</span>
-                <span className="flex items-center gap-1"><IndianRupee className="w-3 h-3" />{opp.compensation_text}</span>
-                <span className="flex items-center gap-1 text-warning"><Calendar className="w-3 h-3" />
-                  Closes {new Date(opp.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                </span>
-              </div>
-
-              {/* Row 3: Applicant stats + skills */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2 border-t border-border">
-                {/* Stats */}
-                <div className="flex gap-4 text-xs">
-                  <div className="text-center">
-                    <div className="metric-value text-xl text-text-primary">{opp.total_applicants}</div>
-                    <div className="text-[10px] text-text-muted">Applied</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="metric-value text-xl text-success">{opp.reviewed_applicants}</div>
-                    <div className="text-[10px] text-text-muted">Reviewed</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="metric-value text-xl text-accent">{opp.shortlisted_count}</div>
-                    <div className="text-[10px] text-text-muted">Shortlisted</div>
-                  </div>
-                </div>
-
-                {/* Skills */}
-                <div className="flex flex-wrap gap-1.5 sm:ml-auto">
-                  {opp.key_skills.map((s) => (
-                    <span key={s} className="pb-badge text-[10px]">{s}</span>
-                  ))}
-                </div>
-              </div>
+              <h3 className="text-lg font-bold text-text-primary mb-1">No Active Opportunities</h3>
+              <p className="text-sm text-text-muted max-w-md mx-auto mb-6">
+                You haven't posted any roles yet. Use our cryptographic requirement publisher to attract fully-verified talent.
+              </p>
+              <button 
+                onClick={() => toast.info('Post Mode Activated', { description: 'Opening the cryptographic requirement publisher.' })}
+                className="pb-btn-primary"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Post Your First Role
+              </button>
             </div>
-          ))}
+          ) : (
+            opportunities.map((opp) => (
+              <div key={opp.id} className="pb-card p-6 space-y-4 hover:border-border-accent transition-all group">
+                {/* Row 1: Title + status */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge status={opp.status} />
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border capitalize ${modeStyle[opp.work_mode]}`}>
+                        {opp.work_mode}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-black text-text-primary leading-snug">{opp.title}</h3>
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted">
+                      <Building className="w-3 h-3" />
+                      <span>{opp.org_name}</span>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/employer/opportunities/${opp.id}/applicants`}
+                    className="pb-btn-primary shrink-0 text-xs py-2 px-3 group-hover:scale-105"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">View Applicants</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Row 2: Meta */}
+                <div className="flex flex-wrap gap-3 text-[11px] text-text-muted">
+                  <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{opp.location_text}</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{opp.duration_text}</span>
+                  <span className="flex items-center gap-1"><IndianRupee className="w-3 h-3" />{opp.compensation_text}</span>
+                  <span className="flex items-center gap-1 text-warning"><Calendar className="w-3 h-3" />
+                    Closes {new Date(opp.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                  </span>
+                </div>
+
+                {/* Row 3: Applicant stats + skills */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-2 border-t border-border">
+                  {/* Stats */}
+                  <div className="flex gap-4 text-xs">
+                    <div className="text-center">
+                      <div className="metric-value text-xl text-text-primary">{opp.total_applicants}</div>
+                      <div className="text-[10px] text-text-muted">Applied</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="metric-value text-xl text-success">{opp.reviewed_applicants}</div>
+                      <div className="text-[10px] text-text-muted">Reviewed</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="metric-value text-xl text-accent">{opp.shortlisted_count}</div>
+                      <div className="text-[10px] text-text-muted">Shortlisted</div>
+                    </div>
+                  </div>
+
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-1.5 sm:ml-auto">
+                    {opp.key_skills.map((s) => (
+                      <span key={s} className="pb-badge text-[10px]">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         {/* ProofBridge CTA */}

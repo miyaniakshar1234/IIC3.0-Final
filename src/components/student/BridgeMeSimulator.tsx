@@ -48,14 +48,20 @@ export function BridgeMeSimulator({
 
   if (!isOpen) return null;
 
-  // Base is 61 (Spreadsheets 25 + Comm 12 + Reasoning 24)
-  // SQL Level 3 adds +35
-  // Comm Level 4 adds +4 (12 -> 16)
-  let simulatedScore = 61;
-  if (simulatedSql) simulatedScore += 35;
-  if (simulatedComm) simulatedScore += 4;
+  // Base score from props
+  let simulatedScore = currentCoverage;
+  
+  // Only add SQL score if we are toggling it ON and it isn't ALREADY included in currentCoverage (hasVerifiedSql)
+  if (simulatedSql && !hasVerifiedSql) {
+    simulatedScore += 35;
+  }
+  
+  // Comm upgrade adds +4
+  if (simulatedComm) {
+    simulatedScore += 4;
+  }
 
-  const unlockedCount = simulatedScore >= 90 ? 4 : simulatedScore >= 75 ? 2 : 1;
+  const unlockedCount = simulatedScore >= 90 ? 4 : simulatedScore >= 75 ? 2 : simulatedScore >= 70 ? 1 : 0;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
@@ -121,7 +127,7 @@ export function BridgeMeSimulator({
               {unlockedCount} / 4
             </div>
             <div className="text-[11px] text-text-secondary mt-0.5">
-              {simulatedScore >= 90 ? 'Top tier qualified' : 'Threshold: 85%+'}
+              {simulatedScore >= 90 ? 'Top tier qualified' : simulatedScore >= 70 ? 'Threshold met (70%+)' : 'Needs 70%+ threshold'}
             </div>
           </div>
         </div>

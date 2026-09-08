@@ -62,7 +62,12 @@ const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
   },
 ];
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function ReviewerQueuePage() {
+  const { user } = useAuth();
+  const isDemoReviewer = user?.email?.includes('alok.sharma') ?? false;
+
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
 
@@ -89,7 +94,9 @@ export default function ReviewerQueuePage() {
     };
   }, []);
 
-  const submissions = DEFAULT_SUBMISSIONS.map((s) => {
+  const baseSubmissions = isDemoReviewer ? DEFAULT_SUBMISSIONS : [];
+
+  const submissions = baseSubmissions.map((s) => {
     if (s.id === 'sub-sql-001' && hasVerifiedSql) {
       return {
         ...s,
@@ -122,7 +129,9 @@ export default function ReviewerQueuePage() {
           <div>
             <div className="section-label mb-1">Reviewer Workspace</div>
             <h1 className="text-2xl font-black text-text-primary">Evaluation Queue</h1>
-            <p className="text-xs text-text-muted font-mono mt-0.5">Dr. Alok Sharma · Faculty Evaluator · Manipal University Jaipur (MUJ)</p>
+            <p className="text-xs text-text-muted font-mono mt-0.5">
+              {user?.name || 'Faculty Evaluator'} · Faculty Evaluator · {user?.institutionName || 'Institution'}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             {pending > 0 && (

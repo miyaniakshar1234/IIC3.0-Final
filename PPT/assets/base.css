@@ -1,0 +1,115 @@
+/* MediBridge Pitch Deck — Shared System
+   Aesthetic: Deep Glassmorphism, Modern Healthcare Tech
+*/
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --teal-900:#042F2E;
+  --teal-800:#0B4744;
+  --teal-700:#0F766E;
+  --teal-600:#0D9488;
+  --cyan-500:#06B6D4;
+  --cyan-400:#22D3EE;
+  --emerald:#10B981;
+  --amber:#F59E0B;
+  --white:#F8FAFC;
+  --white-soft:rgba(248,250,252,0.72);
+  --white-mute:rgba(248,250,252,0.5);
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-bg-strong: rgba(255,255,255,0.09);
+  --glass-border: rgba(255,255,255,0.14);
+  --glass-border-strong: rgba(255,255,255,0.22);
+  --font-display:'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:'Inter', system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow:hidden;font-family:var(--font-body);color:var(--white);-webkit-font-smoothing:antialiased;}
+
+/* Slide canvas & background */
+.slide-container{
+  position:relative;width:1920px;height:1080px;overflow:hidden;
+  background:
+    radial-gradient(1200px 800px at 85% -10%, rgba(6,182,212,0.35), transparent 60%),
+    radial-gradient(1000px 700px at -10% 100%, rgba(15,118,110,0.55), transparent 60%),
+    radial-gradient(900px 600px at 50% 50%, rgba(16,185,129,0.10), transparent 70%),
+    linear-gradient(135deg, #041F1E 0%, #062F2C 40%, #083F3A 100%);
+  font-family:var(--font-body);
+}
+
+/* Ambient orbs — subtle floating light for depth */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.55;pointer-events:none;}
+.orb-cyan{background:radial-gradient(circle, #06B6D4 0%, transparent 70%);}
+.orb-teal{background:radial-gradient(circle, #0F766E 0%, transparent 70%);}
+.orb-emerald{background:radial-gradient(circle, #10B981 0%, transparent 70%);}
+
+/* Fine grid overlay */
+.grid-overlay{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+}
+
+/* Glass card */
+.glass{
+  background:var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border:1px solid var(--glass-border);
+  border-radius:24px;
+  box-shadow:
+    0 20px 60px -20px rgba(0,0,0,0.45),
+    inset 0 1px 0 0 rgba(255,255,255,0.10);
+}
+.glass-strong{
+  background:var(--glass-bg-strong);
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border:1px solid var(--glass-border-strong);
+  border-radius:24px;
+  box-shadow:
+    0 30px 80px -20px rgba(0,0,0,0.55),
+    inset 0 1px 0 0 rgba(255,255,255,0.14);
+}
+
+/* Chrome */
+.chrome-logo{
+  filter: brightness(0) invert(1);
+  opacity:0.92;
+}
+.chrome-page{
+  font-family:var(--font-mono);
+  color:var(--white-mute);
+  font-size:14px;letter-spacing:0.18em;
+}
+.chrome-brand{
+  font-family:var(--font-display);
+  font-weight:700;
+  letter-spacing:0.02em;
+}
+
+/* Typography helpers */
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:14px;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--cyan-400);
+}
+.h1{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;line-height:1.02;}
+.h2{font-family:var(--font-display);font-weight:700;letter-spacing:-0.015em;line-height:1.08;}
+.h3{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;}
+.body{font-family:var(--font-body);color:var(--white-soft);line-height:1.5;}
+
+/* Accents */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:999px;
+  background:rgba(6,182,212,0.12);
+  border:1px solid rgba(6,182,212,0.35);
+  font-family:var(--font-mono);font-size:13px;letter-spacing:0.14em;
+  color:#7EE3F0;text-transform:uppercase;
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--emerald);box-shadow:0 0 12px var(--emerald);}

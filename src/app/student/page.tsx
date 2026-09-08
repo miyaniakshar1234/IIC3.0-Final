@@ -33,12 +33,20 @@ import {
 
 export default function StudentDashboardPage() {
   const { user } = useAuth();
-  const [isEmptyAccount, setIsEmptyAccount] = useState(false);
+  const isMeera = user?.email?.includes('meera.patel') ?? false;
+  const [isEmptyAccount, setIsEmptyAccount] = useState(!isMeera);
   const [showCalculation, setShowCalculation] = useState(false);
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
   const [liveCoverage, setLiveCoverage] = useState(61);
   const [submissionStatus, setSubmissionStatus] = useState<'submitted' | 'reviewed'>('submitted');
   const [isBridgeMeOpen, setIsBridgeMeOpen] = useState(false);
+
+  // Sync isEmptyAccount if user changes
+  useEffect(() => {
+    if (user) {
+      setIsEmptyAccount(!user.email?.includes('meera.patel'));
+    }
+  }, [user]);
 
   useEffect(() => {
     let isMounted = true;
@@ -68,13 +76,13 @@ export default function StudentDashboardPage() {
   const student = {
     name: user?.name || 'Meera Patel',
     avatarInitial: user?.avatarInitials || 'MP',
-    program: user?.program || 'MCA 2026',
-    institution: user?.institutionName || 'Manipal University Jaipur (MUJ)',
-    rollNumber: user?.rollNumber || 'MCA-2026-042',
+    program: user?.program || 'Student',
+    institution: user?.institutionName || 'Self-Taught',
+    rollNumber: user?.rollNumber || '001',
     affiliationStatus: user?.affiliationStatus || 'approved',
-    headline: hasVerifiedSql
+    headline: isEmptyAccount ? 'Student' : (hasVerifiedSql
       ? 'Aspiring Data Analyst · 4 Verified Attainments (SQL Verified)'
-      : 'Aspiring Data Analyst · 3 Verified Attainments',
+      : 'Aspiring Data Analyst · 3 Verified Attainments'),
   };
 
   const targetOpportunity = {
@@ -95,23 +103,16 @@ export default function StudentDashboardPage() {
     difficulty: 'Intermediate',
   };
 
-  const isMeera = user?.email?.includes('meera.patel');
-
-  const skillBreakdown = isMeera ? [
+  const skillBreakdown = !isEmptyAccount ? [
     { skill: 'Spreadsheets', requiredLevel: 3, reviewedLevel: 3, weight: 25, contribution: 25, formulaNote: '25 × min(3/3, 1) = 25 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Written Communication', requiredLevel: 4, reviewedLevel: 3, weight: 16, contribution: 12, formulaNote: '16 × min(3/4, 1) = 12 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Analytical Reasoning', requiredLevel: 3, reviewedLevel: 3, weight: 24, contribution: 24, formulaNote: '24 × min(3/3, 1) = 24 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     hasVerifiedSql
       ? { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 3, weight: 35, contribution: 35, formulaNote: '35 × min(3/3, 1) = 35 pts (verified Level 3)', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Just now' }
       : { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
-  ] : [
-    { skill: 'Spreadsheets', requiredLevel: 3, reviewedLevel: 0, weight: 25, contribution: 0, formulaNote: '25 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
-    { skill: 'Written Communication', requiredLevel: 4, reviewedLevel: 0, weight: 16, contribution: 0, formulaNote: '16 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
-    { skill: 'Analytical Reasoning', requiredLevel: 3, reviewedLevel: 0, weight: 24, contribution: 0, formulaNote: '24 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
-    { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
-  ];
+  ] : [];
 
-  const recentSubmissions = isMeera ? [
+  const recentSubmissions = !isEmptyAccount ? [
     {
       id: 'sub-sql-001',
       title: 'Explain Monthly Sales from Messy Dataset',
@@ -122,7 +123,7 @@ export default function StudentDashboardPage() {
     { id: 'sub-comm-001',  title: 'Stakeholder Communication Report', skill: 'Communication', status: 'reviewed' as const, reviewedDate: 'Sep 5' },
   ] : [];
 
-  const coverageScore = isEmptyAccount ? 0 : (isMeera ? (hasVerifiedSql ? 96 : liveCoverage) : 0);
+  const coverageScore = isEmptyAccount ? 0 : (hasVerifiedSql ? 96 : liveCoverage);
 
   return (
     <AppShell>
@@ -163,17 +164,6 @@ export default function StudentDashboardPage() {
             >
               <Zap className="w-3.5 h-3.5 fill-white/20" />
               <span>⚡ Bridge Me</span>
-            </button>
-
-            <button
-              onClick={() => setIsEmptyAccount(!isEmptyAccount)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
-                isEmptyAccount
-                  ? 'bg-warning/10 text-warning border-warning/30'
-                  : 'bg-surface-raised text-text-secondary border-border hover:border-border-bright'
-              }`}
-            >
-              {isEmptyAccount ? '⚡ Show Populated State' : '🔲 Show Empty State'}
             </button>
 
             <Link href={`/opportunities/${targetOpportunity.id}`} className="pb-btn-primary py-1.5 px-3 text-xs">
