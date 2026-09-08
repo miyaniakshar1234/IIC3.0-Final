@@ -3,6 +3,7 @@ export interface AstSignal {
   finding: string;
   passed: boolean;
   codeSnippet?: string;
+  metric?: string;
 }
 
 export interface DiscoveredSkill {
@@ -12,6 +13,25 @@ export interface DiscoveredSkill {
   confidence: 'HIGH' | 'MEDIUM' | 'LOW';
   evidenceRef: string;
   linesAnalyzed: number;
+  astPattern: string;
+}
+
+export interface AnalyzedRepo {
+  name: string;
+  description: string;
+  language: string;
+  stars: number;
+  forks: number;
+  url: string;
+  astTokensParsed: number;
+  authenticLogicPercent: number;
+  tags: string[];
+}
+
+export interface CommitVelocityPoint {
+  period: string;
+  commits: number;
+  authenticityScore: number;
 }
 
 export interface GithubEvaluationResult {
@@ -27,12 +47,30 @@ export interface GithubEvaluationResult {
   authoredVelocityRatio: number;
   astSignals: AstSignal[];
   discoveredSkills: DiscoveredSkill[];
+  repositories: AnalyzedRepo[];
+  commitVelocity: CommitVelocityPoint[];
+  forensics: {
+    cyclomaticComplexity: string;
+    idiomaticPatternsCount: number;
+    testCoverageEstimated: string;
+    antiPatternsDetected: string[];
+  };
   auditDigest: string;
   analyzedAt: string;
-  profileData?: {
-    avatarUrl?: string;
-    publicRepos?: number;
-    bio?: string;
-    name?: string;
+  profileData: {
+    avatarUrl: string;
+    name: string;
+    bio: string;
+    publicRepos: number;
+    followers: number;
+    location: string;
+    profileUrl: string;
+  };
+  verifiableCredential: {
+    id: string;
+    type: string[];
+    issuer: string;
+    issuanceDate: string;
+    proofValue: string;
   };
 }

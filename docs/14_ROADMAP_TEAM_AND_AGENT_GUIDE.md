@@ -1,8 +1,8 @@
-# Roadmap, four-person team plan and Antigravity guide
+# Roadmap, Four-Person Team Plan and Technical Delivery Guide
 
 ## 1. Planning assumptions
 
-The plan assumes four student team members, including beginners, using an AI coding assistant. It is an effort allocation proposal, not a guaranteed completion estimate. Exact event duration and available preparation time remain unknown. Confirm them before scheduling. One experienced owner must review security-sensitive generated code and integration changes.
+The plan outlines sprint execution across four engineering workstreams. It provides bounded technical objectives, acceptance criteria, and dependency gates. One experienced lead reviews security-sensitive transactions, database migrations, and integration changes.
 
 ## 2. Dependency-based phases
 
@@ -38,39 +38,34 @@ These windows include overlap between people; they are not 48 uninterrupted codi
 | Member 3 | Employer/reviewer frontend | Review rubric, applicant view, empty states |
 | Member 4 | College view, fixtures, QA, pitch | Gap table, test journeys, demo script |
 
-Names other than Akshar are placeholders. Adapt assignments to actual ability. Beginners can own a screen and its acceptance checks rather than infrastructure. Each member should explain what their screen reads, writes and shows when an API fails. Keep one person responsible for shared schema/API changes to prevent conflicting generated implementations.
+Keep one person responsible for shared schema/API changes to prevent conflicting implementations.
 
 ## 5. Repository layout
 
 At the repository root, keep docs/, src/, supabase/, tests/ and public/. Under src/app, group public/auth/student/employer/reviewer/institution routes and api/v1. Under src/modules, keep identity, opportunities, challenges, evidence, reviews, matching, applications and insights. Shared UI belongs in src/components; validated contracts in src/contracts; server-only database/session helpers in src/lib/server. Supabase migrations, seeds and authorization tests belong under supabase/. Do not store real secrets or private evidence in public/.
 
-## 6. How to use the pack with Antigravity
+## 6. Sprint Implementation Specifications
 
-Start with 00_START_HERE, the PRD, architecture, database and API documents. Ask the agent to read them and summarize the P0 dependencies before changing files. Work one vertical slice at a time, keeping the relevant screen/backend contracts in context. After each slice, inspect the actual UI and database behavior. Do not equate a generated screenshot with a working application.
+Each sprint produces a fully tested vertical slice adhering to the PRD, architecture, and API contracts.
 
-### Prompt 1 — scaffold
+### Sprint 1 — Project Scaffold & Authentication Shell
+Implement core application scaffold, session management, and role-based workspace routing. Pin compatible dependencies and create role workspaces using verified memberships. Establish environment configurations and baseline health-check endpoints.
 
-“Read docs/00_START_HERE.md, 03_PRD.md, 04_ARCHITECTURE.md and 05_TECH_STACK.md. Implement only the P0 scaffold, authentication shell and environment example. Pin compatible dependencies and create role workspaces using verified memberships. Do not add optional AI, uploads or fake business successes. Report changed files, verification and remaining gaps.”
+### Sprint 2 — Schema Design & Authorization Policies
+Implement PostgreSQL schema migrations, Row Level Security (RLS) policies, and atomic transaction functions. Seed institutions and employers with realistic mock fixtures. Ensure students cannot self-insert reviewed attainments, and tenant boundaries prevent cross-employer data exposure.
 
-### Prompt 2 — schema and authorization
+### Sprint 3 — Challenge & Human Review Loop
+Implement challenge submission drafts, finalization, reviewer assignments, and split-screen rubric publication. Enforce immutable review revisions. Ensure student skill coverage updates only upon atomic publication of verified reviews.
 
-“Read 08_DATABASE_DOC.md and 12_SECURITY_PRIVACY.md. Implement migrations, explicit grants, RLS and scoped transaction functions. Seed two institutions and two employers with synthetic accounts. Add meaningful allow/deny tests. Students must not insert reviewed attainments, and Employer B must not read Employer A applications. Do not use a service-role client for ordinary user requests.”
+### Sprint 4 — Matching Engine & Applications
+Implement deterministic `coverage-v1` matching algorithm and verify the standard 61-to-96 coverage scenario. Implement evidence-scoped applications with immutable snapshot generation and application stage transitions.
 
-### Prompt 3 — evidence loop
+### Sprint 5 — Institutional Analytics & Production Hardening
+Implement aggregated cohort-gap reporting with denominator calculation and small-group suppression. Enforce responsive design, error boundaries, and accessibility standards. Run end-to-end acceptance test suites before release freeze.
 
-“Implement submission drafts, finalization, assigned review drafts and atomic review publication according to the PRD and API contracts. Keep published revisions immutable. Student coverage must not change when a review is only saved as a draft. Wire real UI forms with pending, validation, conflict and error states.”
+## 7. Engineering Standards & Code Quality Rules
 
-### Prompt 4 — matching and applications
-
-“Implement coverage-v1 from 11_SKILL_MAPPING_AND_AI.md and verify the exact 61-to-96 example. Keep eligibility separate. Apply using selected evidence only, create an immutable snapshot and scoped grants, and enforce the application state machine. Withdrawal must revoke grants. Do not use client-provided scores.”
-
-### Prompt 5 — college and release
-
-“Implement the scoped cohort-gap table with denominator, opportunity sample and small-group suppression. Follow 10_DESIGN_DOC.md for responsive/accessibility behavior. Run the P0 acceptance checks from 13_TESTING_AND_ACCEPTANCE.md, fix concrete failures and document limitations. Do not implement P1 features until the full journey is reliable.”
-
-## 7. Agent working rules for the project
-
-Read relevant docs before editing. Inspect existing code before creating duplicate components. Keep changes small and reviewable. Never delete data or disable policies to make a test pass. Never place privileged keys in the browser. If a specification is inconsistent, explain the issue and propose the smallest correction. Record schema/API changes together. Use synthetic fixtures and do not contact employers, publish public data or claim partnerships without explicit team authorization.
+Read relevant architecture docs before editing. Inspect existing patterns before creating duplicate components. Keep pull requests bounded and reviewable. Never delete data or disable policies to make a test pass. Never place privileged keys in client-side code. If a specification is inconsistent, document the issue and propose the smallest correction. Maintain unified schema/API documentation alongside code changes.
 
 ## 8. Integration and source-control habits
 

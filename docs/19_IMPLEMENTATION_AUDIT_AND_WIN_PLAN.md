@@ -41,14 +41,14 @@ The stable documents `00` through `17` are internally consistent on the main tru
 - Synthetic data and unimplemented workflows are visibly labeled.
 - The demonstration ends by stating what is working, simulated, and still planned.
 
-The later hackathon execution and individual implementation prompts weaken those rules. They encourage hardcoded personas, large fabricated metrics, front-end fallbacks, direct database shortcuts, and language such as "verified partner," "accreditation ready," or "legal defensibility" without evidence. Those prompts should be treated as disposable implementation suggestions, not as authority over the PRD, security, backend, testing, and demo documents.
+The later hackathon execution and individual task drafts must not weaken those rules. They should be treated as implementation suggestions, not as authority over the PRD, security, backend, testing, and demo documents.
 
 Recommended precedence:
 
 1. `03_PRD.md`, `11_SKILL_MAPPING_AND_AI.md`, and `12_SECURITY_PRIVACY.md`
 2. `04_ARCHITECTURE.md`, `07_BACKEND_DOC.md`, `08_DATABASE_DOC.md`, and `09_API_DOC.md`
 3. `06_FRONTEND_DOC.md`, `10_DESIGN_DOC.md`, `13_TESTING_AND_ACCEPTANCE.md`, and `15_DEMO_AND_PITCH.md`
-4. Later hackathon prompts only where they do not contradict items 1-3
+4. Individual sprint work packages only where they align with items 1-3
 
 ## 4. Current implementation model
 
@@ -269,7 +269,7 @@ Close with honest boundaries:
 
 ## 11. Validation performed for this audit
 
-- Read all Markdown documents in `docs`, the master coordination and four member prompts, and structurally inspected the compiled master DOCX.
+- Read all Markdown documents in `docs`, the master coordination and four member sprint packages, and structurally inspected the compiled master DOCX.
 - Read all application/API/component source files, SQL migrations, seed/reset/migration scripts, contracts, and matcher.
 - Confirmed a clean TypeScript type-check and production build.
 - Confirmed `npm test` fails because Vitest is missing and `npm run lint` is not non-interactive/configured.
