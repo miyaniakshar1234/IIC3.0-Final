@@ -20,7 +20,7 @@ The schedule is mapped directly from the official IIC 3.0 event agenda (released
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                 DAY 1: SEPTEMBER 08, 2026                                              │
 ├───────────────────┬───────────────────────────────┬────────────────────────────────────────────────────┤
-│ Time              │ Official Milestone            │ Team Sprint & Antigravity Objective                │
+│ Time              │ Official Milestone            │ Team Sprint & Milestone Objective                  │
 ├───────────────────┼───────────────────────────────┼────────────────────────────────────────────────────┤
 │ 09:00 - 10:30     │ Reporting Time (AB-1 Lobby)   │ Completed                                          │
 │ 10:30 - 12:00     │ Inaugural Ceremony (AB-3)     │ Completed                                          │
@@ -52,7 +52,7 @@ The schedule is mapped directly from the official IIC 3.0 event agenda (released
 
 ## 2. Multi-Developer Git Workflow (Single GitHub Repository)
 
-All 4 members will contribute to the same GitHub repository using **Antigravity**. To prevent merge conflicts, file lockouts, or broken builds during the high-speed 48-hour event, adhere strictly to these rules:
+All 4 members contribute to the same GitHub repository using clean Git branches and pull requests. To prevent merge conflicts, file lockouts, or broken builds during the high-speed 48-hour event, adhere strictly to these rules:
 
 ### 2.1 Repository Architecture & Ownership Boundaries
 
@@ -60,7 +60,7 @@ To eliminate conflicts, files are divided into strict ownership zones:
 
 ```
 ProofBridge/
-├── docs/                                  # Shared Reference (Read-only for agents)
+├── docs/                                  # Shared Reference (System Specifications)
 ├── supabase/
 │   ├── migrations/                        # AKSHAR ONLY (Schema & RLS)
 │   └── seed.sql                           # LUBHANSHI & AKSHAR (Synthetic Fixtures)
@@ -95,7 +95,7 @@ ProofBridge/
   * Lakshita: `feat/reviewer-rubric`, `feat/recruiter-shortlist`, `feat/opp-management`
   * Lubhanshi: `feat/institution-insights`, `feat/seed-fixtures`, `feat/acceptance-tests`
 
-### 2.3 Git Operations Playbook (Run in Terminal / Antigravity)
+### 2.3 Git Operations Playbook (Run in Terminal)
 
 #### Starting a New Feature:
 ```bash
@@ -131,9 +131,9 @@ git push origin feat/your-feature-name
 
 ---
 
-## 3. Team Member Work Breakdown & Antigravity Prompts
+## 3. Team Member Work Breakdown & Technical Specifications
 
-Each team member has a dedicated, bounded mission. Below are their responsibilities, acceptance criteria, and exact **copy-paste Antigravity AI prompts** for every sprint.
+Each team member has a dedicated, bounded mission. Below are their responsibilities, acceptance criteria, and technical specifications for every sprint.
 
 ---
 
@@ -154,33 +154,29 @@ Each team member has a dedicated, bounded mission. Below are their responsibilit
   5. Implement `coverage-v1` deterministic matching engine ([11_SKILL_MAPPING_AND_AI.md](file:///d:/IIC3.0/ProofBridge/docs/11_SKILL_MAPPING_AND_AI.md)).
   6. Manage Vercel / Supabase deployment and environment variables.
 
-#### Antigravity Prompt 1 (Akshar - Sprint 1: Project Scaffold & Database Foundation):
-> "You are Antigravity working with Akshar Miyani, the Backend Lead for ProofBridge.  
-> Read `docs/00_START_HERE.md`, `docs/04_ARCHITECTURE.md`, `docs/05_TECH_STACK.md`, and `docs/08_DATABASE_DOC.md`.  
-> Task:  
-> 1. Scaffold a Next.js 14/15 App Router project with TypeScript, Tailwind CSS, Lucide React, and `@supabase/supabase-js`.  
-> 2. Create the complete PostgreSQL migration files in `supabase/migrations/001_initial_schema.sql` covering all 24 entities from `08_DATABASE_DOC.md` (profiles, organizations, memberships, skills, opportunities, challenges, rubric_criteria, submissions, submission_revisions, reviews, review_scores, skill_attainments, applications, evidence_grants, audit_events, outbox_events, idempotency_records).  
-> 3. Add CHECK constraints, foreign keys, and indexes.  
-> 4. Ensure `skill_attainments` cannot be directly inserted by the public client.  
-> Provide the migration script, package.json dependencies, and Supabase client configuration in `src/lib/server/supabase.ts`."
+#### Technical Work Package 1 (Akshar - Sprint 1: Project Scaffold & Database Foundation):
+- **Objective & Scope:**
+  1. Scaffold Next.js 14/15 App Router project with TypeScript, Tailwind CSS, Lucide React, and `@supabase/supabase-js`.
+  2. Implement PostgreSQL migration files in `supabase/migrations/001_initial_schema.sql` covering all 24 entities from `08_DATABASE_DOC.md` (profiles, organizations, memberships, skills, opportunities, challenges, rubric_criteria, submissions, submission_revisions, reviews, review_scores, skill_attainments, applications, evidence_grants, audit_events, outbox_events, idempotency_records).
+  3. Enforce CHECK constraints, foreign keys, and indexes.
+  4. Ensure `skill_attainments` cannot be directly inserted by the public client.
+  5. Configure Supabase client in `src/lib/server/supabase.ts`.
 
-#### Antigravity Prompt 2 (Akshar - Sprint 2: Atomic Functions & REST API):
-> "You are Antigravity working with Akshar Miyani on ProofBridge.  
-> Read `docs/07_BACKEND_DOC.md`, `docs/08_DATABASE_DOC.md`, and `docs/09_API_DOC.md`.  
-> Task:  
-> 1. Write the PostgreSQL functions with `SECURITY DEFINER` and fixed `search_path`:
->    - `publish_opportunity(p_opportunity_id UUID, p_actor_id UUID)`  
->    - `finalize_submission(p_submission_id UUID, p_actor_id UUID)`  
->    - `publish_review(p_assignment_id UUID, p_actor_id UUID, p_scores JSONB)`  
->    - `submit_application(p_opportunity_id UUID, p_student_id UUID, p_selected_revisions UUID[])`  
->    - `transition_application(p_application_id UUID, p_actor_id UUID, p_to_status TEXT, p_reason TEXT)`  
-> 2. Implement the Next.js App Router API route handlers under `src/app/api/v1/`:
->    - `POST /api/v1/opportunities/[id]/publish`  
->    - `POST /api/v1/submissions/[id]/finalize`  
->    - `POST /api/v1/review-assignments/[id]/publish`  
->    - `GET /api/v1/opportunities/[id]/match` (implementing the exact `coverage-v1` mathematical formula from `11_SKILL_MAPPING_AND_AI.md`)  
->    - `POST /api/v1/applications`  
-> Enforce `expected_version` concurrency and handle standard JSON error envelopes."
+#### Technical Work Package 2 (Akshar - Sprint 2: Atomic Functions & REST API):
+- **Objective & Scope:**
+  1. Write PostgreSQL functions with `SECURITY DEFINER` and fixed `search_path`:
+     - `publish_opportunity(p_opportunity_id UUID, p_actor_id UUID)`  
+     - `finalize_submission(p_submission_id UUID, p_actor_id UUID)`  
+     - `publish_review(p_assignment_id UUID, p_actor_id UUID, p_scores JSONB)`  
+     - `submit_application(p_opportunity_id UUID, p_student_id UUID, p_selected_revisions UUID[])`  
+     - `transition_application(p_application_id UUID, p_actor_id UUID, p_to_status TEXT, p_reason TEXT)`  
+  2. Implement Next.js App Router API route handlers under `src/app/api/v1/`:
+     - `POST /api/v1/opportunities/[id]/publish`  
+     - `POST /api/v1/submissions/[id]/finalize`  
+     - `POST /api/v1/review-assignments/[id]/publish`  
+     - `GET /api/v1/opportunities/[id]/match` (implementing exact `coverage-v1` formula from `11_SKILL_MAPPING_AND_AI.md`)  
+     - `POST /api/v1/applications`  
+  3. Enforce `expected_version` concurrency and standard JSON error envelopes.
 
 ---
 
@@ -195,32 +191,28 @@ Each team member has a dedicated, bounded mission. Below are their responsibilit
   5. Application Submission Dialog — Explicit confirmation modal displaying shared evidence revisions.
   6. Application Tracking Screen (`/student/applications`) — Real-time status timeline.
 
-#### Antigravity Prompt 1 (Faizan - Sprint 1 & 2: Student Dashboard & Evidence Passport):
-> "You are Antigravity working with Faizan on the ProofBridge Student Frontend.  
-> Read `docs/06_FRONTEND_DOC.md`, `docs/10_DESIGN_DOC.md`, and `docs/11_SKILL_MAPPING_AND_AI.md`.  
-> Task:  
-> 1. Create the Student Action-First Dashboard at `src/app/student/page.tsx`:  
->    - Banner highlighting 'Your Next Step' (e.g., Missing SQL for Analyst Internship).  
->    - Recommended challenge card with time estimate and direct start button.  
->    - Summary of recent feedback and active applications.  
-> 2. Build the Evidence Passport at `src/app/student/passport/page.tsx`:  
->    - Group skills into: 'Reviewed Skills' (green chip, reviewer name, date), 'Self-Declared' (neutral chip), and 'Awaiting Review' (amber chip).  
->    - Clicking a reviewed skill opens `EvidenceDrawer` showing rubric criteria scores, reviewer rationale, and the student's contribution statement.  
-> Follow the color tokens in `10_DESIGN_DOC.md` (`#185ADB` accent, `#166534` success, `#F7F8FA` canvas)."
+#### Technical Work Package 1 (Faizan - Sprint 1 & 2: Student Dashboard & Evidence Passport):
+- **Objective & Scope:**
+  1. Build Student Action-First Dashboard at `src/app/student/page.tsx`:  
+     - Banner highlighting "Your Next Step" (e.g., Missing SQL for Analyst Internship).  
+     - Recommended challenge card with time estimate and direct action trigger.  
+     - Summary of recent feedback and active applications.  
+  2. Build Evidence Passport at `src/app/student/passport/page.tsx`:  
+     - Group skills into: 'Reviewed Skills' (green badge, reviewer name, date), 'Self-Declared' (neutral badge), and 'Awaiting Review' (amber badge).  
+     - Clicking a reviewed skill opens `EvidenceDrawer` showing rubric criteria scores, reviewer rationale, and the student's contribution statement.  
+     - Follow color tokens from `10_DESIGN_DOC.md` (`#185ADB` accent, `#166534` success, `#F7F8FA` canvas).
 
-#### Antigravity Prompt 2 (Faizan - Sprint 2 & 3: Challenge Workspace & Match Detail):
-> "You are Antigravity working with Faizan on ProofBridge.  
-> Read `docs/06_FRONTEND_DOC.md`, `docs/09_API_DOC.md`, and `docs/11_SKILL_MAPPING_AND_AI.md`.  
-> Task:  
-> 1. Build the Challenge Workspace at `src/app/challenges/[id]/page.tsx`:  
->    - Display challenge brief, permitted tools/AI policy, deliverables, and anchored rubric.  
->    - Submission form: Title, Body text (code/queries/explanations), Contribution Statement ('What did you do? What help did you use?'), and up to 10 HTTPS reference links.  
->    - Include 'Save Draft' and 'Finalize Submission' buttons with confirmation modal.  
-> 2. Build the Opportunity Detail & Coverage Panel at `src/app/opportunities/[id]/page.tsx`:  
->    - Header: Role title, employer name, compensation, work mode, deadline.  
->    - Coverage Panel: Visual percentage bar (e.g., 61% -> 96%), per-skill table showing required level vs reviewed level, weight, and contribution.  
->    - 'How this is calculated' disclosure showing the formula.  
->    - 'Apply Now' button that opens evidence selection dialog."
+#### Technical Work Package 2 (Faizan - Sprint 2 & 3: Challenge Workspace & Match Detail):
+- **Objective & Scope:**
+  1. Build Challenge Workspace at `src/app/challenges/[id]/page.tsx`:  
+     - Display challenge brief, permitted tools/AI policy, deliverables, and anchored rubric.  
+     - Submission form: Title, Body text (code/queries/explanations), Contribution Statement, and up to 10 HTTPS reference links.  
+     - Include 'Save Draft' and 'Finalize Submission' actions with confirmation modal.  
+  2. Build Opportunity Detail & Coverage Panel at `src/app/opportunities/[id]/page.tsx`:  
+     - Header: Role title, employer name, compensation, work mode, deadline.  
+     - Coverage Panel: Visual percentage bar (e.g., 61% -> 96%), per-skill breakdown table.  
+     - 'How this is calculated' disclosure showing formula.  
+     - 'Apply Now' action opening evidence selection modal.
 
 ---
 
@@ -239,26 +231,22 @@ Each team member has a dedicated, bounded mission. Below are their responsibilit
      * Click candidate to inspect frozen evidence snapshot drawer.
      * Action menu: Move status (`shortlisted`, `interview`, `offered`, `rejected`).
 
-#### Antigravity Prompt 1 (Lakshita - Sprint 2: Reviewer Queue & Split-Screen Rubric):
-> "You are Antigravity working with Lakshita on ProofBridge Reviewer Experience.  
-> Read `docs/06_FRONTEND_DOC.md`, `docs/09_API_DOC.md`, and `docs/10_DESIGN_DOC.md`.  
-> Task:  
-> 1. Build the Reviewer Queue at `src/app/reviewer/queue/page.tsx` showing pending assigned submissions with student program, challenge title, submitted date, and time waiting.  
-> 2. Build the Split-Screen Reviewer Workspace at `src/app/reviewer/submissions/[id]/page.tsx`:  
->    - Left Pane: Student finalized submission body, contribution statement, and clickable external links.  
->    - Right Pane: Rubric criteria cards. Each criterion has radio buttons for Levels 0 to 4 with descriptive anchors (e.g., Level 0 = Not demonstrated, Level 3 = Validates results & explains trade-offs) and a rationale textarea.  
->    - Include 'Publish Review' button that triggers `POST /api/v1/review-assignments/[id]/publish`. Include validation warning if any criterion is unrated.  
->    - Support 'Request Changes' with a required explanation modal."
+#### Technical Work Package 1 (Lakshita - Sprint 2: Reviewer Queue & Split-Screen Rubric):
+- **Objective & Scope:**
+  1. Build Reviewer Queue at `src/app/reviewer/queue/page.tsx` displaying pending assigned submissions with student program, challenge title, submission date, and waiting duration.  
+  2. Build Split-Screen Reviewer Workspace at `src/app/reviewer/submissions/[id]/page.tsx`:  
+     - Left Pane: Student finalized submission body, contribution statement, and verified links.  
+     - Right Pane: Rubric criteria cards. Each criterion has radio selectors for Levels 0 to 4 with descriptive anchors and rationale textarea.  
+     - 'Publish Review' action triggering `POST /api/v1/review-assignments/[id]/publish` with client-side validation.  
+     - 'Request Changes' workflow with mandatory reviewer explanation.
 
-#### Antigravity Prompt 2 (Lakshita - Sprint 3: Employer Screening & Shortlist UI):
-> "You are Antigravity working with Lakshita on ProofBridge Recruiter Experience.  
-> Read `docs/06_FRONTEND_DOC.md`, `docs/07_BACKEND_DOC.md`, and `docs/09_API_DOC.md`.  
-> Task:  
-> 1. Build the Candidate Screening Table at `src/app/employer/opportunities/[id]/applicants/page.tsx`:  
->    - Sortable columns: Candidate Name, Current Status, Reviewed Coverage (color-coded badge), Verified Evidence Count, Applied At.  
->    - Selecting a candidate opens a sliding drawer displaying the frozen `snapshot_json` (what the student proved, reviewed attainments, reviewer name and notes).  
->    - Status Transition dropdown: Allows changing status from `submitted` -> `shortlisted` -> `interview` -> `offered`.  
->    - Call `POST /api/v1/applications/[id]/transitions` with `expected_version`."
+#### Technical Work Package 2 (Lakshita - Sprint 3: Employer Screening & Shortlist UI):
+- **Objective & Scope:**
+  1. Build Candidate Screening Table at `src/app/employer/opportunities/[id]/applicants/page.tsx`:  
+     - Sortable columns: Candidate Name, Status, Reviewed Coverage (color-coded badge), Verified Evidence Count, Applied Date.  
+     - Selecting candidate opens sliding drawer displaying frozen `snapshot_json` (demonstrated competencies, attainments, reviewer notes).  
+     - Status transition dropdown: Transition between `submitted` -> `shortlisted` -> `interview` -> `offered`.  
+     - Invoke `POST /api/v1/applications/[id]/transitions` with `expected_version`.
 
 ---
 
@@ -281,43 +269,39 @@ Each team member has a dedicated, bounded mission. Below are their responsibilit
   4. Slide Deck & 5-Minute Pitch Rehearsal ([15_DEMO_AND_PITCH.md](file:///d:/IIC3.0/ProofBridge/docs/15_DEMO_AND_PITCH.md)).
   5. Local Offline Screen Recording Backup (in case of venue Wi-Fi failure).
 
-#### Antigravity Prompt 1 (Lubhanshi - Sprint 1 & 2: Seed Fixtures & Cohort Gaps):
-> "You are Antigravity working with Lubhanshi on ProofBridge.  
-> Read `docs/08_DATABASE_DOC.md`, `docs/11_SKILL_MAPPING_AND_AI.md`, and `docs/15_DEMO_AND_PITCH.md`.  
-> Task:  
-> 1. Create the complete SQL seed script at `supabase/seed.sql`:  
->    - Seed 2 institutions and 2 employers to test multi-tenant isolation.  
->    - Seed 6 synthetic students in Demo College of Computing.  
->    - Seed Student Meera with active reviewed attainments: Spreadsheets L3, Communication L3, Analytical Reasoning L3.  
->    - Seed Opportunity 'Junior Data Analyst Intern' with exact weights: SQL (35), Spreadsheets (25), Communication (16), Reasoning (24).  
->    - Seed Challenge 'Explain monthly sales from a messy dataset' linked to SQL rubric criteria.  
-> 2. Build the Institution Insights Screen at `src/app/institution/insights/page.tsx`:  
->    - Filters for cohort and target opportunities.  
->    - Cohort Gap Table displaying Skill, Students with Gap, Total Enrolled, Gap %.  
->    - Clicking SQL shows the level breakdown."
+#### Technical Work Package 1 (Lubhanshi - Sprint 1 & 2: Seed Fixtures & Cohort Gaps):
+- **Objective & Scope:**
+  1. Implement complete SQL seed script in `supabase/seed.sql`:  
+     - Seed 2 institutions and 2 employers to test multi-tenant isolation.  
+     - Seed 6 synthetic students in Demo College of Computing.  
+     - Seed Student Meera with active reviewed attainments: Spreadsheets L3, Communication L3, Analytical Reasoning L3.  
+     - Seed Opportunity 'Junior Data Analyst Intern' with exact weights: SQL (35), Spreadsheets (25), Communication (16), Reasoning (24).  
+     - Seed Challenge 'Explain monthly sales from a messy dataset' linked to SQL rubric criteria.  
+  2. Build Institution Insights Screen at `src/app/institution/insights/page.tsx`:  
+     - Filters for cohort and target opportunities.  
+     - Cohort Gap Table displaying Skill, Students with Gap, Total Enrolled, Gap %.  
+     - Level breakdown drill-down modal.
 
-#### Antigravity Prompt 2 (Lubhanshi - Sprint 3 & 4: QA Tests & Pitch Artifacts):
-> "You are Antigravity working with Lubhanshi on ProofBridge QA and Pitch Prep.  
-> Read `docs/13_TESTING_AND_ACCEPTANCE.md` and `docs/15_DEMO_AND_PITCH.md`.  
-> Task:  
-> 1. Implement automated test scripts in `tests/acceptance.test.ts` verifying:  
->    - `T-01`: Student cannot call employer publish route.  
->    - `T-02`: Employer B cannot view Employer A candidate.  
->    - `T-09`: Exact mathematical verification: Meera coverage before review = 61%, after SQL review = 96%.  
->    - `T-10`: Review draft does not change coverage score.  
->    - `T-13`: Application withdrawal revokes evidence grants.  
-> 2. Create the presentation notes and judge Q&A flashcards based on `15_DEMO_AND_PITCH.md`."
+#### Technical Work Package 2 (Lubhanshi - Sprint 3 & 4: QA Tests & Pitch Artifacts):
+- **Objective & Scope:**
+  1. Implement automated test scripts in `tests/acceptance.test.ts` verifying:  
+     - `T-01`: Student cannot call employer publish route.  
+     - `T-02`: Employer B cannot view Employer A candidate.  
+     - `T-09`: Exact mathematical verification: Meera coverage before review = 61%, after SQL review = 96%.  
+     - `T-10`: Review draft does not change coverage score.  
+     - `T-13`: Application withdrawal revokes evidence grants.  
+  2. Create presentation notes and judge Q&A flashcards based on `15_DEMO_AND_PITCH.md`.
 
 ---
 
 ## 4. The 2-Day Hour-by-Hour Master Battle Plan
 
-Here is the exact hour-by-hour roadmap connecting the current time (16:25 Day 1) to the final Valedictory Ceremony:
+Here is the exact hour-by-hour roadmap connecting the event start to the final Valedictory Ceremony:
 
 ```
 DAY 1 (SEP 08):
 ├── 16:25 - 17:30 [SPRINT 1A]
-│   ├── Akshar: Run Antigravity Prompt 1 (Scaffold project, run Supabase migration, setup Auth).
+│   ├── Akshar: Execute Work Package 1 (Scaffold project, run Supabase migration, setup Auth).
 │   ├── Lubhanshi: Create `supabase/seed.sql` with synthetic institutions, Meera, and roles.
 │   ├── Faizan: Setup UI theme tokens, base AppShell, navbar, and workspace switcher.
 │   └── Lakshita: Build basic cards, layout containers, and shared component primitives.
@@ -334,7 +318,7 @@ DAY 1 (SEP 08):
 │
 ├── 20:00 - 22:00 [DINNER & SPRINT 2A: The Submission Engine]
 │   ├── Dinner at LHC 1st floor (rotate 30 mins each to keep development active).
-│   ├── Akshar: Run Antigravity Prompt 2 (Postgres functions: `finalize_submission`, `publish_review`).
+│   ├── Akshar: Execute Work Package 2 (Postgres functions: `finalize_submission`, `publish_review`).
 │   ├── Faizan: Build Challenge workspace (`/challenges/[id]`) with text & link inputs.
 │   └── Lakshita: Build Reviewer Queue (`/reviewer/queue`).
 │
@@ -457,7 +441,7 @@ During Round 2 (03:00 AM) and Round 3 (13:00 PM), stick to this exact 300-second
    * If localhost crashes, Lubhanshi immediately plays the local 1080p MP4 recording of the full 5-minute flow.
 2. **Git Merge Conflict Emergency:**
    * Do not panic. Run `git merge --abort` or `git rebase --abort`.
-   * Call Akshar to resolve conflicts manually in VS Code / Antigravity diff viewer.
+   * Call Akshar to resolve conflicts manually in VS Code / Git diff viewer.
 3. **Database Seed Corruption:**
    * Run the reset command: `npx supabase db reset` (re-runs migrations and `seed.sql` in under 15 seconds).
 4. **Member Exhaustion / Fatigue:**

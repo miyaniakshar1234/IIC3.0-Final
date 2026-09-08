@@ -44,3 +44,7 @@ Thumbs.db
 # Local database data
 .supabase/
 supabase/.temp/
+
+# Presentations and scratch workspace
+PPT/
+scratch/

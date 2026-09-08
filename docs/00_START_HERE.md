@@ -23,13 +23,13 @@ ProofBridge connects industry requirements to evidence of student ability. Emplo
 11. 11_SKILL_MAPPING_AND_AI.md — scoring rules, worked example and AI boundaries.
 12. 12_SECURITY_PRIVACY.md — threat model, consent and operational safeguards.
 13. 13_TESTING_AND_ACCEPTANCE.md — release gates and test scenarios.
-14. 14_ROADMAP_TEAM_AND_AGENT_GUIDE.md — phases, four-person split and AI development prompts.
+14. 14_ROADMAP_TEAM_AND_AGENT_GUIDE.md — phases, four-person sprint allocation and module deliverables.
 15. 15_DEMO_AND_PITCH.md — demo script, fixtures and judge questions.
 16. 16_VALIDATION_BUSINESS_AND_METRICS.md — interviews, pilot, adoption and economics.
 17. 17_RISKS_DECISIONS_AND_SOURCES.md — assumptions, decisions, risks and sources.
-18. 18_HACKATHON_EXECUTION_PLAN_AND_TEAM_GUIDE.md — official IIC 3.0 timetable, team allocation (Akshar, Faizan, Lakshita, Lubhanshi), Git workflow and Antigravity prompts.
+18. 18_HACKATHON_EXECUTION_PLAN_AND_TEAM_GUIDE.md — official IIC 3.0 timetable, team allocation (Akshar, Faizan, Lakshita, Lubhanshi), Git workflow and engineering modules.
 
-The master Word document combines all chapters for reading and sharing. The Markdown documents are the editable source of truth for development with Antigravity or another coding assistant. These are design specifications, not a finished application, tested implementation, signed partner agreement or verified market study.
+The master documentation combines all chapters for technical review and implementation governance. The Markdown documents are the editable source of truth for development. These are production specifications and architectural designs.
 
 ## Scope language
 
