@@ -250,13 +250,13 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
 
   return (
     <AppShell>
-      <div className="space-y-6 pb-24">
+      <div className="space-y-6 pb-28 max-w-7xl mx-auto">
         {/* Top Workspace Header */}
-        <div className="bg-surface rounded-xl border border-border p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
+        <div className="glass-card rounded-2xl border border-white/10 p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-3.5">
             <Link
               href="/reviewer/queue"
-              className="p-2 rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
               aria-label="Back to queue"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -264,33 +264,33 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
 
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-accent">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-400 font-mono">
                   Reviewer Workspace
                 </span>
-                <span className="text-xs text-text-secondary">•</span>
+                <span className="text-xs text-zinc-600 font-mono">•</span>
                 <StatusBadge status="awaiting_review" size="sm" />
               </div>
-              <h1 className="text-xl font-bold text-text-primary mt-0.5">
-                Evaluation: {evidence.student_display_name} ({evidence.student_program})
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">
+                Evaluation: {evidence.student_display_name} <span className="text-zinc-400 font-normal text-sm font-mono">({evidence.student_program})</span>
               </h1>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
             {/* View Mode Toggle for Tablet/Mobile */}
-            <div className="lg:hidden flex bg-canvas rounded-lg p-1 border border-border text-xs">
+            <div className="lg:hidden flex bg-zinc-950 rounded-xl p-1 border border-white/10 text-xs font-mono">
               <button
                 onClick={() => setActiveTab('evidence')}
-                className={`px-3 py-1 rounded font-medium ${
-                  activeTab === 'evidence' ? 'bg-surface shadow text-accent' : 'text-text-secondary'
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  activeTab === 'evidence' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400'
                 }`}
               >
                 Evidence
               </button>
               <button
                 onClick={() => setActiveTab('rubric')}
-                className={`px-3 py-1 rounded font-medium ${
-                  activeTab === 'rubric' ? 'bg-surface shadow text-accent' : 'text-text-secondary'
+                className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+                  activeTab === 'rubric' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400'
                 }`}
               >
                 Rubric ({completedCount}/{criteria.length})
@@ -298,7 +298,7 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
             </div>
 
             {lastSaved && (
-              <span className="text-[11px] text-text-secondary hidden sm:inline-block font-mono">
+              <span className="text-[11px] text-zinc-400 hidden sm:inline-block font-mono bg-zinc-950 px-3 py-1 rounded-full border border-white/10">
                 Draft saved {lastSaved}
               </span>
             )}
@@ -307,32 +307,32 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
 
         {/* Success Modal / Banner */}
         {publishSuccess && (
-          <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-6 shadow-md space-y-4">
-            <div className="flex items-start space-x-3">
-              <CheckCircle2 className="w-6 h-6 text-success shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-success">
-                  Review Successfully Published!
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 sm:p-7 shadow-2xl space-y-4">
+            <div className="flex items-start space-x-3.5">
+              <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="space-y-1.5">
+                <h3 className="text-lg sm:text-xl font-bold text-emerald-300">
+                  Review Successfully Published & Attributed!
                 </h3>
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  <strong>Atomic Transaction Complete:</strong> SQL evidence has been formally attributed to student <strong>Meera Patel</strong> at <strong>Level 3</strong>.
-                  Tamper-proof skill attainments have been written to the ledger, instantly updating her opportunity match coverage from <strong>61% to 96%</strong>.
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-mono">
+                  <strong className="text-white">Atomic Transaction Complete:</strong> SQL evidence has been formally attributed to student <strong className="text-white">Meera Patel</strong> at <strong className="text-emerald-400">Level 3</strong>.
+                  Tamper-proof skill attainments have been written to the ledger, instantly updating her opportunity match coverage from <strong className="text-amber-400">61% to 96%</strong>.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 href="/reviewer/queue"
-                className="px-4 py-2 rounded-md bg-accent text-white text-xs font-semibold hover:bg-accent-hover transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 transition-all font-mono uppercase tracking-wider"
               >
                 Return to Reviewer Queue
               </Link>
               <Link
-                href="/employer/opportunities"
-                className="px-4 py-2 rounded-md bg-surface border border-border text-text-primary text-xs font-semibold hover:bg-gray-50 transition-colors"
+                href="/employer/opportunities/40000000-0000-0000-0000-000000000001/applicants"
+                className="px-5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-xs font-bold hover:bg-zinc-800 transition-all font-mono"
               >
-                View as Recruiter (Candidate Screening)
+                View in Recruiter Screening Table
               </Link>
             </div>
           </div>
@@ -342,15 +342,15 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Pane: Student Evidence */}
           <div
-            className={`lg:col-span-6 space-y-6 ${
+            className={`lg:col-span-6 space-y-4 ${
               activeTab === 'rubric' ? 'hidden lg:block' : 'block'
             }`}
           >
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs font-bold text-text-secondary uppercase tracking-wider">
+            <div className="flex items-center justify-between px-1">
+              <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider font-mono">
                 Student Submitted Artifact & Statement
               </h2>
-              <span className="text-[11px] text-text-secondary">
+              <span className="text-[11px] text-blue-400 font-mono bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full">
                 Revision 1 (Frozen)
               </span>
             </div>
@@ -360,31 +360,31 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
 
           {/* Right Pane: Rubric Evaluation */}
           <div
-            className={`lg:col-span-6 space-y-6 ${
+            className={`lg:col-span-6 space-y-4 ${
               activeTab === 'evidence' ? 'hidden lg:block' : 'block'
             }`}
           >
             {/* Criteria Evaluation Progress */}
-            <div className="bg-surface rounded-xl border border-border p-4 shadow-sm flex items-center justify-between">
+            <div className="glass-card rounded-2xl border border-white/10 p-5 shadow-xl flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-text-primary block">
+                <span className="text-xs font-bold text-white block uppercase tracking-wider font-mono">
                   Evaluation Progress
                 </span>
-                <span className="text-xs text-text-secondary">
+                <span className="text-xs text-zinc-400 font-mono">
                   {completedCount} of {criteria.length} criteria scored & justified
                 </span>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <div className="w-28 bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div className="flex items-center space-x-3">
+                <div className="w-28 bg-zinc-800 rounded-full h-2.5 overflow-hidden border border-white/10 p-0.5">
                   <div
-                    className="h-2 rounded-full bg-accent transition-all duration-300"
+                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-400 transition-all duration-300"
                     style={{
                       width: `${(completedCount / criteria.length) * 100}%`,
                     }}
                   />
                 </div>
-                <span className="text-xs font-bold text-text-primary font-mono">
+                <span className="text-xs font-bold text-blue-400 font-mono">
                   {Math.round((completedCount / criteria.length) * 100)}%
                 </span>
               </div>
@@ -411,21 +411,21 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
         </div>
 
         {/* Sticky Bottom Action Bar */}
-        <div className="fixed bottom-0 inset-x-0 bg-surface border-t border-border p-4 shadow-lg z-30">
+        <div className="fixed bottom-0 inset-x-0 bg-zinc-950/90 backdrop-blur-xl border-t border-white/10 p-4 shadow-2xl z-30">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4">
-            <div className="flex items-center space-x-2 text-xs text-text-secondary">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="flex items-center space-x-2 text-xs text-zinc-400 font-mono">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                <strong>Academic Integrity:</strong> Publishing creates permanent verifiable attainments under your name.
+                <strong className="text-white">Academic Integrity:</strong> Publishing creates immutable verified attainments signed by Dr. Alok Sharma.
               </span>
             </div>
 
-            <div className="flex items-center space-x-3 self-end sm:self-center">
+            <div className="flex items-center space-x-3 self-end sm:self-center font-mono">
               <button
                 type="button"
                 onClick={handleSaveDraft}
                 disabled={isSavingDraft}
-                className="px-3.5 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-gray-100 rounded-md border border-border transition-colors flex items-center space-x-1.5"
+                className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-xl border border-white/10 transition-colors flex items-center space-x-1.5"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>{isSavingDraft ? 'Saving...' : 'Save Draft'}</span>
@@ -434,7 +434,7 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
               <button
                 type="button"
                 onClick={() => setShowChangesModal(true)}
-                className="px-3.5 py-2 text-xs font-semibold text-warning hover:bg-amber-50 rounded-md border border-amber-200 transition-colors flex items-center space-x-1.5"
+                className="px-4 py-2 text-xs font-semibold text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 rounded-xl border border-amber-500/30 transition-colors flex items-center space-x-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Request Changes</span>
@@ -444,7 +444,7 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
                 type="button"
                 onClick={handlePublishClick}
                 disabled={publishSuccess}
-                className="px-5 py-2 text-xs font-semibold text-white bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed rounded-md shadow-sm transition-all flex items-center space-x-1.5"
+                className="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-blue-500/25 transition-all hover:scale-105 flex items-center space-x-2 uppercase tracking-wider"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Publish Evaluation</span>
@@ -456,57 +456,57 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
         {/* Modal: Publish Confirmation */}
         {showPublishModal && (
           <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
-            <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={() => setShowPublishModal(false)} />
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowPublishModal(false)} />
             <div className="flex min-h-screen items-center justify-center p-4">
-              <div className="relative bg-surface rounded-xl border border-border shadow-2xl max-w-lg w-full p-6 space-y-5">
-                <div className="flex items-start justify-between border-b border-border pb-3">
+              <div className="relative bg-zinc-950 rounded-2xl border border-white/10 shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-5">
+                <div className="flex items-start justify-between border-b border-white/10 pb-4">
                   <div className="flex items-center space-x-2">
-                    <ShieldCheck className="w-5 h-5 text-accent" />
-                    <h3 className="text-base font-bold text-text-primary">
+                    <ShieldCheck className="w-5 h-5 text-blue-400" />
+                    <h3 className="text-lg font-bold text-white">
                       Confirm Atomic Review Publication
                     </h3>
                   </div>
                   <button
                     onClick={() => setShowPublishModal(false)}
-                    className="text-text-secondary hover:text-text-primary"
+                    className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="space-y-3 text-xs text-text-secondary leading-relaxed">
+                <div className="space-y-4 text-xs text-zinc-300 leading-relaxed font-mono">
                   <p>
-                    You are about to publish your formal assessment for <strong>{evidence.student_display_name}</strong> on <strong>{evidence.challenge_title}</strong>:
+                    You are about to publish your formal assessment for <strong className="text-white">{evidence.student_display_name}</strong> on <strong className="text-white">{evidence.challenge_title}</strong>:
                   </p>
 
-                  <div className="bg-canvas border border-border rounded-lg p-3 space-y-2">
+                  <div className="bg-zinc-900/90 border border-white/10 rounded-xl p-4 space-y-2.5">
                     {criteria.map((crit) => (
                       <div key={crit.id} className="flex justify-between items-center text-xs">
-                        <span className="font-medium text-text-primary">{crit.skill_name}:</span>
-                        <span className="font-bold text-success bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        <span className="font-semibold text-zinc-300">{crit.skill_name}:</span>
+                        <span className="font-bold text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
                           Level {scores[crit.id]?.level} of 4
                         </span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-lg text-xs text-text-primary">
-                    <strong className="text-accent block mb-0.5">What happens next?</strong>
-                    This action is permanent and creates immutable <code className="font-mono text-accent">skill_attainments</code>. Linked employers will immediately see updated skill coverage scores.
+                  <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-zinc-200">
+                    <strong className="text-blue-400 block mb-1 font-bold">What happens next?</strong>
+                    This action is permanent and creates immutable <code className="text-blue-300 font-mono">skill_attainments</code>. Linked employers will immediately see updated skill coverage scores leaping from 61% to 96%.
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end space-x-3 pt-2">
+                <div className="flex items-center justify-end space-x-3 pt-3 border-t border-white/10 font-mono">
                   <button
                     onClick={() => setShowPublishModal(false)}
-                    className="px-4 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-gray-100 rounded-md border border-border"
+                    className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-xl border border-white/10"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmPublishReview}
                     disabled={isPublishing}
-                    className="px-5 py-2 text-xs font-semibold text-white bg-accent hover:bg-accent-hover rounded-md shadow-sm transition-all"
+                    className="px-5 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl shadow-lg shadow-blue-500/25 transition-all"
                   >
                     {isPublishing ? 'Publishing & Attributing...' : 'Confirm & Publish Review'}
                   </button>
@@ -519,56 +519,56 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
         {/* Modal: Request Changes */}
         {showChangesModal && (
           <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
-            <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={() => setShowChangesModal(false)} />
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={() => setShowChangesModal(false)} />
             <div className="flex min-h-screen items-center justify-center p-4">
-              <div className="relative bg-surface rounded-xl border border-border shadow-2xl max-w-lg w-full p-6 space-y-4">
-                <div className="flex items-start justify-between border-b border-border pb-3">
+              <div className="relative bg-zinc-950 rounded-2xl border border-white/10 shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-4">
+                <div className="flex items-start justify-between border-b border-white/10 pb-4">
                   <div className="flex items-center space-x-2">
-                    <RotateCcw className="w-5 h-5 text-warning" />
-                    <h3 className="text-base font-bold text-text-primary">
+                    <RotateCcw className="w-5 h-5 text-amber-400" />
+                    <h3 className="text-lg font-bold text-white">
                       Request Submission Changes
                     </h3>
                   </div>
                   <button
                     onClick={() => setShowChangesModal(false)}
-                    className="text-text-secondary hover:text-text-primary"
+                    className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-zinc-800"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 <form onSubmit={handleRequestChanges} className="space-y-4">
-                  <p className="text-xs text-text-secondary leading-relaxed">
-                    Requesting changes moves this submission to <code className="text-warning font-semibold">changes_requested</code>.
+                  <p className="text-xs text-zinc-300 leading-relaxed font-mono">
+                    Requesting changes moves this submission to <code className="text-amber-400 font-semibold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">changes_requested</code>.
                     No skill attainments will be granted. The student will be prompted to submit a new revision.
                   </p>
 
                   <div>
-                    <label className="block text-xs font-semibold text-text-primary mb-1">
-                      Guidance for Revision <span className="text-danger">*</span>
+                    <label className="block text-xs font-bold text-zinc-300 mb-1.5 font-mono">
+                      Guidance for Revision <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       rows={4}
                       value={changesReason}
                       onChange={(e) => setChangesReason(e.target.value)}
                       placeholder="Explain specifically what needs improvement (e.g., 'Please add month-over-month growth calculation and address negative values in amount_minor')..."
-                      className="w-full text-xs text-text-primary rounded-md border border-border p-3 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+                      className="w-full text-xs text-white rounded-xl border border-white/10 bg-zinc-900/90 p-4 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-zinc-600 font-mono"
                       required
                     />
                   </div>
 
-                  <div className="flex items-center justify-end space-x-3 pt-2">
+                  <div className="flex items-center justify-end space-x-3 pt-3 border-t border-white/10 font-mono">
                     <button
                       type="button"
                       onClick={() => setShowChangesModal(false)}
-                      className="px-4 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-gray-100 rounded-md border border-border"
+                      className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-xl border border-white/10"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={!changesReason.trim()}
-                      className="px-5 py-2 text-xs font-semibold text-white bg-warning hover:bg-amber-800 rounded-md shadow-sm transition-all"
+                      className="px-5 py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 rounded-xl shadow-lg shadow-amber-500/25 transition-all uppercase tracking-wider"
                     >
                       Send Revision Request
                     </button>

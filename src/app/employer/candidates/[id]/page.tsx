@@ -121,112 +121,130 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
     <AppShell>
       <div className="space-y-6 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="bg-surface rounded-xl border border-border p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
+        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="space-y-2 relative z-10">
             <div className="flex items-center space-x-3">
               <Link
                 href="/employer/opportunities"
-                className="p-1.5 rounded-md border border-border text-text-secondary hover:text-text-primary hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                 aria-label="Back to opportunities"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Link>
-              <div className="flex items-center space-x-2 text-xs font-semibold text-accent">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>Verified Candidate Evidence Snapshot</span>
+              <div className="flex items-center space-x-2 text-xs font-mono font-semibold text-blue-400">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span className="uppercase tracking-wide">Verified Candidate Evidence Snapshot</span>
               </div>
             </div>
 
-            <h1 className="text-2xl font-bold text-text-primary pl-7">
+            <h1 className="text-2xl sm:text-3xl font-black text-white pl-9 tracking-tight">
               {candidate.student_name}
             </h1>
-            <p className="text-xs text-text-secondary pl-7">
-              {candidate.student_program} • {candidate.student_institution} — Applied for <span className="font-semibold text-text-primary">{candidate.opportunity_title}</span>
+            <p className="text-xs sm:text-sm text-zinc-400 pl-9 font-mono">
+              {candidate.student_program} • {candidate.student_institution} — Applied for <span className="font-semibold text-white">{candidate.opportunity_title}</span>
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 pl-7 sm:pl-0">
+          <div className="flex items-center space-x-3 pl-9 sm:pl-0 relative z-10 shrink-0">
             <StatusBadge status={candidate.status} size="md" />
           </div>
         </div>
 
         {/* Success Toast */}
         {toastMessage && (
-          <div className="bg-emerald-50 border border-emerald-200 text-success rounded-xl p-4 flex items-center justify-between shadow-sm">
-            <div className="flex items-center space-x-2 text-xs font-semibold">
-              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-2xl p-4 flex items-center justify-between shadow-xl">
+            <div className="flex items-center space-x-2.5 text-xs font-semibold font-mono">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{toastMessage}</span>
             </div>
-            <button onClick={() => setToastMessage(null)} className="text-xs text-success font-medium">
+            <button onClick={() => setToastMessage(null)} className="text-xs text-emerald-400 hover:underline font-mono">
               Dismiss
             </button>
           </div>
         )}
 
         {/* Coverage Overview */}
-        <div className="bg-surface rounded-xl border border-border p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div>
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider block mb-1">
+        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest font-mono block">
               Deterministic Reviewed Coverage
             </span>
-            <div className="flex items-center space-x-3">
-              <span className="text-4xl font-extrabold text-text-primary">
+            <div className="flex items-center space-x-4">
+              <span className="text-5xl font-black text-white font-mono tracking-tight">
                 {candidate.reviewed_coverage}%
               </span>
               <div className="space-y-1">
-                <span className="text-xs font-semibold text-success bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full block">
-                  Match Verified (coverage-v1)
+                <span className="text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-0.5 rounded-full inline-flex items-center space-x-1.5 font-mono">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                  <span>Match Verified (coverage-v1)</span>
                 </span>
-                <span className="text-[11px] text-text-secondary block">
-                  All 4 skills evaluated against anchored rubrics
+                <span className="text-xs text-zinc-400 block font-mono">
+                  All 4 skills evaluated against anchored faculty rubrics
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="w-full sm:w-64 bg-canvas p-4 rounded-xl border border-border space-y-2">
-            <div className="flex justify-between text-xs font-semibold text-text-primary">
-              <span>Overall Match Score</span>
-              <span>{candidate.reviewed_coverage}%</span>
+          <div className="w-full sm:w-72 bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-3 shadow-inner">
+            <div className="flex justify-between text-xs font-semibold text-zinc-300 font-mono">
+              <span>Overall Match Index</span>
+              <span className="text-emerald-400 font-bold">{candidate.reviewed_coverage}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div className="h-3 rounded-full bg-success" style={{ width: `${candidate.reviewed_coverage}%` }} />
+            <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden p-0.5 border border-white/10">
+              <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-sm shadow-emerald-500/50" style={{ width: `${candidate.reviewed_coverage}%` }} />
+            </div>
+            <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+              <span>Required: 70%</span>
+              <span>Audit Passed</span>
             </div>
           </div>
         </div>
 
         {/* Verified Attainments */}
-        <div className="bg-surface rounded-xl border border-border p-6 shadow-sm space-y-4">
-          <h2 className="text-base font-bold text-text-primary uppercase tracking-wider">
-            Verified Skill Attainments ({candidate.skills.length})
-          </h2>
+        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center space-x-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Verified Skill Attainments ({candidate.skills.length})</span>
+            </h2>
+            <span className="text-xs font-mono text-zinc-400">
+              Weighted Deterministic Contributions
+            </span>
+          </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {candidate.skills.map((skill) => (
-              <div key={skill.skill_id} className="p-4 rounded-xl border border-border bg-canvas space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-text-primary text-sm">
+              <div key={skill.skill_id} className="p-5 rounded-2xl border border-white/10 bg-zinc-950/70 hover:border-white/20 transition-all space-y-3 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="font-bold text-white text-base">
                       {skill.skill_name}
                     </span>
-                    <span className="text-xs font-bold text-success bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-mono">
                       Level {skill.reviewed_level} of {skill.required_level}
                     </span>
                   </div>
 
-                  <span className="text-sm font-bold text-accent">
-                    +{skill.contribution}% (Weight: {skill.weight}%)
-                  </span>
+                  <div className="text-left sm:text-right">
+                    <span className="text-base font-bold text-blue-400 font-mono">
+                      +{skill.contribution}%
+                    </span>
+                    <span className="text-xs text-zinc-500 font-mono ml-2">
+                      (Weight: {skill.weight}%)
+                    </span>
+                  </div>
                 </div>
 
-                <div className="bg-surface p-3 rounded-lg border border-border/70 text-xs space-y-1">
-                  <div className="flex items-center justify-between text-text-secondary text-[11px]">
-                    <span className="font-semibold text-text-primary">
-                      Reviewed by {skill.reviewer_name} ({new Date(skill.reviewed_at).toLocaleDateString()})
+                <div className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-xs space-y-1.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between text-zinc-400 text-[11px] font-mono gap-1">
+                    <span className="font-semibold text-zinc-300">
+                      Evaluator: {skill.reviewer_name} ({new Date(skill.reviewed_at).toLocaleDateString()})
                     </span>
-                    <span>Evidence: {skill.evidence_title}</span>
+                    <span className="text-blue-400/80">Artifact: {skill.evidence_title}</span>
                   </div>
-                  <p className="text-text-secondary italic">"{skill.rationale}"</p>
+                  <p className="text-zinc-300 italic font-mono text-[11px] leading-relaxed">
+                    "{skill.rationale}"
+                  </p>
                 </div>
               </div>
             ))}
@@ -234,20 +252,29 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
         </div>
 
         {/* Contribution Statement */}
-        <div className="bg-surface rounded-xl border border-border p-6 shadow-sm space-y-3">
-          <h2 className="text-base font-bold text-text-primary uppercase tracking-wider">
-            Student Contribution Statement
-          </h2>
-          <div className="bg-indigo-50/40 border border-indigo-100 rounded-xl p-4 text-xs text-text-primary leading-relaxed">
+        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-3">
+          <div className="flex items-center space-x-2 text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
+            <User className="w-4 h-4 text-blue-400" />
+            <span>Student Contribution Statement</span>
+          </div>
+          <div className="bg-zinc-950/80 border border-white/10 rounded-xl p-5 text-xs text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap">
             {candidate.contribution_statement}
           </div>
+          <p className="text-[11px] text-zinc-500 italic font-mono">
+            * Authenticated statement submitted under academic integrity guidelines with permitted AI disclosure.
+          </p>
         </div>
 
         {/* Transition Form */}
-        <form onSubmit={handleTransition} className="bg-surface rounded-xl border border-border p-6 shadow-sm space-y-4">
-          <h2 className="text-base font-bold text-text-primary uppercase tracking-wider">
-            Recruiter Decision & Stage Transition
-          </h2>
+        <form onSubmit={handleTransition} className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-5">
+          <div>
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+              Recruiter Decision & Stage Transition
+            </h2>
+            <p className="text-xs text-zinc-400 mt-1 font-mono">
+              Every stage update writes an immutable audit record tagged with version #{candidate.version}.
+            </p>
+          </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -260,10 +287,10 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
                 key={item.status}
                 type="button"
                 onClick={() => setTargetStatus(item.status as ApplicationStatus)}
-                className={`p-3 text-left rounded-lg border text-xs font-semibold transition-all ${
+                className={`p-3.5 text-left rounded-xl border text-xs font-bold transition-all font-mono ${
                   targetStatus === item.status
-                    ? 'border-accent bg-accent-soft text-accent ring-1 ring-accent'
-                    : 'border-border bg-surface text-text-secondary hover:text-text-primary'
+                    ? 'border-blue-500/60 bg-blue-500/20 text-white shadow-md shadow-blue-500/20 ring-1 ring-blue-500/50'
+                    : 'border-white/10 bg-zinc-950/80 text-zinc-400 hover:text-white hover:border-white/20'
                 }`}
               >
                 {item.label}
@@ -272,15 +299,15 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-text-primary mb-1">
-              Internal Justification Note <span className="text-danger">*</span>
+            <label className="block text-xs font-semibold text-zinc-300 mb-1.5 font-mono">
+              Internal Justification Note <span className="text-red-400">*</span>
             </label>
             <textarea
-              rows={2}
+              rows={3}
               value={transitionReason}
               onChange={(e) => setTransitionReason(e.target.value)}
-              placeholder="e.g., Reviewed SQL queries demonstrate strong edge-case handling and independent reasoning."
-              className="w-full text-xs text-text-primary rounded-md border border-border p-3 focus:outline-none focus:ring-1 focus:ring-accent"
+              placeholder="e.g., Reviewed SQL queries demonstrate strong edge-case handling, independent window logic, and honest AI disclosure."
+              className="w-full text-xs text-white rounded-xl border border-white/10 bg-zinc-950/90 p-3.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-zinc-600 font-mono"
               required
             />
           </div>
@@ -288,9 +315,9 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
           <button
             type="submit"
             disabled={isSubmitting || !transitionReason.trim()}
-            className="w-full py-2.5 px-4 rounded-md bg-accent text-white font-semibold text-xs hover:bg-accent-hover disabled:opacity-50 transition-all shadow-sm"
+            className="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/25 font-mono uppercase tracking-wider"
           >
-            {isSubmitting ? 'Recording Transition...' : `Confirm Stage Change to "${targetStatus}"`}
+            {isSubmitting ? 'Recording Transition in Audit Log...' : `Confirm Stage Change to "${targetStatus}"`}
           </button>
         </form>
       </div>

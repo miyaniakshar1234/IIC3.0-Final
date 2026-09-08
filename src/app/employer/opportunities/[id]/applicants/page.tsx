@@ -247,38 +247,38 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
 
   return (
     <AppShell>
-      <div className="space-y-8">
+      <div className="space-y-8 max-w-6xl mx-auto">
         {/* Navigation & Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border rounded-xl p-6 shadow-sm">
-          <div className="space-y-1">
+        <div className="glass-card border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="space-y-2 relative z-10">
             <div className="flex items-center space-x-3">
               <Link
                 href="/employer/opportunities"
-                className="p-1.5 rounded-md border border-border text-text-secondary hover:text-text-primary hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                 aria-label="Back to opportunities"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Link>
-              <div className="flex items-center space-x-2 text-xs font-semibold text-accent">
-                <Building className="w-4 h-4" />
-                <span>Sample Analytics Studio • Candidate Screening</span>
+              <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400 font-mono">
+                <Building className="w-4 h-4 text-blue-400" />
+                <span className="uppercase tracking-wide text-[11px]">Sample Analytics Studio • Candidate Screening</span>
               </div>
             </div>
 
-            <h1 className="text-2xl font-bold text-text-primary pl-7">
+            <h1 className="text-2xl sm:text-3xl font-black text-white pl-9 tracking-tight">
               Junior Data Analyst Intern — Applicants
             </h1>
-            <p className="text-xs text-text-secondary pl-7">
-              Screen candidates based on verified evidence snapshots and deterministic skill coverage.
+            <p className="text-xs sm:text-sm text-zinc-400 pl-9 font-mono max-w-2xl">
+              Screen candidates based on verified evidence snapshots, anchored rubrics, and deterministic skill coverage math.
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 pl-7 sm:pl-0">
-            <div className="bg-canvas border border-border px-4 py-2 rounded-lg text-left">
-              <span className="text-[11px] text-text-secondary font-medium block">
+          <div className="flex items-center space-x-3 pl-9 sm:pl-0 relative z-10 shrink-0">
+            <div className="bg-zinc-950/90 border border-white/10 px-5 py-3 rounded-2xl text-left shadow-inner">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 block">
                 Total Applicants
               </span>
-              <span className="text-lg font-bold text-text-primary">
+              <span className="text-xl font-bold text-white font-mono">
                 {candidates.length} Candidates
               </span>
             </div>
@@ -287,14 +287,14 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
 
         {/* Success Toast */}
         {toastMessage && (
-          <div className="bg-emerald-50 border border-emerald-200 text-success rounded-xl p-4 flex items-center justify-between shadow-sm">
-            <div className="flex items-center space-x-2 text-xs font-semibold">
-              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-2xl p-4 flex items-center justify-between shadow-xl">
+            <div className="flex items-center space-x-2.5 text-xs font-semibold font-mono">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{toastMessage}</span>
             </div>
             <button
               onClick={() => setToastMessage(null)}
-              className="text-xs text-success hover:underline font-medium"
+              className="text-xs text-emerald-400 hover:underline font-mono"
             >
               Dismiss
             </button>
@@ -303,7 +303,7 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
 
         {/* Filters and Search Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-2">
             {[
               { id: 'all', label: 'All Candidates', count: candidates.length },
               {
@@ -320,65 +320,67 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
               <button
                 key={tab.id}
                 onClick={() => setFilterStatus(tab.id)}
-                className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all ${
                   filterStatus === tab.id
-                    ? 'bg-accent-soft text-accent border border-blue-200'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-gray-100'
+                    ? 'bg-blue-500/20 text-white border border-blue-500/50 shadow-md shadow-blue-500/20'
+                    : 'bg-zinc-950/80 text-zinc-400 border border-white/10 hover:text-white hover:border-white/20'
                 }`}
               >
                 <span>{tab.label}</span>
-                <span className="text-[10px] bg-gray-200 text-gray-700 px-1.5 py-0.2 rounded-full">
+                <span className={`text-[10px] px-2 py-0.2 rounded-full font-mono ${
+                  filterStatus === tab.id ? 'bg-blue-500 text-white' : 'bg-zinc-800 text-zinc-300'
+                }`}>
                   {tab.count}
                 </span>
               </button>
             ))}
           </div>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-72">
+            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search candidate name or program..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-border bg-surface focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-white/10 bg-zinc-950/90 text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
             />
           </div>
         </div>
 
         {/* Candidate Table */}
-        <div className="bg-surface rounded-xl border border-border shadow-sm overflow-hidden">
+        <div className="glass-card rounded-2xl border border-white/10 shadow-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-gray-50/80 border-b border-border text-text-secondary font-semibold uppercase tracking-wider text-[11px]">
+              <thead className="bg-zinc-950/90 border-b border-white/10 text-zinc-400 font-bold uppercase tracking-wider text-[11px] font-mono">
                 <tr>
-                  <th className="py-3.5 px-5">Candidate Name</th>
-                  <th className="py-3.5 px-4">Stage Status</th>
-                  <th className="py-3.5 px-4">Reviewed Skill Coverage</th>
-                  <th className="py-3.5 px-4">Verified Evidence</th>
-                  <th className="py-3.5 px-4">Applied Date</th>
-                  <th className="py-3.5 px-5 text-right">Actions</th>
+                  <th className="py-4 px-6">Candidate Profile</th>
+                  <th className="py-4 px-4">Stage Status</th>
+                  <th className="py-4 px-4">Reviewed Skill Coverage</th>
+                  <th className="py-4 px-4">Verified Evidence</th>
+                  <th className="py-4 px-4">Applied Date</th>
+                  <th className="py-4 px-6 text-right">Audit Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60">
+              <tbody className="divide-y divide-white/5">
                 {filteredCandidates.map((candidate) => (
                   <tr
                     key={candidate.application_id}
                     onClick={() => handleOpenDrawer(candidate)}
-                    className="hover:bg-gray-50/70 transition-colors cursor-pointer group"
+                    className="hover:bg-zinc-800/40 transition-colors cursor-pointer group"
                   >
                     {/* Candidate Name & Info */}
-                    <td className="py-4 px-5">
-                      <div className="space-y-0.5">
-                        <span className="font-bold text-sm text-text-primary group-hover:text-accent transition-colors flex items-center space-x-1.5">
+                    <td className="py-4 px-6">
+                      <div className="space-y-1">
+                        <span className="font-bold text-sm text-white group-hover:text-blue-400 transition-colors flex items-center space-x-2">
                           <span>{candidate.student_name}</span>
                           {candidate.reviewed_coverage >= 90 && (
-                            <span className="text-[10px] uppercase font-bold text-success bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded-full">
+                            <span className="text-[10px] uppercase font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono">
                               Top Match
                             </span>
                           )}
                         </span>
-                        <span className="text-text-secondary text-[11px] block">
+                        <span className="text-zinc-400 text-xs block font-mono">
                           {candidate.student_program} • {candidate.student_institution}
                         </span>
                       </div>
@@ -391,23 +393,23 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
 
                     {/* Reviewed Coverage */}
                     <td className="py-4 px-4">
-                      <div className="space-y-1.5 max-w-[140px]">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-text-primary font-mono text-xs">
+                      <div className="space-y-1.5 max-w-[150px]">
+                        <div className="flex items-center justify-between font-mono">
+                          <span className="font-bold text-white text-xs">
                             {candidate.reviewed_coverage}%
                           </span>
-                          <span className="text-[10px] text-text-secondary">
-                            (coverage-v1)
+                          <span className="text-[10px] text-zinc-500">
+                            coverage-v1
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-zinc-800 rounded-full h-2 overflow-hidden border border-white/10 p-0.5">
                           <div
-                            className={`h-2 rounded-full transition-all duration-300 ${
+                            className={`h-full rounded-full transition-all duration-500 ${
                               candidate.reviewed_coverage >= 80
-                                ? 'bg-success'
+                                ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
                                 : candidate.reviewed_coverage >= 50
-                                ? 'bg-amber-500'
-                                : 'bg-danger'
+                                ? 'bg-gradient-to-r from-amber-500 to-yellow-400'
+                                : 'bg-red-500'
                             }`}
                             style={{ width: `${candidate.reviewed_coverage}%` }}
                           />
@@ -416,15 +418,15 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
                     </td>
 
                     {/* Verified Evidence */}
-                    <td className="py-4 px-4 text-text-secondary font-medium">
-                      <span className="inline-flex items-center space-x-1 text-xs text-text-primary">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <td className="py-4 px-4">
+                      <span className="inline-flex items-center space-x-1.5 text-xs text-zinc-300 font-mono">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                         <span>{candidate.skills.length} Attainments</span>
                       </span>
                     </td>
 
                     {/* Applied Date */}
-                    <td className="py-4 px-4 text-text-secondary text-xs">
+                    <td className="py-4 px-4 text-zinc-400 text-xs font-mono">
                       {new Date(candidate.applied_at).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -433,13 +435,13 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
                     </td>
 
                     {/* Actions */}
-                    <td className="py-4 px-5 text-right">
+                    <td className="py-4 px-6 text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleOpenDrawer(candidate);
                         }}
-                        className="inline-flex items-center space-x-1 text-xs font-semibold text-accent bg-accent-soft px-3 py-1.5 rounded-md hover:bg-blue-100 transition-colors border border-blue-200"
+                        className="inline-flex items-center space-x-1.5 text-xs font-bold text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-3.5 py-1.5 rounded-xl transition-all border border-blue-500/30 font-mono hover:scale-105 shadow-sm"
                       >
                         <span>Inspect Evidence</span>
                         <ChevronRight className="w-3.5 h-3.5" />

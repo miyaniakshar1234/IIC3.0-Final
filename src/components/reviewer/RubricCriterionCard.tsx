@@ -67,49 +67,49 @@ export function RubricCriterionCard({
 
   return (
     <div
-      className={`bg-surface rounded-xl border transition-all shadow-sm ${
+      className={`rounded-2xl border transition-all duration-300 shadow-xl overflow-hidden ${
         hasError
-          ? 'border-danger/60 ring-1 ring-danger/30'
+          ? 'border-red-500/60 bg-zinc-950/90 ring-1 ring-red-500/30 shadow-[0_0_25px_rgba(239,68,68,0.15)]'
           : isComplete
-          ? 'border-emerald-300 ring-1 ring-emerald-100'
-          : 'border-border hover:border-gray-300'
+          ? 'border-emerald-500/40 bg-zinc-950/90 shadow-[0_0_25px_rgba(16,185,129,0.1)]'
+          : 'border-white/10 bg-zinc-950/80 hover:border-white/20'
       }`}
     >
       {/* Header */}
-      <div className="p-4 sm:p-5 border-b border-border/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-gray-50/50 rounded-t-xl">
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-accent bg-accent-soft px-2.5 py-0.5 rounded-full border border-blue-200">
+      <div className="p-5 sm:p-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-900/70">
+        <div className="space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/30 font-mono">
               {criterion.skill_name}
             </span>
             {criterion.required_level && (
-              <span className="text-[11px] text-text-secondary">
+              <span className="text-xs text-zinc-400 font-mono">
                 Target: Level {criterion.required_level}
               </span>
             )}
             {criterion.weight && (
-              <span className="text-[11px] text-text-secondary font-medium">
+              <span className="text-xs text-zinc-500 font-mono">
                 • Weight: {criterion.weight}%
               </span>
             )}
           </div>
-          <h3 className="text-base font-semibold text-text-primary">
+          <h3 className="text-lg font-bold text-white tracking-tight">
             {criterion.title}
           </h3>
-          <p className="text-xs text-text-secondary leading-relaxed">
+          <p className="text-xs text-zinc-400 leading-relaxed font-mono">
             {criterion.description}
           </p>
         </div>
 
         <div className="shrink-0 flex items-center space-x-1.5 self-start sm:self-center">
           {isComplete ? (
-            <span className="inline-flex items-center space-x-1 text-xs font-semibold text-success bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-              <CheckCircle2 className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center space-x-1.5 text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-full font-mono shadow-sm">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>Assessed (L{selectedLevel})</span>
             </span>
           ) : (
-            <span className="inline-flex items-center space-x-1 text-xs font-medium text-warning bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
-              <AlertCircle className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-full font-mono shadow-sm">
+              <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
               <span>Assessment Required</span>
             </span>
           )}
@@ -117,13 +117,13 @@ export function RubricCriterionCard({
       </div>
 
       {/* Body: Anchored Level Selection */}
-      <div className="p-4 sm:p-5 space-y-4">
+      <div className="p-5 sm:p-6 space-y-5">
         <div>
-          <label className="block text-xs font-semibold text-text-primary uppercase tracking-wider mb-2">
-            Select Demonstrated Proficiency Level (Anchored 0–4) <span className="text-danger">*</span>
+          <label className="block text-xs font-bold text-zinc-300 uppercase tracking-wider font-mono mb-3">
+            Select Demonstrated Proficiency Level (Anchored 0–4) <span className="text-red-400">*</span>
           </label>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {[0, 1, 2, 3, 4].map((level) => {
               const defaultInfo = DEFAULT_ANCHORS[level];
               const customDescription = criterion.anchors?.[level] || defaultInfo.description;
@@ -132,10 +132,10 @@ export function RubricCriterionCard({
               return (
                 <label
                   key={level}
-                  className={`relative flex items-start p-3 rounded-lg border cursor-pointer transition-all ${
+                  className={`relative flex items-start p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
                     isSelected
-                      ? 'border-accent bg-accent-soft/40 ring-1 ring-accent'
-                      : 'border-border/80 hover:bg-gray-50/70 hover:border-gray-300'
+                      ? 'border-blue-500/60 bg-blue-500/15 text-white shadow-md shadow-blue-500/15 ring-1 ring-blue-500/40'
+                      : 'border-white/10 bg-zinc-900/40 hover:bg-zinc-900 hover:border-white/20 text-zinc-300'
                   }`}
                 >
                   <div className="flex items-center h-5">
@@ -145,21 +145,21 @@ export function RubricCriterionCard({
                       value={level}
                       checked={isSelected}
                       onChange={() => onLevelChange(level)}
-                      className="w-4 h-4 text-accent border-gray-300 focus:ring-accent"
+                      className="w-4 h-4 text-blue-500 bg-zinc-950 border-zinc-700 focus:ring-blue-500 focus:ring-offset-0"
                     />
                   </div>
-                  <div className="ml-3 text-xs flex-1">
+                  <div className="ml-3.5 text-xs flex-1">
                     <div className="flex items-center justify-between">
-                      <span className={`font-semibold ${isSelected ? 'text-accent' : 'text-text-primary'}`}>
+                      <span className={`font-bold font-mono ${isSelected ? 'text-blue-300' : 'text-white'}`}>
                         {defaultInfo.label}
                       </span>
                       {level === 3 && (
-                        <span className="text-[10px] uppercase font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">
-                          Standard Bar
+                        <span className="text-[10px] uppercase font-bold text-indigo-300 bg-indigo-500/20 border border-indigo-500/40 px-2 py-0.5 rounded font-mono">
+                          Standard Industry Bar
                         </span>
                       )}
                     </div>
-                    <p className="text-text-secondary mt-0.5 leading-normal">
+                    <p className="text-zinc-400 mt-1 leading-relaxed font-mono text-[11px]">
                       {customDescription}
                     </p>
                   </div>
@@ -169,23 +169,23 @@ export function RubricCriterionCard({
           </div>
 
           {showValidationErrors && !isLevelValid && (
-            <p className="text-xs text-danger font-medium mt-1.5 flex items-center space-x-1">
+            <p className="text-xs text-red-400 font-mono mt-2 flex items-center space-x-1.5">
               <AlertCircle className="w-3.5 h-3.5" />
-              <span>Please select a proficiency level for this criterion.</span>
+              <span>Please select an anchored proficiency level for this criterion.</span>
             </p>
           )}
         </div>
 
         {/* Rationale Text Area */}
-        <div className="pt-2 border-t border-border/70">
-          <div className="flex items-center justify-between mb-1.5">
+        <div className="pt-3 border-t border-white/10">
+          <div className="flex items-center justify-between mb-2">
             <label
               htmlFor={`rationale-${criterion.id}`}
-              className="block text-xs font-semibold text-text-primary uppercase tracking-wider"
+              className="block text-xs font-bold text-zinc-300 uppercase tracking-wider font-mono"
             >
-              Evaluator Rationale & Evidence Notes <span className="text-danger">*</span>
+              Evaluator Rationale & Evidence Notes <span className="text-red-400">*</span>
             </label>
-            <span className="text-[11px] text-text-secondary font-mono">
+            <span className="text-[11px] text-zinc-500 font-mono">
               {rationale.length}/2000
             </span>
           </div>
@@ -197,17 +197,17 @@ export function RubricCriterionCard({
             value={rationale}
             onChange={(e) => onRationaleChange(e.target.value)}
             placeholder="Cite specific lines of code, query logic, trade-offs explained, or missing requirements to justify this score..."
-            className={`w-full text-xs text-text-primary rounded-md border p-3 focus:outline-none focus:ring-1 transition-colors ${
+            className={`w-full text-xs text-white rounded-xl border p-4 bg-zinc-900/90 focus:outline-none transition-colors font-mono placeholder:text-zinc-600 ${
               showValidationErrors && !isRationaleValid
-                ? 'border-danger focus:border-danger focus:ring-danger'
-                : 'border-border focus:border-accent focus:ring-accent'
+                ? 'border-red-500 focus:border-red-400 focus:ring-1 focus:ring-red-400'
+                : 'border-white/10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
             }`}
           />
 
           {showValidationErrors && !isRationaleValid && (
-            <p className="text-xs text-danger font-medium mt-1 flex items-center space-x-1">
+            <p className="text-xs text-red-400 font-mono mt-2 flex items-center space-x-1.5">
               <AlertCircle className="w-3.5 h-3.5" />
-              <span>A brief rationale citing specific evidence is required before publishing.</span>
+              <span>A brief rationale citing specific code evidence is required before publishing.</span>
             </p>
           )}
         </div>

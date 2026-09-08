@@ -21,7 +21,9 @@ import {
   X,
   ShieldCheck,
   Zap,
-  Check
+  Check,
+  Layers,
+  Fingerprint
 } from 'lucide-react';
 
 interface SkillRow {
@@ -78,48 +80,48 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
         {/* Back Link */}
         <Link
           href="/student"
-          className="inline-flex items-center space-x-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+          className="inline-flex items-center space-x-2 text-xs font-semibold text-zinc-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Student Dashboard</span>
         </Link>
 
         {/* Opportunity Header Card */}
-        <div className="glass-card rounded-2xl p-6 sm:p-8 space-y-5">
+        <div className="glass-card rounded-2xl p-6 sm:p-8 space-y-5 border border-white/10">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center space-x-1.5 text-xs font-semibold text-zinc-800 bg-zinc-100 px-3 py-1 rounded-full border border-zinc-200">
-                  <Building className="w-3.5 h-3.5 text-zinc-500" />
+                <div className="inline-flex items-center space-x-1.5 text-xs font-semibold text-zinc-300 bg-zinc-900/90 px-3 py-1 rounded-full border border-white/10">
+                  <Building className="w-3.5 h-3.5 text-blue-400" />
                   <span>Sample Analytics Studio</span>
                 </div>
-                <span className="inline-flex items-center space-x-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                <span className="inline-flex items-center space-x-1 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                   <ShieldCheck className="w-3 h-3" />
-                  <span>Approved Partner</span>
+                  <span>Approved Partner Organization</span>
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 Junior Data Analyst Intern
               </h1>
             </div>
 
             {/* Quick Interactive Demo Simulation Toggle */}
-            <div className="bg-zinc-50 border border-zinc-200/80 p-3 rounded-xl flex flex-col items-end shrink-0 shadow-xs">
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">
-                Interactive Demo State
+            <div className="bg-zinc-950 p-3 rounded-xl flex flex-col items-end shrink-0 border border-white/10 shadow-inner">
+              <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider mb-1.5">
+                Simulation Cockpit
               </span>
               <button
                 type="button"
                 onClick={() => setHasSqlReview(!hasSqlReview)}
-                className={`text-xs px-3.5 py-1.5 rounded-lg font-bold transition-all shadow-xs flex items-center space-x-1.5 ${
+                className={`text-xs px-4 py-2 rounded-lg font-bold transition-all shadow-md flex items-center space-x-2 ${
                   hasSqlReview
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'bg-zinc-900 text-white hover:bg-zinc-800'
+                    ? 'bg-emerald-600 text-white shadow-emerald-500/20'
+                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
                 }`}
               >
                 {hasSqlReview ? (
                   <>
-                    <Check className="w-3.5 h-3.5" />
+                    <Check className="w-3.5 h-3.5 text-emerald-200" />
                     <span>SQL Reviewed: 96% Match</span>
                   </>
                 ) : (
@@ -132,93 +134,97 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-zinc-600 border-t border-zinc-100 pt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs text-zinc-400 border-t border-white/10 pt-4 font-mono">
             <div className="flex items-center space-x-2">
-              <MapPin className="w-4 h-4 text-zinc-400" />
-              <span>Jaipur / Remote</span>
+              <MapPin className="w-4 h-4 text-zinc-500" />
+              <span>Jaipur / Hybrid</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-zinc-400" />
-              <span>3 Months Duration</span>
+              <Clock className="w-4 h-4 text-zinc-500" />
+              <span>3 Months Term</span>
             </div>
             <div className="flex items-center space-x-2">
-              <DollarSign className="w-4 h-4 text-zinc-400" />
-              <span className="font-semibold text-zinc-900">₹25,000 / month</span>
+              <DollarSign className="w-4 h-4 text-emerald-400" />
+              <span className="font-bold text-white font-sans">₹25,000 / month</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-zinc-400" />
+              <Calendar className="w-4 h-4 text-zinc-500" />
               <span>Closes in 30 days</span>
             </div>
           </div>
         </div>
 
         {/* Coverage Panel & Match Engine */}
-        <div className="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div className="glass-card rounded-2xl p-6 sm:p-8 space-y-6 border border-white/10">
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4">
             <div>
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest block">
-                Deterministic Fit Engine (coverage-v1)
+              <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest block">
+                Deterministic Engine • coverage-v1
               </span>
-              <h2 className="text-xl font-bold text-zinc-900 mt-0.5">
-                Reviewed Coverage Score
+              <h2 className="text-xl sm:text-2xl font-bold text-white mt-0.5 tracking-tight">
+                Reviewed Role Coverage Score
               </h2>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                Calculated strictly from human faculty verified rubrics. Zero AI hallucinations.
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Mathematically compiled from accredited faculty rubrics. Zero AI hallucinations.
               </p>
             </div>
 
-            <div className="flex items-baseline space-x-2.5">
-              <span className={`text-4xl sm:text-5xl font-black font-mono tracking-tight transition-all duration-300 ${
-                (data?.reviewedCoverage || 0) >= 90 ? 'text-emerald-600' : 'text-blue-600'
-              }`}>
+            <div className="flex items-baseline space-x-3">
+              <span
+                className={`text-5xl font-black font-mono tracking-tight transition-all duration-300 ${
+                  (data?.reviewedCoverage || 0) >= 90
+                    ? 'text-emerald-400 glow-text-emerald'
+                    : 'text-blue-400 glow-text-blue'
+                }`}
+              >
                 {data ? `${data.reviewedCoverage}%` : '61%'}
               </span>
-              <span className="text-xs font-semibold text-zinc-500">
-                {hasSqlReview ? '(Meera: Ready to Apply)' : '(Meera: Actionable Gap)'}
+              <span className="text-xs font-semibold text-zinc-400 font-mono">
+                {hasSqlReview ? '(Meera: Shortlist Ready)' : '(Meera: Actionable Gap)'}
               </span>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-zinc-100 rounded-full h-3.5 p-0.5 overflow-hidden border border-zinc-200/60">
+          <div className="w-full bg-zinc-950 rounded-full h-4 p-0.5 overflow-hidden border border-white/10">
             <div
               className={`h-full rounded-full transition-all duration-700 ease-out ${
                 (data?.reviewedCoverage || 0) >= 90
-                  ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500'
-                  : 'bg-blue-600'
+                  ? 'bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 shadow-lg shadow-emerald-500/30'
+                  : 'bg-blue-500 shadow-lg shadow-blue-500/30'
               }`}
               style={{ width: `${data?.reviewedCoverage || 61}%` }}
             />
           </div>
 
           {/* Formula explanation disclosure */}
-          <div className="border-t border-zinc-100 pt-3">
+          <div className="border-t border-white/10 pt-3">
             <button
               type="button"
               onClick={() => setShowFormula(!showFormula)}
-              className="text-xs font-semibold text-zinc-600 flex items-center space-x-1.5 hover:text-zinc-900"
+              className="text-xs font-semibold text-zinc-400 flex items-center space-x-1.5 hover:text-white"
             >
-              <Info className="w-3.5 h-3.5 text-blue-600" />
-              <span>How this deterministic score is calculated</span>
-              {showFormula ? <ChevronUp className="w-3.5 h-3.5 ml-1 text-zinc-400" /> : <ChevronDown className="w-3.5 h-3.5 ml-1 text-zinc-400" />}
+              <Info className="w-3.5 h-3.5 text-blue-400" />
+              <span>How this deterministic score is calculated (coverage-v1)</span>
+              {showFormula ? <ChevronUp className="w-3.5 h-3.5 ml-1 text-zinc-500" /> : <ChevronDown className="w-3.5 h-3.5 ml-1 text-zinc-500" />}
             </button>
 
             {showFormula && (
-              <div className="mt-3 p-4 bg-zinc-50 border border-zinc-200/80 rounded-xl text-xs text-zinc-600 space-y-2">
-                <div className="font-mono text-[11px] bg-white p-2.5 border border-zinc-200 rounded-lg text-zinc-900 font-bold">
+              <div className="mt-3 p-4 bg-zinc-950 border border-white/10 rounded-xl text-xs text-zinc-300 space-y-2">
+                <div className="font-mono text-[11px] bg-zinc-900 p-2.5 border border-white/10 rounded-lg text-cyan-300 font-bold">
                   contribution_i = weight_i &times; min(reviewed_level_i / required_level_i, 1.0)
                 </div>
-                <p className="leading-relaxed">
-                  Every skill contributes strictly up to its weighted ceiling. A student cannot compensate for a missing core requirement (e.g. SQL = 35%) by over-performing in Spreadsheets. 100% auditable and fair.
+                <p className="text-zinc-400 leading-relaxed text-[11px]">
+                  Every skill contributes strictly up to its weighted ceiling. A student cannot compensate for a missing core requirement (e.g. SQL = 35%) by over-performing in Spreadsheets. 100% auditable, transparent, and fair.
                 </p>
               </div>
             )}
           </div>
 
           {/* Per-Skill Table */}
-          <div className="overflow-hidden border border-zinc-200/80 rounded-xl">
+          <div className="overflow-hidden border border-white/10 rounded-xl bg-zinc-950/80">
             <table className="w-full text-left text-xs">
-              <thead className="bg-zinc-50 text-zinc-500 border-b border-zinc-200/80 uppercase tracking-wider font-bold text-[10px]">
+              <thead className="bg-zinc-900/90 text-zinc-400 border-b border-white/10 uppercase tracking-wider font-mono text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Required Skill</th>
                   <th className="py-3 px-4">Target Level</th>
@@ -228,35 +234,39 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
                   <th className="py-3 px-4">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 bg-white font-medium text-zinc-700">
+              <tbody className="divide-y divide-white/5 font-medium text-zinc-300">
                 {data?.skills.map((skill) => (
-                  <tr key={skill.skillId} className="hover:bg-zinc-50/60 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-zinc-900">
+                  <tr key={skill.skillId} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-white">
                       {skill.skillName}
                     </td>
-                    <td className="py-3.5 px-4">Level {skill.requiredLevel}</td>
+                    <td className="py-3.5 px-4 font-mono text-zinc-400">Level {skill.requiredLevel}</td>
                     <td className="py-3.5 px-4 font-semibold">
-                      {skill.reviewedLevel ? `Level ${skill.reviewedLevel}` : '—'}
+                      {skill.reviewedLevel ? (
+                        <span className="text-emerald-400 font-mono">Level {skill.reviewedLevel}</span>
+                      ) : (
+                        <span className="text-zinc-600 font-mono">—</span>
+                      )}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-500">{skill.weight}%</td>
-                    <td className="py-3.5 px-4 font-bold text-zinc-900 font-mono">
+                    <td className="py-3.5 px-4 font-mono text-zinc-400">{skill.weight}%</td>
+                    <td className="py-3.5 px-4 font-bold text-white font-mono">
                       +{skill.contribution} pts
                     </td>
                     <td className="py-3.5 px-4">
                       {skill.status === 'demonstrated' && (
-                        <span className="inline-flex items-center space-x-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-[11px] font-semibold border border-emerald-200">
+                        <span className="inline-flex items-center space-x-1 text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-emerald-500/20">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>Demonstrated</span>
                         </span>
                       )}
                       {skill.status === 'partially_demonstrated' && (
-                        <span className="inline-flex items-center space-x-1 text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full text-[11px] font-semibold border border-blue-200">
+                        <span className="inline-flex items-center space-x-1 text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-blue-500/20">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>Partial</span>
                         </span>
                       )}
                       {skill.status === 'not_yet_demonstrated' && (
-                        <span className="inline-flex items-center space-x-1 text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full text-[11px] font-semibold border border-amber-200">
+                        <span className="inline-flex items-center space-x-1 text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-amber-500/20">
                           <AlertCircle className="w-3 h-3" />
                           <span>Missing (35 pts)</span>
                         </span>
@@ -269,17 +279,17 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
           </div>
 
           {/* Action CTA Bar */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-100">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
             <div>
               {(data?.reviewedCoverage || 0) >= 90 ? (
-                <p className="text-xs text-emerald-700 font-semibold flex items-center space-x-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Verified Match Threshold Met (&ge; 90%). You are eligible for fast-track interview consideration.</span>
+                <p className="text-xs text-emerald-400 font-semibold flex items-center space-x-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Verified Match Threshold Met (&ge; 90%). Eligible for fast-track recruiter review.</span>
                 </p>
               ) : (
-                <p className="text-xs text-amber-700 font-semibold flex items-center space-x-1.5">
-                  <AlertCircle className="w-4 h-4 text-amber-600" />
-                  <span>35% Gap in SQL. Complete the 2-hour scoped challenge to reach 96% eligibility.</span>
+                <p className="text-xs text-amber-400 font-semibold flex items-center space-x-1.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>35% Gap in SQL. Complete the 2-hour scoped task to reach 96% eligibility.</span>
                 </p>
               )}
             </div>
@@ -288,7 +298,7 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
               {!(data?.reviewedCoverage || 0 >= 90) && (
                 <Link
                   href="/challenges/50000000-0000-0000-0000-000000000001"
-                  className="px-4 py-2 rounded-xl bg-white border border-zinc-200 text-zinc-700 font-semibold text-xs hover:bg-zinc-50 transition"
+                  className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/10 text-zinc-300 font-semibold text-xs hover:bg-zinc-800 hover:text-white transition"
                 >
                   Solve SQL Challenge →
                 </Link>
@@ -298,10 +308,10 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
                 type="button"
                 onClick={() => setIsApplyModalOpen(true)}
                 disabled={isApplied}
-                className={`px-5 py-2.5 rounded-xl font-bold text-xs transition shadow-xs flex items-center space-x-1.5 ${
+                className={`px-5 py-2.5 rounded-xl font-bold text-xs transition shadow-sm flex items-center space-x-1.5 ${
                   isApplied
-                    ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                    : 'bg-zinc-900 hover:bg-zinc-800 text-white'
+                    ? 'bg-zinc-900 text-zinc-500 border border-white/5 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20'
                 }`}
               >
                 <Send className="w-3.5 h-3.5" />
@@ -313,52 +323,52 @@ export default function OpportunityDetailPage({ params }: { params: { id: string
 
         {/* Modal for Application Confirmation */}
         {isApplyModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-zinc-200">
-              <div className="flex justify-between items-center pb-2 border-b border-zinc-100">
-                <h3 className="text-base font-bold text-zinc-900">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in">
+            <div className="bg-zinc-950 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-white/15">
+              <div className="flex justify-between items-center pb-2 border-b border-white/10">
+                <h3 className="text-base font-bold text-white">
                   Confirm Application Submission
                 </h3>
                 <button
                   type="button"
                   onClick={() => setIsApplyModalOpen(false)}
-                  className="p-1 rounded-lg text-zinc-400 hover:text-zinc-700"
+                  className="p-1 rounded-lg text-zinc-400 hover:text-white"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="text-xs text-zinc-600 space-y-2.5">
+              <div className="text-xs text-zinc-300 space-y-3">
                 <p>
                   You are applying to <strong>Junior Data Analyst Intern</strong> at <strong>Sample Analytics Studio</strong>.
                 </p>
-                <div className="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 space-y-1.5 font-mono text-[11px]">
+                <div className="bg-zinc-900 p-3.5 rounded-xl border border-white/10 space-y-1.5 font-mono text-[11px]">
                   <div className="flex justify-between">
-                    <span>Submitted Match Coverage:</span>
-                    <span className="font-bold text-zinc-900">{data?.reviewedCoverage || 61}%</span>
+                    <span className="text-zinc-400">Verified Coverage:</span>
+                    <span className="font-bold text-white">{data?.reviewedCoverage || 61}%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Evidence Snapshot:</span>
-                    <span className="text-emerald-700 font-bold">Tamper-Proof Grant</span>
+                    <span className="text-zinc-400">Evidence Snapshot:</span>
+                    <span className="text-emerald-400 font-bold">Tamper-Proof Grant</span>
                   </div>
                 </div>
-                <p className="text-[11px] text-zinc-400">
+                <p className="text-[11px] text-zinc-500 leading-relaxed">
                   The employer will receive your frozen evidence snapshot including verified code and human faculty signatures.
                 </p>
               </div>
 
-              <div className="flex items-center justify-end space-x-2.5 pt-3 border-t border-zinc-100">
+              <div className="flex items-center justify-end space-x-2.5 pt-3 border-t border-white/10">
                 <button
                   type="button"
                   onClick={() => setIsApplyModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-600 hover:bg-zinc-100"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirmApply}
-                  className="px-5 py-2 rounded-xl text-xs font-bold bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 shadow-md shadow-blue-500/20"
                 >
                   Confirm & Send Proof
                 </button>

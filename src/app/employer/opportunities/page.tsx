@@ -87,26 +87,26 @@ export default function EmployerOpportunitiesPage() {
 
   return (
     <AppShell>
-      <div className="space-y-8">
+      <div className="space-y-8 max-w-6xl mx-auto">
         {/* Welcome Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border rounded-xl p-6 shadow-sm">
-          <div>
-            <div className="flex items-center space-x-2 text-xs font-semibold text-accent">
-              <Building className="w-4 h-4" />
-              <span>Recruiter Workspace • Neha Verma (Sample Analytics Studio)</span>
+        <div className="glass-card border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="space-y-2 relative z-10">
+            <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400">
+              <Building className="w-4 h-4 text-blue-400" />
+              <span className="font-mono tracking-wide uppercase text-[11px]">Recruiter Workspace • Neha Verma (Sample Analytics Studio)</span>
             </div>
-            <h1 className="text-2xl font-bold text-text-primary mt-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Active Opportunities & Talent Pipelines
             </h1>
-            <p className="text-xs text-text-secondary mt-0.5">
-              Review published roles, track applicants, and screen verified evidence snapshots.
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
+              Screen candidates based on authentic challenge evidence, deterministic rubric scores, and immutable audit trails.
             </p>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 relative z-10 shrink-0">
             <button
               onClick={() => alert('Opening Create Opportunity Dialog...')}
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-md bg-accent text-white text-xs font-semibold hover:bg-accent-hover shadow-sm transition-all"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Post New Role</span>
@@ -116,12 +116,18 @@ export default function EmployerOpportunitiesPage() {
 
         {/* Opportunities List */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-              Your Company Roles ({opportunities.length})
-            </h2>
-            <span className="text-xs text-text-secondary">
-              Evidence-based applicant matching active
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center space-x-2">
+              <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider font-mono">
+                Company Opportunities
+              </span>
+              <span className="text-[11px] font-mono text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-full">
+                {opportunities.length} Active
+              </span>
+            </div>
+            <span className="text-xs text-zinc-400 flex items-center space-x-1.5 font-mono">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Deterministic matching active (coverage-v1)</span>
             </span>
           </div>
 
@@ -129,59 +135,59 @@ export default function EmployerOpportunitiesPage() {
             {opportunities.map((opp) => (
               <div
                 key={opp.id}
-                className="bg-surface rounded-xl border border-border p-6 shadow-sm hover:border-gray-300 transition-all space-y-4"
+                className="glass-card rounded-2xl border border-white/10 p-6 sm:p-7 shadow-xl hover:border-white/20 transition-all duration-300 space-y-5 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] relative overflow-hidden group"
               >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                   {/* Left: Role Info */}
-                  <div className="space-y-2 flex-1">
+                  <div className="space-y-3 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
-                        className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+                        className={`text-xs font-semibold px-3 py-1 rounded-full border font-mono ${
                           opp.status === 'published'
-                            ? 'bg-emerald-50 text-success border-emerald-200'
-                            : 'bg-gray-100 text-text-secondary border-gray-200'
+                            ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                            : 'bg-zinc-800/80 text-zinc-400 border-white/10'
                         }`}
                       >
-                        {opp.status === 'published' ? 'Published & Accepting Applications' : 'Draft'}
+                        {opp.status === 'published' ? '● Published & Accepting' : '○ Draft'}
                       </span>
 
-                      <span className="text-xs text-text-secondary font-medium uppercase tracking-wider bg-gray-100 px-2.5 py-0.5 rounded">
+                      <span className="text-xs text-zinc-400 font-mono uppercase tracking-wider bg-zinc-900 px-3 py-1 rounded-full border border-white/10">
                         {opp.work_mode}
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-text-primary">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
                       {opp.title}
                     </h3>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-secondary">
-                      <span className="flex items-center space-x-1">
-                        <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400 font-mono">
+                      <span className="flex items-center space-x-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-blue-400" />
                         <span>{opp.location_text}</span>
                       </span>
-                      <span>•</span>
-                      <span className="flex items-center space-x-1 font-semibold text-text-primary">
-                        <IndianRupee className="w-3.5 h-3.5 text-accent" />
+                      <span className="text-zinc-700">•</span>
+                      <span className="flex items-center space-x-1.5 text-emerald-400 font-semibold font-sans">
+                        <IndianRupee className="w-3.5 h-3.5" />
                         <span>{opp.compensation_text}</span>
                       </span>
-                      <span>•</span>
-                      <span className="flex items-center space-x-1">
-                        <Clock className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-zinc-700">•</span>
+                      <span className="flex items-center space-x-1.5">
+                        <Clock className="w-3.5 h-3.5 text-zinc-500" />
                         <span>{opp.duration_text}</span>
                       </span>
-                      <span>•</span>
-                      <span className="flex items-center space-x-1">
-                        <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-zinc-700">•</span>
+                      <span className="flex items-center space-x-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-zinc-500" />
                         <span>Deadline: {new Date(opp.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </span>
                     </div>
 
                     {/* Skill Tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="flex flex-wrap gap-2 pt-1">
                       {opp.key_skills.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="text-[11px] bg-accent-soft text-accent border border-blue-200 px-2 py-0.5 rounded font-medium"
+                          className="text-[11px] bg-zinc-900/90 text-zinc-300 border border-white/10 px-2.5 py-1 rounded-lg font-mono font-medium hover:border-blue-500/30 transition-colors"
                         >
                           {skill}
                         </span>
@@ -190,25 +196,25 @@ export default function EmployerOpportunitiesPage() {
                   </div>
 
                   {/* Right: Metrics & CTA */}
-                  <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end justify-between gap-4 shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-border">
-                    <div className="flex items-center space-x-3 bg-canvas border border-border rounded-lg p-2.5 px-4 text-center">
+                  <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end justify-between gap-4 shrink-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-white/10">
+                    <div className="flex items-center space-x-3 bg-zinc-950/80 border border-white/10 rounded-xl p-3 px-5 text-center shadow-inner">
                       <div>
-                        <span className="text-[11px] text-text-secondary block">Applicants</span>
-                        <span className="text-base font-bold text-text-primary">
+                        <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 block">Applicants</span>
+                        <span className="text-lg font-bold text-white font-mono">
                           {opp.total_applicants}
                         </span>
                       </div>
-                      <div className="h-6 w-px bg-border" />
+                      <div className="h-7 w-px bg-white/10" />
                       <div>
-                        <span className="text-[11px] text-text-secondary block">Reviewed</span>
-                        <span className="text-base font-bold text-success">
+                        <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 block">Reviewed</span>
+                        <span className="text-lg font-bold text-emerald-400 font-mono">
                           {opp.reviewed_applicants}
                         </span>
                       </div>
-                      <div className="h-6 w-px bg-border" />
+                      <div className="h-7 w-px bg-white/10" />
                       <div>
-                        <span className="text-[11px] text-text-secondary block">Shortlisted</span>
-                        <span className="text-base font-bold text-accent">
+                        <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 block">Shortlisted</span>
+                        <span className="text-lg font-bold text-blue-400 font-mono">
                           {opp.shortlisted_count}
                         </span>
                       </div>
@@ -216,7 +222,7 @@ export default function EmployerOpportunitiesPage() {
 
                     <Link
                       href={`/employer/opportunities/${opp.id}/applicants`}
-                      className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-md bg-accent text-white text-xs font-semibold hover:bg-accent-hover shadow-sm transition-all"
+                      className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 transition-all hover:scale-[1.02] w-full sm:w-auto justify-center"
                     >
                       <Users className="w-4 h-4" />
                       <span>Screen Candidates</span>
