@@ -12,6 +12,7 @@
 
   /* ── DARK THEME (default) ── warm charcoal, never pitch black */
   :root,
+  .dark,
   [data-theme="dark"] {
     --canvas:         #0f0e0c;
     --canvas-subtle:  #141210;
@@ -53,6 +54,7 @@
   }
 
   /* ── LIGHT THEME ── warm parchment, never pure white */
+  .light,
   [data-theme="light"] {
     --canvas:         #f5f0e8;
     --canvas-subtle:  #ede8df;
@@ -228,8 +230,10 @@
 }
 
 /* =====================================================================
-   AMBIENT BACKGROUND (dark only)
+   AMBIENT BACKGROUND
    ===================================================================== */
+:root .ambient-bg::before,
+.dark .ambient-bg::before,
 [data-theme="dark"] .ambient-bg::before {
   content: "";
   position: fixed;
@@ -241,6 +245,7 @@
   z-index: 0;
 }
 
+.light .ambient-bg::before,
 [data-theme="light"] .ambient-bg::before {
   content: "";
   position: fixed;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
@@ -25,7 +25,15 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? (resolvedTheme || theme) === 'dark' : true;
+  const toggleTheme = () => setTheme(isDark ? 'light' : 'dark');
 
   const workspaces = [
     { name: 'Student',          href: '/student',               icon: GraduationCap, persona: 'Meera Patel',    role: 'Candidate · MCA 2026' },
@@ -112,11 +120,12 @@ export function AppShell({ children }: AppShellProps) {
 
             {/* Theme toggle */}
             <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              onClick={toggleTheme}
               className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-accent hover:border-border-accent transition-all cursor-pointer"
               aria-label="Toggle theme"
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {theme === 'dark'
+              {isDark
                 ? <Sun className="w-3.5 h-3.5" />
                 : <Moon className="w-3.5 h-3.5" />
               }
@@ -178,10 +187,12 @@ export function AppShell({ children }: AppShellProps) {
                 <span>Match Leap Demo</span>
               </Link>
               <button
-                onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }}
-                className="px-3 py-2 rounded-xl text-xs font-bold text-text-secondary bg-surface border border-border"
+                onClick={() => { toggleTheme(); setMobileOpen(false); }}
+                className="px-3 py-2 rounded-xl text-xs font-bold text-text-secondary bg-surface border border-border cursor-pointer flex items-center justify-center gap-1.5"
+                title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               >
-                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                <span>{isDark ? 'Light' : 'Dark'}</span>
               </button>
             </div>
           </div>
