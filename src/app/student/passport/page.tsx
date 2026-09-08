@@ -24,6 +24,7 @@ import {
   Info,
   Zap,
   Github,
+  Cpu,
 } from 'lucide-react';
 
 export default function EvidencePassportPage() {
@@ -373,6 +374,41 @@ export default function EvidencePassportPage() {
           weight={35}
           reviewDate={hasVerifiedSql ? 'Just now' : 'Pending'}
         />
+
+        {/* 2.6 GITHUB AST CODE AUDIT LINK CARD */}
+        <div className="bg-surface border border-border/80 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-canvas border border-border flex items-center justify-center text-text-primary shrink-0">
+                <Github className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-success uppercase">
+                    GitHub AST Audit • Level 3 Verified (89%)
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-success/10 text-success border border-success/30 font-bold">
+                    Evidence-Backed
+                  </span>
+                </div>
+                <h3 className="text-sm font-bold text-text-primary mt-0.5">
+                  4 Repositories Parsed • 2,840 Lines of Authentic C++ & SQL Logic
+                </h3>
+                <p className="text-xs text-text-muted mt-0.5 font-mono">
+                  Audit Digest: sha256:7f83b1...26d9069 • 84% Authored Velocity
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/student/github-eval"
+              className="pb-btn-secondary text-xs py-2 px-4 flex items-center justify-center gap-2 shrink-0 font-mono"
+            >
+              <Cpu className="w-3.5 h-3.5 text-accent" />
+              <span>Inspect Full AST Forensics →</span>
+            </Link>
+          </div>
+        </div>
 
         {/* 3. TAB FILTERS */}
         <div className="flex items-center gap-1.5 p-1 bg-surface rounded-xl border border-border w-fit font-mono overflow-x-auto">
