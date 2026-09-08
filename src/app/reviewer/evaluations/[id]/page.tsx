@@ -154,13 +154,13 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
 
   return (
     <AppShell>
-      <div className="space-y-6 max-w-7xl mx-auto pb-16">
+      <div className="space-y-6 max-w-7xl mx-auto pb-16 animate-fade-in">
         {/* Top Header Navigation */}
-        <div className="bg-zinc-900/80 backdrop-blur-xl rounded-2xl border border-white/10 p-5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="pb-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3.5">
             <Link
               href="/reviewer/queue"
-              className="p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-xl border border-border text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
               aria-label="Back to queue"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -168,24 +168,24 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
 
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-accent">
+                <span className="section-label text-xs">
                   Faculty Evaluation Workspace
                 </span>
-                <span className="text-zinc-600">•</span>
-                <span className="inline-flex items-center space-x-1 text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-0.5 rounded-full">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-text-muted">•</span>
+                <span className="inline-flex items-center space-x-1 text-xs font-mono font-semibold text-success bg-success/10 border border-success/30 px-3 py-0.5 rounded-full">
+                  <ShieldCheck className="w-3.5 h-3.5 text-success" />
                   <span>Dr. Alok Sharma Reviewing</span>
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-zinc-100 mt-0.5">
+              <h1 className="text-xl sm:text-2xl font-bold text-text-primary mt-0.5">
                 Evaluation: Meera Patel • Challenge: Monthly Sales Breakdown
               </h1>
             </div>
           </div>
 
           <div className="flex items-center space-x-2.5">
-            <span className="text-xs font-mono font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-full flex items-center space-x-1.5 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
-              <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span className="text-xs font-mono font-semibold text-warning bg-warning/10 border border-warning/30 px-3.5 py-1.5 rounded-full flex items-center space-x-1.5 shadow-sm">
+              <Clock className="w-3.5 h-3.5 text-warning animate-pulse" />
               <span>SLA: Due in 22h</span>
             </span>
           </div>
@@ -193,18 +193,18 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
 
         {/* Success Banner */}
         {isSuccess && (
-          <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-6 shadow-[0_0_30px_rgba(16,185,129,0.15)] space-y-4">
+          <div className="bg-success/10 border border-success/40 rounded-2xl p-6 shadow-md space-y-4">
             <div className="flex items-start space-x-3.5">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 mt-0.5 shadow-inner">
-                <Check className="w-5 h-5 text-emerald-400" />
+              <div className="w-10 h-10 rounded-xl bg-success/20 text-success border border-success/40 flex items-center justify-center shrink-0 mt-0.5 shadow-inner">
+                <Check className="w-5 h-5 text-success" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-lg font-black text-zinc-100">
+                <h3 className="text-lg font-black text-text-primary">
                   Skill Attainment Level {selectedLevel} Published!
                 </h3>
-                <p className="text-xs text-zinc-300 leading-relaxed font-mono">
-                  <strong className="text-emerald-400">Atomic Transaction Complete:</strong> SQL Proficiency <strong>Level {selectedLevel}</strong> has been officially attributed to <strong>Meera Patel</strong> under Dr. Alok Sharma&apos;s faculty signature.
-                  Her candidate match score for <strong>Junior Data Analyst Intern</strong> has leaped from <strong className="text-amber-400">61%</strong> to <strong className="text-emerald-400 font-bold">96%</strong>!
+                <p className="text-xs text-text-secondary leading-relaxed font-mono">
+                  <strong className="text-success">Atomic Transaction Complete:</strong> SQL Proficiency <strong>Level {selectedLevel}</strong> has been officially attributed to <strong>Meera Patel</strong> under Dr. Alok Sharma&apos;s faculty signature.
+                  Her candidate match score for <strong>Junior Data Analyst Intern</strong> has leaped from <strong className="text-warning font-bold">61%</strong> to <strong className="text-success font-bold">96%</strong>!
                 </p>
               </div>
             </div>
@@ -212,15 +212,15 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <Link
                 href="/reviewer/queue"
-                className="px-4 py-2 rounded-xl bg-accent text-white text-xs font-bold hover:bg-accent-hover transition-colors shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                className="pb-btn-primary text-xs py-2 px-4"
               >
                 ← Return to Reviewer Queue
               </Link>
               <Link
                 href="/employer/candidates/70000000-0000-0000-0000-000000000001"
-                className="px-4 py-2 rounded-xl bg-zinc-800 border border-white/10 text-zinc-200 text-xs font-mono font-semibold hover:bg-zinc-700 transition-colors"
+                className="pb-btn-ghost text-xs py-2 px-4 font-mono"
               >
-                Inspect Recruiter Candidate Snapshot (96% Match) →
+                Inspect Candidate Snapshot (96% Match) →
               </Link>
             </div>
           </div>
@@ -228,66 +228,62 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
 
         {/* 2-Column Responsive Split-Screen Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* ============================================================= */}
-          {/* LEFT COLUMN: Student Artifact Viewer                         */}
-          {/* ============================================================= */}
+          {/* LEFT COLUMN: Student Artifact Viewer */}
           <div className="lg:col-span-6 space-y-5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <FileCode2 className="w-4 h-4 text-accent" />
-                <h2 className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider">
-                  Student Submitted Artifact
-                </h2>
+              <div className="section-label flex items-center space-x-2">
+                <FileCode2 className="w-4 h-4" />
+                <span>Student Submitted Artifact</span>
               </div>
-              <span className="text-[11px] text-zinc-500 font-mono">
+              <span className="text-[11px] text-text-muted font-mono">
                 Revision 1 (Frozen Snapshot)
               </span>
             </div>
 
             {/* Submission Info Header Card */}
-            <div className="bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-5 shadow-xl space-y-3">
+            <div className="pb-card p-5 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="space-y-0.5">
-                  <h3 className="text-base font-bold text-zinc-100">
+                  <h3 className="text-base font-bold text-text-primary">
                     Meera Patel • Challenge: Monthly Sales Breakdown
                   </h3>
-                  <p className="text-xs text-zinc-400 font-mono">
+                  <p className="text-xs text-text-muted font-mono">
                     MCA 2026 • Demo College of Computing
                   </p>
                 </div>
 
                 {/* AI Disclosure Tag */}
-                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-mono font-semibold">
-                  <Bot className="w-3.5 h-3.5 text-amber-400" />
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-warning/10 text-warning border border-warning/30 text-xs font-mono font-semibold">
+                  <Bot className="w-3.5 h-3.5 text-warning" />
                   <span>ChatGPT used for syntax verification only</span>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-white/10 flex items-center space-x-4 text-xs text-zinc-400 font-mono">
-                <span>Task: <strong className="text-zinc-200">PostgreSQL 16 Cleaning & Window Aggregation</strong></span>
+              <div className="pt-2 border-t border-border flex items-center space-x-4 text-xs text-text-muted font-mono">
+                <span>Task: <strong className="text-text-secondary">PostgreSQL 16 Cleaning & Window Aggregation</strong></span>
                 <span>•</span>
-                <span>Submitted: <strong className="text-zinc-200">2 hours ago</strong></span>
+                <span>Submitted: <strong className="text-text-secondary">2 hours ago</strong></span>
               </div>
             </div>
 
             {/* Contribution Statement Box */}
-            <div className="bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-5 shadow-xl space-y-2.5">
-              <div className="flex items-center space-x-2 text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider">
+            <div className="pb-card p-5 space-y-2.5">
+              <div className="section-label flex items-center space-x-2 text-info">
                 <User className="w-4 h-4" />
                 <span>Student Contribution Statement</span>
               </div>
-              <div className="bg-indigo-950/30 border border-indigo-500/30 rounded-xl p-4 text-xs text-zinc-200 leading-relaxed border-l-4 border-l-indigo-500 font-mono">
+              <div className="bg-info/5 border border-info/20 rounded-xl p-4 text-xs text-text-secondary leading-relaxed border-l-4 border-l-info font-mono">
                 &quot;I independently cleaned 14 missing date fields using PostgreSQL COALESCE and NULLIF guards, and constructed all multi-table joins without automated scaffolding. I used ChatGPT solely to verify regex digit replacement syntax for corrupted customer IDs, which I tested and tuned against edge-case anomalies.&quot;
               </div>
-              <p className="text-[11px] text-zinc-500 italic font-mono">
+              <p className="text-[11px] text-text-muted italic font-mono">
                 * Confirmed under Demo College of Computing academic integrity pledge.
               </p>
             </div>
 
-            {/* Code Box: Dark IDE Container */}
+            {/* Code Box */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider">
+                <span className="section-label text-xs">
                   PostgreSQL Query Solution
                 </span>
                 <span className="text-[11px] font-mono text-accent">
@@ -295,35 +291,31 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                 </span>
               </div>
 
-              <div className="bg-zinc-950 text-emerald-400 font-mono text-xs rounded-2xl p-5 border border-white/10 shadow-2xl overflow-x-auto leading-relaxed">
+              <div className="bg-canvas text-success font-mono text-xs rounded-2xl p-5 border border-border shadow-inner overflow-x-auto leading-relaxed">
                 <pre className="whitespace-pre-wrap">{SAMPLE_POSTGRES_SQL}</pre>
               </div>
             </div>
           </div>
 
-          {/* ============================================================= */}
-          {/* RIGHT COLUMN: Anchored 4-Level Rubric & Evaluator Action      */}
-          {/* ============================================================= */}
+          {/* RIGHT COLUMN: Anchored 4-Level Rubric & Evaluator Action */}
           <div className="lg:col-span-6 space-y-5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-accent" />
-                <h2 className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-wider">
-                  Evaluation & Attainment Rubric
-                </h2>
+              <div className="section-label flex items-center space-x-2">
+                <Sparkles className="w-4 h-4" />
+                <span>Evaluation & Attainment Rubric</span>
               </div>
-              <span className="text-xs font-mono font-bold text-accent bg-accent/10 px-3 py-1 rounded-full border border-accent/30">
+              <span className="pb-badge pb-badge-accent font-mono font-bold">
                 Weight: 35%
               </span>
             </div>
 
             {/* Rubric Container Card */}
-            <div className="bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 shadow-xl space-y-5">
+            <div className="pb-card p-6 space-y-5">
               <div>
-                <h3 className="text-lg font-black text-zinc-100">
+                <h3 className="text-lg font-black text-text-primary">
                   SQL Optimization & Business Aggregation (coverage-v1)
                 </h3>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                <p className="text-xs text-text-muted mt-1 leading-relaxed">
                   Select the proficiency level demonstrated in the code artifact. ProofBridge requires explicit qualitative justification for every published attainment.
                 </p>
               </div>
@@ -339,8 +331,8 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                       onClick={() => setSelectedLevel(rubric.level)}
                       className={`p-4 rounded-xl border cursor-pointer transition-all ${
                         isSelected
-                          ? 'ring-2 ring-emerald-500 bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-                          : 'border-white/10 bg-zinc-950/60 hover:border-white/20 hover:bg-zinc-900/60'
+                          ? 'border-border-accent bg-accent-soft ring-1 ring-border-accent shadow-sm'
+                          : 'border-border bg-canvas hover:border-border-bright hover:bg-surface-hover'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -349,17 +341,17 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                             <span
                               className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${
                                 isSelected
-                                  ? 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.3)]'
-                                  : 'bg-zinc-800 text-zinc-300'
+                                  ? 'bg-accent text-[var(--text-inverse)] shadow-sm'
+                                  : 'bg-surface border border-border text-text-secondary'
                               }`}
                             >
                               {rubric.badge}
                             </span>
-                            <span className="font-bold text-xs text-zinc-200">
+                            <span className="font-bold text-xs text-text-primary">
                               {rubric.title}
                             </span>
                           </div>
-                          <p className="text-xs text-zinc-400 leading-relaxed pt-0.5">
+                          <p className="text-xs text-text-muted leading-relaxed pt-0.5">
                             {rubric.description}
                           </p>
                         </div>
@@ -368,11 +360,11 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                           <div
                             className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
                               isSelected
-                                ? 'bg-emerald-500 border-emerald-500 text-white'
-                                : 'border-zinc-600 bg-zinc-900'
+                                ? 'bg-accent border-accent text-[var(--text-inverse)]'
+                                : 'border-border bg-surface'
                             }`}
                           >
-                            {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                            {isSelected && <Check className="w-3.5 h-3.5 text-[var(--text-inverse)]" />}
                           </div>
                         </div>
                       </div>
@@ -382,10 +374,10 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
               </div>
 
               {/* Reviewer Comments */}
-              <div className="pt-2 border-t border-white/10 space-y-2">
+              <div className="pt-2 border-t border-border space-y-2">
                 <label
                   htmlFor="faculty-comments"
-                  className="block text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider"
+                  className="section-label"
                 >
                   Faculty Evaluation Rationale (Signed by Dr. Alok Sharma)
                 </label>
@@ -395,9 +387,9 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                   value={comments}
                   onChange={(e) => setComments(e.target.value)}
                   placeholder="Provide qualitative feedback justifying the awarded proficiency level..."
-                  className="w-full text-xs text-zinc-100 rounded-xl border border-white/10 p-3.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-zinc-950 leading-relaxed font-mono"
+                  className="w-full text-xs text-text-primary rounded-xl border border-border p-3.5 focus:outline-none focus:ring-2 focus:ring-accent bg-canvas leading-relaxed font-mono"
                 />
-                <p className="text-[11px] font-mono text-zinc-500">
+                <p className="text-[11px] font-mono text-text-muted">
                   * This rationale will be permanently embedded in Meera&apos;s verified Evidence Snapshot for recruiters.
                 </p>
               </div>
@@ -407,7 +399,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                 <button
                   type="button"
                   onClick={() => alert('Draft evaluation comments saved.')}
-                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-white/10 text-xs font-mono font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors flex items-center justify-center space-x-1.5"
+                  className="pb-btn-ghost w-full sm:w-auto text-xs flex items-center justify-center space-x-1.5"
                 >
                   <Save className="w-3.5 h-3.5" />
                   <span>Save Notes Draft</span>
@@ -417,7 +409,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                   type="button"
                   onClick={() => setIsPublishModalOpen(true)}
                   disabled={isSuccess}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-500 disabled:opacity-50 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-[1.02] flex items-center justify-center space-x-2"
+                  className="pb-btn-primary w-full sm:w-auto text-xs flex items-center justify-center space-x-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>Publish Attainment (Level {selectedLevel})</span>
@@ -431,51 +423,51 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
         {isPublishModalOpen && (
           <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
             <div
-              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+              className="fixed inset-0 bg-black/70 backdrop-blur-md"
               onClick={() => setIsPublishModalOpen(false)}
             />
             <div className="flex min-h-screen items-center justify-center p-4">
-              <div className="relative bg-zinc-950 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.9)] max-w-lg w-full p-6 sm:p-7 space-y-5">
-                <div className="flex items-start justify-between border-b border-white/10 pb-3">
+              <div className="relative bg-surface rounded-3xl border border-border-accent shadow-lg max-w-lg w-full p-6 sm:p-7 space-y-5">
+                <div className="flex items-start justify-between border-b border-border pb-3">
                   <div className="flex items-center space-x-2.5">
-                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                    <h3 className="text-base font-bold text-zinc-100">
+                    <ShieldCheck className="w-5 h-5 text-success" />
+                    <h3 className="text-base font-bold text-text-primary">
                       Confirm Attainment Publication
                     </h3>
                   </div>
                   <button
                     onClick={() => setIsPublishModalOpen(false)}
-                    className="text-zinc-400 hover:text-zinc-100 p-1"
+                    className="text-text-muted hover:text-text-primary p-1"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="space-y-3.5 text-xs text-zinc-300 leading-relaxed font-mono">
+                <div className="space-y-3.5 text-xs text-text-secondary leading-relaxed font-mono">
                   <p>
-                    You are signing off on an official skill attainment for <strong className="text-zinc-100">Meera Patel</strong>:
+                    You are signing off on an official skill attainment for <strong className="text-text-primary">Meera Patel</strong>:
                   </p>
 
-                  <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 space-y-2">
+                  <div className="bg-canvas border border-border rounded-2xl p-4 space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-zinc-400">Skill Criterion:</span>
-                      <span className="font-bold text-zinc-100">SQL Optimization & Business Aggregation</span>
+                      <span className="text-text-muted">Skill Criterion:</span>
+                      <span className="font-bold text-text-primary">SQL Optimization & Business Aggregation</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-zinc-400">Attained Level:</span>
-                      <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                      <span className="text-text-muted">Attained Level:</span>
+                      <span className="font-bold text-success bg-success/10 px-2.5 py-0.5 rounded-full border border-success/30">
                         Level {selectedLevel} (Proficient)
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-zinc-400">Evaluator:</span>
-                      <span className="font-semibold text-zinc-100">Dr. Alok Sharma</span>
+                      <span className="text-text-muted">Evaluator:</span>
+                      <span className="font-semibold text-text-primary">Dr. Alok Sharma</span>
                     </div>
                   </div>
 
-                  <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 text-xs text-emerald-300">
-                    <strong className="block mb-0.5 font-bold text-emerald-400">What happens upon confirmation?</strong>
-                    A tamper-proof credential record is created. Meera&apos;s match score for the <strong>Junior Data Analyst Intern</strong> role will atomically jump from <strong className="text-amber-400">61%</strong> to <strong className="text-emerald-400">96%</strong>.
+                  <div className="bg-success/10 border border-success/30 rounded-2xl p-4 text-xs text-success">
+                    <strong className="block mb-0.5 font-bold">What happens upon confirmation?</strong>
+                    A tamper-proof credential record is created. Meera&apos;s match score for the <strong>Junior Data Analyst Intern</strong> role will atomically jump from <strong className="text-warning">61%</strong> to <strong className="text-success font-bold">96%</strong>.
                   </div>
                 </div>
 
@@ -483,7 +475,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                   <button
                     type="button"
                     onClick={() => setIsPublishModalOpen(false)}
-                    className="px-4 py-2 text-xs font-mono font-semibold text-zinc-400 hover:text-zinc-100 rounded-xl border border-white/10 hover:bg-zinc-900"
+                    className="pb-btn-ghost text-xs py-2 px-4"
                   >
                     Cancel
                   </button>
@@ -491,7 +483,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                     type="button"
                     onClick={handlePublishAttainment}
                     disabled={isPublishing}
-                    className="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all"
+                    className="pb-btn-primary text-xs py-2.5 px-5"
                   >
                     {isPublishing ? 'Signing Attainment...' : 'Confirm & Publish Attainment'}
                   </button>

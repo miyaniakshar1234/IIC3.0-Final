@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { AppShell } from '@/components/ui/AppShell'
-import { StatusChip } from '@/components/student/StatusChip'
-import { EvidenceDrawer, EvidenceDetail } from '@/components/student/EvidenceDrawer'
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { AppShell } from '@/components/ui/AppShell';
+import { StatusChip } from '@/components/student/StatusChip';
+import { EvidenceDrawer, EvidenceDetail } from '@/components/student/EvidenceDrawer';
 import {
   Award,
   CheckCircle2,
@@ -19,13 +19,14 @@ import {
   Building2,
   ExternalLink,
   Layers,
-  Info
-} from 'lucide-react'
+  Info,
+  Zap,
+} from 'lucide-react';
 
 export default function EvidencePassportPage() {
-  const [activeTab, setActiveTab] = useState<'all' | 'reviewed' | 'gaps' | 'declared'>('all')
-  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetail | null>(null)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<'all' | 'reviewed' | 'gaps' | 'declared'>('all');
+  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetail | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Student Identity Context
   const student = {
@@ -33,7 +34,7 @@ export default function EvidencePassportPage() {
     program: 'MCA 2026',
     institution: 'Demo College of Computing',
     avatarInitial: 'MP',
-  }
+  };
 
   // Audited Evidence Dataset for Meera Patel
   const reviewedAttainments: EvidenceDetail[] = [
@@ -107,9 +108,9 @@ export default function EvidencePassportPage() {
         }
       ]
     }
-  ]
+  ];
 
-  // Requirement Gaps for Target Role (Junior Data Analyst Intern)
+  // Requirement Gaps for Target Role
   const requirementGaps = [
     {
       skillName: 'SQL (Structured Query Language)',
@@ -122,126 +123,126 @@ export default function EvidencePassportPage() {
       targetRole: 'Junior Data Analyst Intern at Sample Analytics Studio',
       impactNote: 'Addressing this requirement via successful human review could raise reviewed coverage from 61% to 96%.'
     }
-  ]
+  ];
 
   // Self-Declared Skills (Unverified claims)
   const selfDeclaredSkills = [
     { skillName: 'Python Data Analysis', declaredLevel: 2, declaredDate: 'Aug 28, 2026' },
     { skillName: 'Git & Version Control', declaredLevel: 3, declaredDate: 'Aug 25, 2026' },
     { skillName: 'HTML & CSS', declaredLevel: 2, declaredDate: 'Aug 20, 2026' },
-  ]
+  ];
 
   const openEvidenceDetail = (evidence: EvidenceDetail) => {
-    setSelectedEvidence(evidence)
-    setIsDrawerOpen(true)
-  }
+    setSelectedEvidence(evidence);
+    setIsDrawerOpen(true);
+  };
 
   return (
     <AppShell>
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
         
-        {/* 1. STUDENT IDENTITY & SUB-NAVIGATION BAR */}
-        <div className="glass-card border border-white/10 rounded-2xl p-5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* 1. STUDENT IDENTITY BAR & NAVIGATION */}
+        <div className="pb-card p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-md shadow-blue-500/20">
+            <div className="w-12 h-12 rounded-2xl bg-accent-soft border border-border-accent text-accent flex items-center justify-center font-black text-lg">
               {student.avatarInitial}
             </div>
             <div>
+              <div className="section-label mb-0.5">Verified Profile</div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-white tracking-tight">{student.name}</span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/30 font-mono">
+                <span className="text-xl font-bold text-text-primary tracking-tight">{student.name}</span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-info/10 text-info border border-info/30 font-mono">
                   <GraduationCap className="w-3.5 h-3.5" />
                   {student.program}
                 </span>
               </div>
-              <p className="text-xs text-zinc-400 flex items-center gap-1 mt-0.5 font-mono">
-                <Building2 className="w-3.5 h-3.5 text-zinc-500" />
+              <p className="text-xs text-text-muted flex items-center gap-1 mt-0.5 font-mono">
+                <Building2 className="w-3.5 h-3.5 text-accent" />
                 {student.institution}
               </p>
             </div>
           </div>
 
-          <nav className="flex items-center gap-1.5 p-1 bg-zinc-900/80 rounded-xl border border-white/10 font-mono">
+          <nav className="flex items-center gap-1 bg-surface-raised p-1 rounded-xl border border-border font-mono text-xs">
             <Link
               href="/student"
-              className="px-4 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-white/5 transition"
+              className="px-3.5 py-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition font-medium"
             >
               Dashboard
             </Link>
             <Link
               href="/student/passport"
-              className="px-4 py-1.5 rounded-lg text-xs font-bold bg-zinc-800 text-white border border-white/15 shadow-sm transition"
+              className="px-3.5 py-1.5 rounded-lg font-bold bg-canvas text-text-primary border border-border-bright shadow-sm transition"
             >
               Evidence Passport
             </Link>
             <Link
               href="/student/applications"
-              className="px-4 py-1.5 rounded-lg text-xs font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-white/5 transition"
+              className="px-3.5 py-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition font-medium"
             >
               My Applications
             </Link>
           </nav>
         </div>
 
-        {/* 2. PASSPORT CRYPTOGRAPHIC HEADER & SUMMARY STATS */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-900/90 via-zinc-900/50 to-zinc-950 border border-white/10 p-6 sm:p-8 shadow-2xl space-y-6">
-          <div className="absolute -top-24 -right-24 w-72 h-72 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
+        {/* 2. PASSPORT CRYPTOGRAPHIC HEADER & STATS BENTO */}
+        <div className="pb-card-accent p-6 sm:p-8 space-y-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" />
+          
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
             <div className="space-y-2 max-w-2xl">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-mono font-bold border border-success/30 shadow-sm">
+                  <ShieldCheck className="w-3.5 h-3.5 text-success" />
                   CRYPTOGRAPHIC EVIDENCE PASSPORT
                 </span>
-                <span className="text-[11px] font-mono text-zinc-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                <span className="pb-badge text-[11px] font-mono">
                   ID: #PB-IND-2026-08812
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-zinc-100 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
                 {student.name}&apos;s Skill Passport
               </h1>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-light">
                 {student.program} • {student.institution}. Every verified badge is grounded in qualified faculty rubric evaluation, direct student code artifacts, and tamper-proof SHA-256 commit hashes.
               </p>
             </div>
 
             {/* Quick Metrics Cockpit */}
-            <div className="flex items-center gap-3 bg-zinc-950/80 p-3 rounded-2xl border border-white/10 shrink-0 self-start lg:self-center shadow-inner">
-              <div className="px-4 py-1.5 text-center border-r border-white/10">
-                <span className="text-2xl font-black text-emerald-400 block leading-tight font-mono">3</span>
-                <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Reviewed</span>
+            <div className="flex items-center gap-2 bg-canvas p-3 rounded-2xl border border-border shrink-0 self-start lg:self-center shadow-inner">
+              <div className="px-4 py-1 text-center border-r border-border">
+                <span className="metric-value text-3xl text-success block leading-tight">3</span>
+                <span className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">Reviewed</span>
               </div>
-              <div className="px-4 py-1.5 text-center border-r border-white/10">
-                <span className="text-2xl font-black text-amber-400 block leading-tight font-mono">1</span>
-                <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Target Gap</span>
+              <div className="px-4 py-1 text-center border-r border-border">
+                <span className="metric-value text-3xl text-warning block leading-tight">1</span>
+                <span className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">Gap</span>
               </div>
-              <div className="px-4 py-1.5 text-center">
-                <span className="text-2xl font-black text-blue-400 block leading-tight font-mono">3</span>
-                <span className="text-[10px] font-mono font-bold text-zinc-400 uppercase tracking-wider">Declared</span>
+              <div className="px-4 py-1 text-center">
+                <span className="metric-value text-3xl text-info block leading-tight">3</span>
+                <span className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">Declared</span>
               </div>
             </div>
           </div>
 
-          {/* Core Philosophy Notice */}
-          <div className="p-4 bg-zinc-950/60 rounded-2xl border border-white/5 text-xs text-zinc-400 leading-relaxed flex items-start gap-3 relative z-10 font-mono">
+          {/* Philosophy Notice */}
+          <div className="p-4 bg-canvas rounded-2xl border border-border text-xs text-text-secondary leading-relaxed flex items-start gap-3 relative z-10 font-mono">
             <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
             <span>
-              <strong className="text-zinc-200">Review Principle:</strong> &quot;Reviewed&quot; indicates that a named faculty evaluator assessed submitted code against anchored rubrics. Self-declared skills receive 0% weight until human verification completes.
+              <strong className="text-text-primary">Review Principle:</strong> &quot;Reviewed&quot; indicates that a named faculty evaluator assessed submitted code against anchored rubrics. Self-declared skills receive 0% weight until human verification completes.
             </span>
           </div>
         </div>
 
         {/* 3. TAB FILTERS */}
-        <div className="flex items-center gap-2 border-b border-white/10 pb-3 overflow-x-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-surface rounded-xl border border-border w-fit font-mono overflow-x-auto">
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition shrink-0 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition shrink-0 ${
               activeTab === 'all'
-                ? 'bg-accent text-white shadow-[0_0_12px_rgba(59,130,246,0.3)]'
-                : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
+                ? 'bg-surface-raised text-text-primary border border-border-bright shadow-sm'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
             }`}
           >
             All Skills ({reviewedAttainments.length + requirementGaps.length + selfDeclaredSkills.length})
@@ -250,10 +251,10 @@ export default function EvidencePassportPage() {
           <button
             type="button"
             onClick={() => setActiveTab('reviewed')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
               activeTab === 'reviewed'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-                : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
+                ? 'bg-success/15 text-success border border-success/30 shadow-sm'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -263,10 +264,10 @@ export default function EvidencePassportPage() {
           <button
             type="button"
             onClick={() => setActiveTab('gaps')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
               activeTab === 'gaps'
-                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]'
-                : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
+                ? 'bg-warning/15 text-warning border border-warning/30 shadow-sm'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
             }`}
           >
             <AlertCircle className="w-3.5 h-3.5" />
@@ -276,10 +277,10 @@ export default function EvidencePassportPage() {
           <button
             type="button"
             onClick={() => setActiveTab('declared')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
               activeTab === 'declared'
-                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)]'
-                : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
+                ? 'bg-info/15 text-info border border-info/30 shadow-sm'
+                : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5" />
@@ -292,15 +293,15 @@ export default function EvidencePassportPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                   <span>Verified Human-Reviewed Attainments</span>
                 </h2>
-                <p className="text-xs text-zinc-400 mt-0.5">
+                <p className="text-xs text-text-muted mt-0.5">
                   Click any skill card to open the auditable evidence drawer and inspect reviewer rationale and rubric scores.
                 </p>
               </div>
-              <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30 hidden sm:inline">
+              <span className="text-xs font-mono font-semibold text-success bg-success/10 px-3 py-1 rounded-full border border-success/30 hidden sm:inline">
                 {reviewedAttainments.length} Active Records
               </span>
             </div>
@@ -310,34 +311,34 @@ export default function EvidencePassportPage() {
                 <div
                   key={idx}
                   onClick={() => openEvidenceDetail(item)}
-                  className="bg-zinc-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 hover:border-accent/50 hover:shadow-[0_0_25px_rgba(59,130,246,0.1)] transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
+                  className="pb-card p-6 hover:border-border-accent transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-5 group"
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      openEvidenceDetail(item)
+                      e.preventDefault();
+                      openEvidenceDetail(item);
                     }
                   }}
                   aria-label={`Inspect evidence for ${item.skillName}`}
                 >
                   <div className="space-y-2.5 flex-1">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="text-lg font-bold text-zinc-100 group-hover:text-accent transition">
+                      <h3 className="text-lg font-bold text-text-primary group-hover:text-accent transition">
                         {item.skillName}
                       </h3>
-                      <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-success/10 text-success border border-success/30">
                         Reviewed Level {item.reviewedLevel} / 4
                       </span>
                       {item.requiredLevel !== undefined && (
-                        <span className="text-xs font-mono text-zinc-400">
+                        <span className="text-xs font-mono text-text-muted">
                           (Role Target: Level {item.requiredLevel})
                         </span>
                       )}
                     </div>
 
-                    <p className="text-xs text-zinc-400 flex flex-wrap items-center gap-2 font-mono">
-                      <span>Challenge: <strong className="text-zinc-200">{item.challengeTitle}</strong></span>
+                    <p className="text-xs text-text-muted flex flex-wrap items-center gap-2 font-mono">
+                      <span>Challenge: <strong className="text-text-secondary">{item.challengeTitle}</strong></span>
                       <span>•</span>
                       <span>{item.criteriaResults?.length || 0} Rubric Criteria Scored</span>
                       <span>•</span>
@@ -354,7 +355,7 @@ export default function EvidencePassportPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                    <span className="text-xs font-mono font-semibold text-accent group-hover:underline flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-accent/10 border border-accent/30 group-hover:bg-accent group-hover:text-white transition-all">
+                    <span className="text-xs font-mono font-semibold text-accent flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-accent-soft border border-border-accent group-hover:bg-accent group-hover:text-[var(--text-inverse)] transition-all">
                       Inspect Audit Trail
                       <ChevronRight className="w-4 h-4" />
                     </span>
@@ -365,15 +366,15 @@ export default function EvidencePassportPage() {
           </div>
         )}
 
-        {/* 5. REQUIREMENT GAPS SECTION (NOT YET DEMONSTRATED) */}
+        {/* 5. REQUIREMENT GAPS SECTION */}
         {(activeTab === 'all' || activeTab === 'gaps') && (
           <div className="space-y-4 pt-2">
             <div>
-              <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-amber-400" />
+              <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-warning" />
                 <span>Target Requirement Gaps (Not Yet Demonstrated)</span>
               </h2>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Skills required by active target opportunities that have no verified human review on record.
               </p>
             </div>
@@ -382,30 +383,31 @@ export default function EvidencePassportPage() {
               {requirementGaps.map((gap, idx) => (
                 <div
                   key={idx}
-                  className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-6 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-5"
+                  className="bg-warning/5 border border-warning/30 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-5"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <h3 className="text-lg font-bold text-zinc-100">{gap.skillName}</h3>
+                      <h3 className="text-lg font-bold text-text-primary">{gap.skillName}</h3>
                       <StatusChip status="not-demonstrated" />
-                      <span className="px-3 py-0.5 rounded-full text-xs font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                      <span className="px-3 py-0.5 rounded-full text-xs font-mono font-semibold bg-warning/10 text-warning border border-warning/30">
                         Weight: {gap.weight}%
                       </span>
                     </div>
 
-                    <p className="text-xs text-zinc-300">
-                      Required for: <strong className="text-zinc-100">{gap.targetRole}</strong> (Required: Level {gap.requiredLevel}/4)
+                    <p className="text-xs text-text-secondary">
+                      Required for: <strong className="text-text-primary">{gap.targetRole}</strong> (Required: Level {gap.requiredLevel}/4)
                     </p>
 
-                    <p className="text-xs text-zinc-400 italic">
+                    <p className="text-xs text-text-muted italic">
                       {gap.impactNote}
                     </p>
                   </div>
 
                   <Link
                     href={`/challenges/${gap.challengeId}`}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent text-white font-bold text-xs hover:bg-accent-hover transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] shrink-0 focus-visible:ring-2 focus-visible:ring-accent"
+                    className="pb-btn-primary text-xs shrink-0"
                   >
+                    <Zap className="w-3.5 h-3.5" />
                     Open SQL Challenge Workspace →
                   </Link>
                 </div>
@@ -414,28 +416,28 @@ export default function EvidencePassportPage() {
           </div>
         )}
 
-        {/* 6. SELF-DECLARED SKILLS SECTION (UNVERIFIED) */}
+        {/* 6. SELF-DECLARED SKILLS SECTION */}
         {(activeTab === 'all' || activeTab === 'declared') && (
           <div className="space-y-4 pt-2">
             <div>
-              <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-blue-400" />
+              <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-info" />
                 <span>Self-Declared Skills (Unverified Claims)</span>
               </h2>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 Self-declared skills reflect student interest and self-reported experience. In accordance with ProofBridge integrity rules, they are <strong>never</strong> counted in employer reviewed coverage until verified by a qualified evaluator.
               </p>
             </div>
 
-            <div className="bg-zinc-900/60 rounded-2xl border border-white/10 divide-y divide-white/5 overflow-hidden shadow-lg">
+            <div className="pb-card divide-y divide-[var(--border)] overflow-hidden">
               {selfDeclaredSkills.map((item, idx) => (
-                <div key={idx} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/5 transition">
+                <div key={idx} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-hover transition">
                   <div>
-                    <h3 className="text-sm font-bold text-zinc-100">{item.skillName}</h3>
-                    <p className="text-xs text-zinc-400 mt-0.5 font-mono">Declared on {item.declaredDate}</p>
+                    <h3 className="text-sm font-bold text-text-primary">{item.skillName}</h3>
+                    <p className="text-xs text-text-muted mt-0.5 font-mono">Declared on {item.declaredDate}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-zinc-400 font-mono">Self-Claimed Level {item.declaredLevel}/4</span>
+                    <span className="text-xs text-text-muted font-mono">Self-Claimed Level {item.declaredLevel}/4</span>
                     <StatusChip status="self-declared" />
                   </div>
                 </div>
@@ -453,5 +455,5 @@ export default function EvidencePassportPage() {
         evidence={selectedEvidence}
       />
     </AppShell>
-  )
+  );
 }

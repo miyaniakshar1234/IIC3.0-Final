@@ -119,29 +119,29 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
 
   return (
     <AppShell>
-      <div className="space-y-6 max-w-5xl mx-auto">
+      <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
         {/* Header */}
-        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
+        <div className="pb-card-accent p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
           <div className="space-y-2 relative z-10">
             <div className="flex items-center space-x-3">
               <Link
                 href="/employer/opportunities"
-                className="p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                className="p-2 rounded-xl border border-border text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
                 aria-label="Back to opportunities"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Link>
-              <div className="flex items-center space-x-2 text-xs font-mono font-semibold text-blue-400">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span className="uppercase tracking-wide">Verified Candidate Evidence Snapshot</span>
+              <div className="section-label text-xs">
+                <ShieldCheck className="w-4 h-4 text-success" />
+                <span>Verified Candidate Evidence Snapshot</span>
               </div>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-black text-white pl-9 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-text-primary pl-9 tracking-tight">
               {candidate.student_name}
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 pl-9 font-mono">
-              {candidate.student_program} • {candidate.student_institution} — Applied for <span className="font-semibold text-white">{candidate.opportunity_title}</span>
+            <p className="text-xs sm:text-sm text-text-secondary pl-9 font-mono">
+              {candidate.student_program} • {candidate.student_institution} — Applied for <span className="font-semibold text-text-primary">{candidate.opportunity_title}</span>
             </p>
           </div>
 
@@ -152,98 +152,98 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
 
         {/* Success Toast */}
         {toastMessage && (
-          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-2xl p-4 flex items-center justify-between shadow-xl">
+          <div className="bg-success/10 border border-success/30 text-success rounded-2xl p-4 flex items-center justify-between shadow-sm">
             <div className="flex items-center space-x-2.5 text-xs font-semibold font-mono">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
               <span>{toastMessage}</span>
             </div>
-            <button onClick={() => setToastMessage(null)} className="text-xs text-emerald-400 hover:underline font-mono">
+            <button onClick={() => setToastMessage(null)} className="text-xs text-success hover:underline font-mono">
               Dismiss
             </button>
           </div>
         )}
 
         {/* Coverage Overview */}
-        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="pb-card p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-2">
-            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest font-mono block">
+            <span className="section-label text-[11px] block">
               Deterministic Reviewed Coverage
             </span>
             <div className="flex items-center space-x-4">
-              <span className="text-5xl font-black text-white font-mono tracking-tight">
+              <span className="metric-value text-5xl text-accent">
                 {candidate.reviewed_coverage}%
               </span>
               <div className="space-y-1">
-                <span className="text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3 py-0.5 rounded-full inline-flex items-center space-x-1.5 font-mono">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                <span className="text-xs font-semibold text-success bg-success/10 border border-success/30 px-3 py-0.5 rounded-full inline-flex items-center space-x-1.5 font-mono">
+                  <CheckCircle2 className="w-3 h-3 text-success" />
                   <span>Match Verified (coverage-v1)</span>
                 </span>
-                <span className="text-xs text-zinc-400 block font-mono">
+                <span className="text-xs text-text-muted block font-mono">
                   All 4 skills evaluated against anchored faculty rubrics
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="w-full sm:w-72 bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-3 shadow-inner">
-            <div className="flex justify-between text-xs font-semibold text-zinc-300 font-mono">
+          <div className="w-full sm:w-72 bg-canvas p-5 rounded-2xl border border-border space-y-3 shadow-inner">
+            <div className="flex justify-between text-xs font-semibold text-text-secondary font-mono">
               <span>Overall Match Index</span>
-              <span className="text-emerald-400 font-bold">{candidate.reviewed_coverage}%</span>
+              <span className="text-success font-bold">{candidate.reviewed_coverage}%</span>
             </div>
-            <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden p-0.5 border border-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-sm shadow-emerald-500/50" style={{ width: `${candidate.reviewed_coverage}%` }} />
+            <div className="w-full bg-surface-raised rounded-full h-3 overflow-hidden p-0.5 border border-border">
+              <div className="h-full rounded-full bg-success shadow-sm" style={{ width: `${candidate.reviewed_coverage}%` }} />
             </div>
-            <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+            <div className="flex justify-between text-[10px] font-mono text-text-muted">
               <span>Required: 70%</span>
-              <span>Audit Passed</span>
+              <span className="text-success">Audit Passed</span>
             </div>
           </div>
         </div>
 
         {/* Verified Attainments */}
-        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-5">
+        <div className="pb-card p-6 sm:p-8 space-y-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <h2 className="section-label flex items-center space-x-2">
+              <ShieldCheck className="w-4 h-4 text-success" />
               <span>Verified Skill Attainments ({candidate.skills.length})</span>
             </h2>
-            <span className="text-xs font-mono text-zinc-400">
+            <span className="text-xs font-mono text-text-muted">
               Weighted Deterministic Contributions
             </span>
           </div>
 
           <div className="space-y-4">
             {candidate.skills.map((skill) => (
-              <div key={skill.skill_id} className="p-5 rounded-2xl border border-white/10 bg-zinc-950/70 hover:border-white/20 transition-all space-y-3 shadow-sm">
+              <div key={skill.skill_id} className="p-5 rounded-2xl border border-border bg-surface-raised hover:border-border-bright transition-all space-y-3 shadow-sm">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-2.5">
-                    <span className="font-bold text-white text-base">
+                    <span className="font-bold text-text-primary text-base">
                       {skill.skill_name}
                     </span>
-                    <span className="text-xs font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-mono">
+                    <span className="text-xs font-bold text-success bg-success/10 border border-success/30 px-2.5 py-0.5 rounded-full font-mono">
                       Level {skill.reviewed_level} of {skill.required_level}
                     </span>
                   </div>
 
                   <div className="text-left sm:text-right">
-                    <span className="text-base font-bold text-blue-400 font-mono">
+                    <span className="text-base font-bold text-accent font-mono">
                       +{skill.contribution}%
                     </span>
-                    <span className="text-xs text-zinc-500 font-mono ml-2">
+                    <span className="text-xs text-text-muted font-mono ml-2">
                       (Weight: {skill.weight}%)
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-zinc-900/80 p-4 rounded-xl border border-white/10 text-xs space-y-1.5">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between text-zinc-400 text-[11px] font-mono gap-1">
-                    <span className="font-semibold text-zinc-300">
+                <div className="bg-canvas p-4 rounded-xl border border-border text-xs space-y-1.5 font-mono">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between text-text-muted text-[11px] gap-1">
+                    <span className="font-semibold text-text-secondary">
                       Evaluator: {skill.reviewer_name} ({new Date(skill.reviewed_at).toLocaleDateString()})
                     </span>
-                    <span className="text-blue-400/80">Artifact: {skill.evidence_title}</span>
+                    <span className="text-accent">Artifact: {skill.evidence_title}</span>
                   </div>
-                  <p className="text-zinc-300 italic font-mono text-[11px] leading-relaxed">
-                    "{skill.rationale}"
+                  <p className="text-text-secondary italic text-[11px] leading-relaxed">
+                    &quot;{skill.rationale}&quot;
                   </p>
                 </div>
               </div>
@@ -252,26 +252,26 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
         </div>
 
         {/* Contribution Statement */}
-        <div className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-3">
-          <div className="flex items-center space-x-2 text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
-            <User className="w-4 h-4 text-blue-400" />
+        <div className="pb-card p-6 sm:p-8 space-y-3">
+          <div className="section-label flex items-center space-x-2 text-accent">
+            <User className="w-4 h-4 text-accent" />
             <span>Student Contribution Statement</span>
           </div>
-          <div className="bg-zinc-950/80 border border-white/10 rounded-xl p-5 text-xs text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap">
+          <div className="bg-canvas border border-border rounded-xl p-5 text-xs text-text-secondary leading-relaxed font-mono whitespace-pre-wrap">
             {candidate.contribution_statement}
           </div>
-          <p className="text-[11px] text-zinc-500 italic font-mono">
+          <p className="text-[11px] text-text-muted italic font-mono">
             * Authenticated statement submitted under academic integrity guidelines with permitted AI disclosure.
           </p>
         </div>
 
         {/* Transition Form */}
-        <form onSubmit={handleTransition} className="glass-card rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl space-y-5">
+        <form onSubmit={handleTransition} className="pb-card p-6 sm:p-8 space-y-5">
           <div>
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+            <h2 className="section-label">
               Recruiter Decision & Stage Transition
             </h2>
-            <p className="text-xs text-zinc-400 mt-1 font-mono">
+            <p className="text-xs text-text-muted mt-1 font-mono">
               Every stage update writes an immutable audit record tagged with version #{candidate.version}.
             </p>
           </div>
@@ -289,8 +289,8 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
                 onClick={() => setTargetStatus(item.status as ApplicationStatus)}
                 className={`p-3.5 text-left rounded-xl border text-xs font-bold transition-all font-mono ${
                   targetStatus === item.status
-                    ? 'border-blue-500/60 bg-blue-500/20 text-white shadow-md shadow-blue-500/20 ring-1 ring-blue-500/50'
-                    : 'border-white/10 bg-zinc-950/80 text-zinc-400 hover:text-white hover:border-white/20'
+                    ? 'border-border-accent bg-accent-soft text-accent ring-1 ring-border-accent shadow-sm'
+                    : 'border-border bg-canvas text-text-muted hover:text-text-primary hover:border-border-bright'
                 }`}
               >
                 {item.label}
@@ -299,15 +299,15 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5 font-mono">
-              Internal Justification Note <span className="text-red-400">*</span>
+            <label className="block text-xs font-semibold text-text-secondary mb-1.5 font-mono">
+              Internal Justification Note <span className="text-danger">*</span>
             </label>
             <textarea
               rows={3}
               value={transitionReason}
               onChange={(e) => setTransitionReason(e.target.value)}
               placeholder="e.g., Reviewed SQL queries demonstrate strong edge-case handling, independent window logic, and honest AI disclosure."
-              className="w-full text-xs text-white rounded-xl border border-white/10 bg-zinc-950/90 p-3.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder:text-zinc-600 font-mono"
+              className="w-full text-xs text-text-primary rounded-xl border border-border bg-canvas p-3.5 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent placeholder:text-text-muted font-mono"
               required
             />
           </div>
@@ -315,7 +315,7 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
           <button
             type="submit"
             disabled={isSubmitting || !transitionReason.trim()}
-            className="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/25 font-mono uppercase tracking-wider"
+            className="pb-btn-primary w-full text-xs py-3 justify-center"
           >
             {isSubmitting ? 'Recording Transition in Audit Log...' : `Confirm Stage Change to "${targetStatus}"`}
           </button>
