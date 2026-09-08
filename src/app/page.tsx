@@ -121,6 +121,63 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── MENTOR FAST-TRACK CARD ── */}
+        <section className="pb-card rounded-2xl p-5 sm:p-6 border border-border-accent bg-surface-raised/70 shadow-lg max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-accent-soft border border-border-accent flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Sparkles className="w-5 h-5 text-accent animate-pulse" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="section-label">Mentor Evaluation Guide</span>
+                  <span className="text-[10px] font-mono text-accent bg-accent-soft px-2 py-0.5 rounded-full border border-border-accent">
+                    60-Second Walkthrough
+                  </span>
+                </div>
+                <h3 className="text-sm sm:text-base font-black text-text-primary">
+                  Judging ProofBridge? Trace Meera&apos;s 61% → 96% Placement Story
+                </h3>
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  Student Gap (61%) → Scoped SQL Challenge → Faculty Rubric Grading → Recruiter Shortlist (96%) → Dean Insights.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
+              <Link
+                href="/opportunities/40000000-0000-0000-0000-000000000001"
+                className="pb-btn-primary text-xs py-2 px-3.5"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                <span>Start Step 1 (61%)</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 pt-4 border-t border-border text-[11px]">
+            {[
+              { num: '1', title: '61% Gap', href: '/opportunities/40000000-0000-0000-0000-000000000001', role: 'Student' },
+              { num: '2', title: '2h Challenge', href: '/challenges/50000000-0000-0000-0000-000000000001', role: 'Student' },
+              { num: '3', title: 'Faculty Review', href: '/reviewer/evaluations/60000000-0000-0000-0000-000000000001', role: 'Reviewer' },
+              { num: '4', title: '96% Shortlist', href: '/employer/opportunities/40000000-0000-0000-0000-000000000001/applicants', role: 'Employer' },
+              { num: '5', title: 'Dean Insights', href: '/institution/insights', role: 'Dean' },
+            ].map((st) => (
+              <Link
+                key={st.num}
+                href={st.href}
+                className="p-2.5 rounded-lg bg-surface border border-border hover:border-border-accent hover:bg-surface-raised transition-all flex flex-col gap-0.5 group"
+              >
+                <span className="font-mono text-[9px] text-accent font-bold">STEP {st.num} · {st.role}</span>
+                <span className="font-bold text-text-primary group-hover:text-accent transition-colors flex items-center justify-between">
+                  {st.title}
+                  <ChevronRight className="w-3 h-3 text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ── 2. SCORE LEAP COCKPIT ── */}
         <section className="pb-card-accent rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto overflow-hidden relative">
           {/* Ambient pulse */}
