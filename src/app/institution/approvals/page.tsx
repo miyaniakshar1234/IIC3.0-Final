@@ -43,7 +43,11 @@ export default function StudentAffiliationApprovalsPage() {
     });
   };
 
-  const filteredRequests = affiliationRequests.filter((req) => {
+  const isDemoDean = user?.email?.includes('dean.computing');
+
+  const visibleRequests = isDemoDean ? affiliationRequests : [];
+
+  const filteredRequests = visibleRequests.filter((req) => {
     const matchesSearch =
       req.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       req.rollNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -57,12 +61,12 @@ export default function StudentAffiliationApprovalsPage() {
     return true;
   });
 
-  const pendingCount = affiliationRequests.filter((r) => r.status === 'pending_approval').length;
-  const approvedCount = affiliationRequests.filter((r) => r.status === 'approved').length;
+  const pendingCount = visibleRequests.filter((r) => r.status === 'pending_approval').length;
+  const approvedCount = visibleRequests.filter((r) => r.status === 'approved').length;
 
   const handleExportCsv = () => {
     const headers = ['Request ID', 'Student Name', 'Roll / PRN', 'Email', 'Program', 'Requested At', 'Status'];
-    const rows = affiliationRequests.map((r) => [
+    const rows = visibleRequests.map((r) => [
       r.id,
       `"${r.studentName}"`,
       r.rollNumber,
@@ -187,7 +191,7 @@ export default function StudentAffiliationApprovalsPage() {
               {/* Filter Tabs */}
               <div className="flex items-center gap-1 bg-canvas p-1 rounded-lg border border-border font-mono text-xs">
                 {[
-                  { id: 'all', label: `All (${affiliationRequests.length})` },
+                  { id: 'all', label: `All (${visibleRequests.length})` },
                   { id: 'pending', label: `Pending (${pendingCount})` },
                   { id: 'approved', label: `Approved (${approvedCount})` },
                 ].map((t) => (

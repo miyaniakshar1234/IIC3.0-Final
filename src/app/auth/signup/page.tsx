@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth, UserRole } from '@/context/AuthContext';
@@ -21,11 +21,8 @@ import {
   Info,
 } from 'lucide-react';
 
-const REGISTERED_UNIVERSITIES = [
+const FALLBACK_UNIVERSITIES = [
   { id: 'inst-muj', name: 'Manipal University Jaipur (MUJ)', code: 'U-0683', accreditation: 'NAAC A+ · NBA' },
-  { id: 'inst-demo-college', name: 'Manipal University Jaipur (MUJ)', code: 'U-0142', accreditation: 'NAAC A++ · Autonomous' },
-  { id: 'inst-iit-bombay', name: 'IIT Bombay', code: 'CFTI-001', accreditation: 'Institute of Eminence' },
-  { id: 'inst-bits-pilani', name: 'BITS Pilani', code: 'U-0391', accreditation: 'NAAC A++ · Deemed' },
 ];
 
 export default function SignUpPage() {
@@ -35,7 +32,7 @@ export default function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedUni, setSelectedUni] = useState('inst-muj');
+  const [selectedUni, setSelectedUni] = useState('');
   const [program, setProgram] = useState('Master of Computer Applications (MCA 2026)');
   const [rollNumber, setRollNumber] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -43,6 +40,24 @@ export default function SignUpPage() {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [registeredNotice, setRegisteredNotice] = useState(false);
+  const [universities, setUniversities] = useState(FALLBACK_UNIVERSITIES);
+
+  useEffect(() => {
+    fetch('/api/v1/institutions')
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data && json.data.length > 0) {
+          setUniversities(json.data);
+          setSelectedUni(json.data[0].id);
+        } else {
+          setSelectedUni(FALLBACK_UNIVERSITIES[0].id);
+        }
+      })
+      .catch(e => {
+        console.error('Failed to fetch institutions', e);
+        setSelectedUni(FALLBACK_UNIVERSITIES[0].id);
+      });
+  }, []);
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
@@ -52,7 +67,7 @@ export default function SignUpPage() {
     e.preventDefault();
     setLoading(true);
 
-    const institutionObj = REGISTERED_UNIVERSITIES.find((u) => u.id === selectedUni) || REGISTERED_UNIVERSITIES[0];
+    const institutionObj = universities.find((u) => u.id === selectedUni) || universities[0];
 
     try {
       const success = await signup({
@@ -237,7 +252,7 @@ export default function SignUpPage() {
                     onChange={(e) => setSelectedUni(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas font-mono text-xs text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
                   >
-                    {REGISTERED_UNIVERSITIES.map((u) => (
+                    {universities.map((u) => (
                       <option key={u.id} value={u.id}>
                         {u.name} ({u.accreditation})
                       </option>
