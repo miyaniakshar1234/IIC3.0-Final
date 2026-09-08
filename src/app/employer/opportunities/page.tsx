@@ -70,10 +70,29 @@ const modeStyle: Record<string, string> = {
 };
 
 export default function EmployerOpportunitiesPage() {
-  const published = DEMO_OPPORTUNITIES.filter(o => o.status === 'published').length;
-  const drafts    = DEMO_OPPORTUNITIES.filter(o => o.status === 'draft').length;
-  const totalApplicants = DEMO_OPPORTUNITIES.reduce((a, o) => a + o.total_applicants, 0);
-  const totalShortlisted = DEMO_OPPORTUNITIES.reduce((a, o) => a + o.shortlisted_count, 0);
+  const [opportunities, setOpportunities] = useState<OpportunitySummary[]>(DEMO_OPPORTUNITIES);
+
+  React.useEffect(() => {
+    async function loadOpportunities() {
+      try {
+        const res = await fetch('/api/v1/opportunities', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.length > 0) {
+            setOpportunities(json.data);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load live opportunities:', err);
+      }
+    }
+    loadOpportunities();
+  }, []);
+
+  const published = opportunities.filter(o => o.status === 'published').length;
+  const drafts    = opportunities.filter(o => o.status === 'draft').length;
+  const totalApplicants = opportunities.reduce((a, o) => a + o.total_applicants, 0);
+  const totalShortlisted = opportunities.reduce((a, o) => a + o.shortlisted_count, 0);
 
   return (
     <AppShell>
@@ -112,7 +131,7 @@ export default function EmployerOpportunitiesPage() {
 
         {/* ── OPPORTUNITY CARDS ── */}
         <div className="space-y-4">
-          {DEMO_OPPORTUNITIES.map((opp) => (
+          {opportunities.map((opp) => (
             <div key={opp.id} className="pb-card p-6 space-y-4 hover:border-border-accent transition-all group">
               {/* Row 1: Title + status */}
               <div className="flex items-start justify-between gap-4">

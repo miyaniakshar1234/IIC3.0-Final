@@ -122,6 +122,24 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
   const [isPublishing, setIsPublishing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  React.useEffect(() => {
+    async function checkExistingReview() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data?.has_verified_sql) {
+            setIsSuccess(true);
+            if (json.data.sql_level) {
+              setSelectedLevel(json.data.sql_level);
+            }
+          }
+        }
+      } catch (err) {}
+    }
+    checkExistingReview();
+  }, []);
+
   const handlePublishAttainment = async () => {
     setIsPublishing(true);
     try {

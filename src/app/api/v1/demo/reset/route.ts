@@ -57,6 +57,32 @@ export async function POST(request: NextRequest) {
       WHERE id = '82000000-0000-0000-0000-000000000001';
     `);
 
+    // 6. Delete evaluation reviews & scores
+    await client.query(`
+      DELETE FROM evaluation_review_scores
+      WHERE review_id IN (
+        SELECT id FROM evaluation_reviews
+        WHERE revision_id = '81000000-0000-0000-0000-000000000001'
+           OR assignment_id = '82000000-0000-0000-0000-000000000001'
+      );
+    `);
+    await client.query(`
+      DELETE FROM evaluation_reviews
+      WHERE revision_id = '81000000-0000-0000-0000-000000000001'
+         OR assignment_id = '82000000-0000-0000-0000-000000000001';
+    `);
+
+    // 7. Reset application status and clear application audit events
+    await client.query(`
+      UPDATE applications 
+      SET status = 'submitted', version = 1, updated_at = NOW() 
+      WHERE id = '70000000-0000-0000-0000-000000000001';
+    `);
+    await client.query(`
+      DELETE FROM application_events
+      WHERE application_id = '70000000-0000-0000-0000-000000000001';
+    `);
+
     await client.query('COMMIT');
 
     const duration = Date.now() - startTime;

@@ -17,6 +17,29 @@ import {
 } from 'lucide-react';
 
 export default function StudentApplicationsPage() {
+  const [hasVerifiedSql, setHasVerifiedSql] = React.useState(false);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    async function loadLive() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (err) {}
+    }
+    loadLive();
+    const interval = setInterval(loadLive, 3000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   const applications = [
     {
       id: 'app-001',
@@ -24,19 +47,20 @@ export default function StudentApplicationsPage() {
       companyName: 'Sample Analytics Studio',
       appliedDate: 'Sep 07, 2026',
       status: 'submitted',
-      statusLabel: 'Submitted & Evidence Shared',
-      sharedCoverage: '61%',
-      verifiedEvidenceCount: 3,
+      statusLabel: hasVerifiedSql ? 'Top Match (96% Coverage)' : 'Submitted & Evidence Shared',
+      sharedCoverage: hasVerifiedSql ? '96%' : '61%',
+      verifiedEvidenceCount: hasVerifiedSql ? 4 : 3,
       timeline: [
         { label: 'Application Submitted', date: 'Sep 07, 2026', completed: true },
-        { label: 'Recruiter Screening', date: 'In Progress', completed: false, current: true },
-        { label: 'Technical Interview', date: 'Pending', completed: false },
+        { label: 'Recruiter Screening', date: hasVerifiedSql ? 'Priority Shortlist' : 'In Progress', completed: hasVerifiedSql, current: !hasVerifiedSql },
+        { label: 'Technical Review', date: hasVerifiedSql ? 'Passed (SQL L3 Signed)' : 'Pending Evaluation', completed: hasVerifiedSql, current: hasVerifiedSql },
         { label: 'Final Offer Decision', date: 'Pending', completed: false }
       ],
       sharedSkills: [
-        'Spreadsheets (Level 3)',
-        'Written Technical Communication (Level 3)',
-        'Analytical Reasoning (Level 3)'
+        'Spreadsheets (Level 3 - Verified)',
+        'Written Technical Communication (Level 3 - Verified)',
+        'Analytical Reasoning (Level 3 - Verified)',
+        ...(hasVerifiedSql ? ['SQL Querying & Data Cleaning (Level 3 - Verified Dr. Sharma)'] : [])
       ]
     }
   ];

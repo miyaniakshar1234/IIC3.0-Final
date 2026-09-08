@@ -236,21 +236,27 @@ export default function ReviewerWorkspacePage({ params }: { params: { id: string
   const confirmPublishReview = async () => {
     setIsPublishing(true);
     try {
+      const sqlScore = scores['crit-001']?.level ?? 3;
+      const sqlRationale =
+        scores['crit-001']?.rationale ||
+        'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.';
+      const overallLevel = Math.max(1, Math.min(4, sqlScore));
+
       const res = await fetch('/api/v1/reviews/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           submission_id: '80000000-0000-0000-0000-000000000001',
           reviewer_id: '20000000-0000-0000-0000-000000000001',
-          overall_level: 3,
+          overall_level: overallLevel,
           rubric_scores: [
             {
               criterion_id: '60000000-0000-0000-0000-000000000001',
-              score: 3,
-              rationale: 'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.',
+              score: sqlScore,
+              rationale: sqlRationale,
             },
           ],
-          qualitative_notes: 'Exemplary solution demonstrating production-ready deduplication and clear reasoning.',
+          qualitative_notes: sqlRationale,
         }),
       });
       const json = await res.json();

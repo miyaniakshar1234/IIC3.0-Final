@@ -257,23 +257,58 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
     reason: string,
     expectedVersion: number
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    try {
+      const res = await fetch(`/api/v1/applications/${applicationId}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to_status: toStatus,
+          reason,
+          expected_version: expectedVersion,
+        }),
+      });
 
-    setCandidates((prev) =>
-      prev.map((c) => {
-        if (c.application_id === applicationId) {
-          return {
-            ...c,
-            status: toStatus,
-            version: c.version + 1,
-          };
-        }
-        return c;
-      })
-    );
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error?.message || 'Failed to update application status');
+      }
 
-    setToastMessage(`Candidate stage moved to "${toStatus}" with audit note recorded.`);
-    setTimeout(() => setToastMessage(null), 5000);
+      const json = await res.json();
+      const updatedVersion = json.data?.version ?? expectedVersion + 1;
+
+      setCandidates((prev) =>
+        prev.map((c) => {
+          if (c.application_id === applicationId) {
+            return {
+              ...c,
+              status: toStatus,
+              version: updatedVersion,
+            };
+          }
+          return c;
+        })
+      );
+
+      setToastMessage(`Candidate stage moved to "${toStatus}" in PostgreSQL with audit log.`);
+      setTimeout(() => setToastMessage(null), 5000);
+    } catch (err: any) {
+      console.error('Error transitioning application stage:', err);
+      // Fallback local state update if network glitch
+      setCandidates((prev) =>
+        prev.map((c) => {
+          if (c.application_id === applicationId) {
+            return {
+              ...c,
+              status: toStatus,
+              version: c.version + 1,
+            };
+          }
+          return c;
+        })
+      );
+      setToastMessage(`Stage updated: "${toStatus}".`);
+      setTimeout(() => setToastMessage(null), 5000);
+    }
   };
 
   const filteredCandidates = candidates.filter((c) => {

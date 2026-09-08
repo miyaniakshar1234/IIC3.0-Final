@@ -270,14 +270,18 @@ export default function StudentDashboardPage() {
                 <Link href="/student/submissions" className="text-[10px] text-accent font-semibold hover:underline">View all</Link>
               </div>
               {(isEmptyAccount ? [] : recentSubmissions).map((sub) => (
-                <div key={sub.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer">
+                <Link
+                  key={sub.id}
+                  href={`/student/submissions/${sub.id}`}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer group"
+                >
                   <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${sub.status === 'reviewed' ? 'bg-success' : 'bg-warning'}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-semibold text-text-primary truncate">{sub.title}</p>
+                    <p className="text-[11px] font-semibold text-text-primary group-hover:text-accent transition-colors truncate">{sub.title}</p>
                     <p className="text-[10px] text-text-muted">{sub.skill}</p>
                   </div>
                   <StatusChip status={sub.status} />
-                </div>
+                </Link>
               ))}
               {isEmptyAccount && (
                 <p className="text-[11px] text-text-muted text-center py-4">No submissions yet</p>
