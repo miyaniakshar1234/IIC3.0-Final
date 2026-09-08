@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getDbPool } from '@/lib/server/db';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   const pool = getDbPool();
   if (!pool) {
     return NextResponse.json(
@@ -57,22 +57,7 @@ export async function POST(request: NextRequest) {
       WHERE id = '82000000-0000-0000-0000-000000000001';
     `);
 
-    // 6. Delete evaluation reviews & scores
-    await client.query(`
-      DELETE FROM evaluation_review_scores
-      WHERE review_id IN (
-        SELECT id FROM evaluation_reviews
-        WHERE revision_id = '81000000-0000-0000-0000-000000000001'
-           OR assignment_id = '82000000-0000-0000-0000-000000000001'
-      );
-    `);
-    await client.query(`
-      DELETE FROM evaluation_reviews
-      WHERE revision_id = '81000000-0000-0000-0000-000000000001'
-         OR assignment_id = '82000000-0000-0000-0000-000000000001';
-    `);
-
-    // 7. Reset application status and clear application audit events
+    // 6. Reset application status and clear application audit events
     await client.query(`
       UPDATE applications 
       SET status = 'submitted', version = 1, updated_at = NOW() 
@@ -126,8 +111,4 @@ export async function POST(request: NextRequest) {
   } finally {
     client.release();
   }
-}
-
-export async function GET(request: NextRequest) {
-  return POST(request);
 }

@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppShell } from '@/components/ui/AppShell';
+import { toast } from 'sonner';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -122,7 +124,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
   const [isPublishing, setIsPublishing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function checkExistingReview() {
       try {
         const res = await fetch('/api/v1/state', { cache: 'no-store' });
@@ -143,7 +145,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
   const handlePublishAttainment = async () => {
     setIsPublishing(true);
     try {
-      await fetch('/api/v1/reviews/publish', {
+      const response = await fetch('/api/v1/reviews/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -161,12 +163,18 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
           qualitative_notes: comments,
         }),
       });
-    } catch (err) {
-      console.error('Failed to publish review to live API:', err);
-    } finally {
-      setIsPublishing(false);
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.data?.persistence?.live_db_synced === false) {
+        throw new Error(payload.error?.message || 'The authoritative review transaction was not confirmed.');
+      }
+      toast.success('Skill Attainment Cryptographically Signed', { description: 'The candidate profile has been permanently updated.' });
       setIsPublishModalOpen(false);
       setIsSuccess(true);
+    } catch (err: any) {
+      console.error('Failed to publish review to live API:', err);
+      alert(`Review was not published: ${err?.message || err}`);
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -221,7 +229,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
                   Skill Attainment Level {selectedLevel} Published!
                 </h3>
                 <p className="text-xs text-text-secondary leading-relaxed font-mono">
-                  <strong className="text-success">Atomic Transaction Complete:</strong> SQL Proficiency <strong>Level {selectedLevel}</strong> has been officially attributed to <strong>Meera Patel</strong> under Dr. Alok Sharma&apos;s faculty signature.
+                  <strong className="text-success">Atomic transaction confirmed:</strong> SQL Proficiency <strong>Level {selectedLevel}</strong> has been attributed to <strong>Meera Patel</strong> by the assigned synthetic demo reviewer.
                   Her candidate match score for <strong>Junior Data Analyst Intern</strong> has leaped from <strong className="text-warning font-bold">61%</strong> to <strong className="text-success font-bold">96%</strong>!
                 </p>
               </div>
@@ -243,6 +251,20 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
             </div>
           </div>
         )}
+
+        {/* Live Proof Chain Node Provenance */}
+        <div className="pb-card p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="section-label text-xs">Proof Provenance Graph • Faculty Step</span>
+              <h3 className="text-sm font-bold text-text-primary mt-0.5">Live Credential Lineage</h3>
+            </div>
+            <span className="text-[11px] font-mono text-accent bg-accent/10 border border-accent/20 px-2.5 py-1 rounded-full">
+              Active: Step 4 (Faculty Attainment Rubric)
+            </span>
+          </div>
+          <ProofChainViewer isVerified={isSuccess} reviewedLevel={selectedLevel} rationale={comments} />
+        </div>
 
         {/* 2-Column Responsive Split-Screen Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -485,7 +507,7 @@ export default function SideBySideEvaluationPage({ params }: { params: { id: str
 
                   <div className="bg-success/10 border border-success/30 rounded-2xl p-4 text-xs text-success">
                     <strong className="block mb-0.5 font-bold">What happens upon confirmation?</strong>
-                    A tamper-proof credential record is created. Meera&apos;s match score for the <strong>Junior Data Analyst Intern</strong> role will atomically jump from <strong className="text-warning">61%</strong> to <strong className="text-success font-bold">96%</strong>.
+                    A published review and attainment record will be created in one transaction. The deterministic coverage for the <strong>Junior Data Analyst Intern</strong> example will change from <strong className="text-warning">61%</strong> to <strong className="text-success font-bold">96%</strong> after server confirmation.
                   </div>
                 </div>
 

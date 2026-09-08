@@ -1,10 +1,11 @@
+import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { getDbPool } from '@/lib/server/db';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const paramId = params.id;
@@ -107,6 +108,7 @@ export async function GET(
           title: row.title,
           body: row.body,
           contribution: row.contribution,
+          proof_hash: `sha256:${crypto.createHash('sha256').update(row.body, 'utf8').digest('hex')}`,
           submitted_at: row.submitted_at,
           external_links: linkRes.rows.map((l: any) => l.url),
           review: review

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ProofBridge — Architecture</title>
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<div class="slide-container" data-screen-label="06 Technical Stack & Cryptographic Engine" style="position:relative;width:1920px;height:1080px;overflow:hidden;background:#0A0908;">
+
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:0px;top:0px;width:1920px;height:1080px;z-index:1;background:
+      radial-gradient(840px 540px at 78% 8%, rgba(34,211,238,0.12), transparent 66%),
+      radial-gradient(760px 520px at 10% 92%, rgba(212,168,83,0.10), transparent 64%),
+      linear-gradient(155deg,#12100E 0%, #0A0908 60%);">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(34,211,238,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,0.045) 1px,transparent 1px);background-size:80px 80px;"></div>
+    <div style="position:absolute;left:0;top:0;width:1920px;height:3px;background:linear-gradient(90deg,#22D3EE 0%,#D4A853 60%,rgba(212,168,83,0) 100%);"></div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:66px;width:900px;height:26px;z-index:10;">
+    <span class="eyebrow">Architecture &amp; Engineering</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:102px;width:1250px;height:70px;z-index:10;">
+    <div class="h1">Enterprise-Grade, Deterministic, and Self-Hosted</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1360px;top:112px;width:464px;height:52px;z-index:10;text-align:right;">
+    <span class="mono" style="font-size:15px;letter-spacing:.14em;color:#10B981;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.32);border-radius:8px;padding:10px 16px;">ZERO BLOCKCHAIN · ZERO GAS FEES</span>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:96px;top:196px;width:1728px;height:1px;z-index:1;background:linear-gradient(90deg,rgba(212,168,83,0.45),rgba(212,168,83,0.05));"></div>
+
+  <!-- Block 1 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:96px;top:240px;width:552px;height:718px;z-index:1;background:rgba(24,22,19,0.85);border:1px solid rgba(212,168,83,0.25);border-radius:18px;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:272px;width:484px;height:96px;z-index:10;">
+    <div class="mono" style="font-size:13px;letter-spacing:.2em;color:#8A8377;">LAYER 01</div>
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:28px;color:#E8C06A;margin-top:10px;line-height:1.2;">Frontend &amp; Experience</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:392px;width:484px;height:220px;z-index:10;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <span class="mono" style="font-size:16px;color:#DDD6C7;background:rgba(245,241,232,0.05);border:1px solid rgba(245,241,232,0.14);border-radius:8px;padding:10px 14px;">Next.js 14 App Router</span>
+      <span class="mono" style="font-size:16px;color:#DDD6C7;background:rgba(245,241,232,0.05);border:1px solid rgba(245,241,232,0.14);border-radius:8px;padding:10px 14px;">TypeScript</span>
+      <span class="mono" style="font-size:16px;color:#DDD6C7;background:rgba(245,241,232,0.05);border:1px solid rgba(245,241,232,0.14);border-radius:8px;padding:10px 14px;">Tailwind CSS</span>
+      <span class="mono" style="font-size:16px;color:#DDD6C7;background:rgba(245,241,232,0.05);border:1px solid rgba(245,241,232,0.14);border-radius:8px;padding:10px 14px;">Lucide Icons</span>
+      <span class="mono" style="font-size:16px;color:#DDD6C7;background:rgba(245,241,232,0.05);border:1px solid rgba(245,241,232,0.14);border-radius:8px;padding:10px 14px;">Framer Motion</span>
+    </div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:636px;width:484px;height:150px;z-index:10;">
+    <div style="border:1px solid rgba(34,211,238,0.26);border-radius:12px;background:rgba(10,20,22,0.55);padding:18px 20px;">
+      <div class="mono" style="font-size:13px;letter-spacing:.18em;color:#22D3EE;">CLIENT-SIDE VERIFICATION</div>
+      <div style="font-family:'Inter',sans-serif;font-size:18px;line-height:1.45;color:#BDB6A8;margin-top:10px;">Cryptographic signature checks run in-browser via <span class="mono" style="color:#22D3EE;font-size:16px;">SubtleCrypto</span> — no server round-trip required.</div>
+    </div>
+  </div>
+
+  <!-- Block 2 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:684px;top:240px;width:552px;height:718px;z-index:1;background:rgba(24,22,19,0.85);border:1px solid rgba(212,168,83,0.25);border-radius:18px;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:718px;top:272px;width:484px;height:96px;z-index:10;">
+    <div class="mono" style="font-size:13px;letter-spacing:.2em;color:#8A8377;">LAYER 02</div>
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:28px;color:#E8C06A;margin-top:10px;line-height:1.2;">Data &amp; Vector Intelligence Core</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:718px;top:400px;width:484px;height:212px;z-index:10;">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span class="mono" style="color:#D4A853;font-size:17px;">▸</span><span style="font-family:'Inter',sans-serif;font-size:18px;line-height:1.45;color:#DDD6C7;">PostgreSQL on Supabase with <span style="color:#E8C06A;">Row-Level Security (RLS)</span></span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span class="mono" style="color:#D4A853;font-size:17px;">▸</span><span style="font-family:'Inter',sans-serif;font-size:18px;line-height:1.45;color:#DDD6C7;"><span class="mono" style="color:#22D3EE;font-size:16px;">pgvector</span> embedding store for role-to-skill semantic clustering</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span class="mono" style="color:#D4A853;font-size:17px;">▸</span><span style="font-family:'Inter',sans-serif;font-size:18px;line-height:1.45;color:#DDD6C7;">Deterministic Role Coverage Algorithm — identical inputs always yield identical scores</span></div>
+    </div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:718px;top:640px;width:484px;height:180px;z-index:10;">
+    <div style="border:1px solid rgba(212,168,83,0.32);border-radius:12px;background:rgba(18,16,14,0.85);padding:20px;">
+      <div class="mono" style="font-size:13px;letter-spacing:.18em;color:#D4A853;">ROLE COVERAGE FORMULA</div>
+      <div class="mono" style="font-size:17px;line-height:1.7;color:#E8C06A;margin-top:14px;">Score = ∑ ( W<span style="font-size:12px;">i</span> × min(1, S<span style="font-size:12px;">lvl</span> / R<span style="font-size:12px;">lvl</span>) )<br><span style="color:#22D3EE;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× Mandatory_Multiplier</span></div>
+    </div>
+  </div>
+
+  <!-- Block 3 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:1272px;top:240px;width:552px;height:718px;z-index:1;background:rgba(24,22,19,0.85);border:1px solid rgba(16,185,129,0.32);border-radius:18px;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1306px;top:272px;width:484px;height:96px;z-index:10;">
+    <div class="mono" style="font-size:13px;letter-spacing:.2em;color:#8A8377;">LAYER 03</div>
+    <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:28px;color:#10B981;margin-top:10px;line-height:1.2;">W3C Verifiable Credentials Ledger</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1306px;top:400px;width:484px;height:120px;z-index:10;">
+    <div style="font-family:'Inter',sans-serif;font-size:18px;line-height:1.5;color:#BDB6A8;">Decentralized Identifiers (DIDs) conforming to the <span style="color:#F5F1E8;">W3C Verifiable Credentials Standard v2.0</span>.</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1306px;top:530px;width:484px;height:224px;z-index:10;">
+    <div style="border:1px solid rgba(16,185,129,0.28);border-radius:12px;background:rgba(10,20,17,0.6);padding:18px 20px;">
+      <div class="mono" style="font-size:13px;letter-spacing:.18em;color:#10B981;">CRYPTOGRAPHIC PAYLOAD</div>
+      <div class="mono" style="font-size:16px;line-height:1.9;color:#DDD6C7;margin-top:12px;">Student_DID<br>+ Skill_ID<br>+ Faculty_Signature <span style="color:#22D3EE;">(Ed25519)</span><br>+ Timestamp<br>+ <span style="color:#22D3EE;">SHA-256 Merkle Proof</span></div>
+    </div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1306px;top:768px;width:484px;height:164px;z-index:10;">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:center;"><span class="mono" style="color:#10B981;font-size:17px;">✓</span><span style="font-family:'Inter',sans-serif;font-size:18px;color:#DDD6C7;">Zero recurring cloud gas fees</span></div>
+      <div style="display:flex;gap:12px;align-items:center;"><span class="mono" style="color:#10B981;font-size:17px;">✓</span><span style="font-family:'Inter',sans-serif;font-size:18px;color:#DDD6C7;">Zero blockchain latency</span></div>
+      <div style="display:flex;gap:12px;align-items:center;"><span class="mono" style="color:#10B981;font-size:17px;">✓</span><span style="font-family:'Inter',sans-serif;font-size:18px;color:#DDD6C7;">Verifiable offline by any standard HR system</span></div>
+    </div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:996px;width:900px;height:32px;z-index:10;">
+    <span class="mono" style="font-size:14px;letter-spacing:.16em;color:#4E4941;">PROOFBRIDGE · TEAM OUTLIERS</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1524px;top:996px;width:300px;height:32px;z-index:10;text-align:right;">
+    <span class="mono" style="font-size:15px;letter-spacing:.2em;color:#4E4941;">06 / 09</span>
+  </div>
+
+</div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

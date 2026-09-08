@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
+import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
 import { StatusBadge, ApplicationStatus } from '@/components/employer/StatusBadge';
 import {
   ShieldCheck,
@@ -139,13 +140,13 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
 
     setIsSubmitting(false);
     setTransitionReason('');
-    setToastMessage(`Candidate stage moved to "${targetStatus}". Audit record saved.`);
+    setToastMessage(`Synthetic preview only: stage shown as "${targetStatus}"; no database audit event was written.`);
     setTimeout(() => setToastMessage(null), 5000);
   };
 
   return (
     <AppShell>
-      <div className="space-y-6 max-w-5xl mx-auto animate-fade-in">
+      <div className="space-y-6 max-w-5xl mx-auto animate-fade-in pb-16">
         {/* Header */}
         <div className="pb-card-accent p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative overflow-hidden">
           <div className="space-y-2 relative z-10">
@@ -226,6 +227,31 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
           </div>
         </div>
 
+        {/* Full Proof Chain Provenance */}
+        <div className="pb-card p-6 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="section-label text-xs">Proof Provenance Graph</span>
+              <h3 className="text-sm font-bold text-text-primary mt-0.5">Candidate Evidence Lineage</h3>
+            </div>
+            <Link
+              href="/verify/4f8a9b2c7e1d5a6f8b0c2e4a6d8f0b2c4e6a8d0f2b4c6e8a0d2f4b6c8e0a2d4f"
+              className="text-[11px] font-mono text-accent bg-accent/10 border border-accent/20 px-3 py-1 rounded-full flex items-center gap-1.5 hover:bg-accent hover:text-white transition-all"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Verify in Public Gateway</span>
+            </Link>
+          </div>
+          <ProofChainViewer
+            isVerified={hasVerifiedSql}
+            studentName={candidate.student_name}
+            roleTitle={candidate.opportunity_title}
+            reviewedLevel={hasVerifiedSql ? 3 : 0}
+            weight={35}
+            reviewDate={hasVerifiedSql ? 'Just now' : 'Pending'}
+          />
+        </div>
+
         {/* Verified Attainments */}
         <div className="pb-card p-6 sm:p-8 space-y-5">
           <div className="flex items-center justify-between">
@@ -264,7 +290,7 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
                 <div className="bg-canvas p-4 rounded-xl border border-border text-xs space-y-1.5 font-mono">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between text-text-muted text-[11px] gap-1">
                     <span className="font-semibold text-text-secondary">
-                      Evaluator: {skill.reviewer_name} ({new Date(skill.reviewed_at).toLocaleDateString()})
+                      Evaluator: {skill.reviewer_name} ({skill.reviewed_at !== 'Pending' ? new Date(skill.reviewed_at).toLocaleDateString() : 'Pending'})
                     </span>
                     <span className="text-accent">Artifact: {skill.evidence_title}</span>
                   </div>
@@ -294,11 +320,11 @@ export default function CandidateEvidenceSnapshotPage({ params }: { params: { id
         {/* Transition Form */}
         <form onSubmit={handleTransition} className="pb-card p-6 sm:p-8 space-y-5">
           <div>
-            <h2 className="section-label">
+            <h2 className="section-label text-warning">
               Recruiter Decision & Stage Transition
             </h2>
             <p className="text-xs text-text-muted mt-1 font-mono">
-              Every stage update writes an immutable audit record tagged with version #{candidate.version}.
+              Synthetic interaction preview only. This standalone screen does not persist a stage change or audit record.
             </p>
           </div>
 

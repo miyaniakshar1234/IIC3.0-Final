@@ -33,7 +33,12 @@ interface SubmissionSummary {
   } | null;
 }
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function StudentSubmissionsListPage() {
+  const { user } = useAuth();
+  const isMeera = user?.email?.includes('meera.patel') ?? false;
+
   const [submissions, setSubmissions] = useState<SubmissionSummary[]>([]);
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +47,12 @@ export default function StudentSubmissionsListPage() {
     let isMounted = true;
 
     async function loadData() {
+      if (!isMeera) {
+        setSubmissions([]);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const [subsRes, stateRes] = await Promise.all([
           fetch('/api/v1/submissions', { cache: 'no-store' }),
@@ -110,7 +121,7 @@ export default function StudentSubmissionsListPage() {
       isMounted = false;
       clearInterval(interval);
     };
-  }, []);
+  }, [isMeera]);
 
   return (
     <AppShell>
@@ -142,7 +153,7 @@ export default function StudentSubmissionsListPage() {
               My Challenge Submissions
             </h1>
             <p className="text-xs sm:text-sm text-text-secondary font-mono max-w-2xl leading-relaxed">
-              Every submission is immutably versioned with cryptographic hashes and audited by verified academic faculty.
+              Each synthetic demo submission keeps a frozen revision, server-calculated digest, and named human review record.
             </p>
           </div>
 

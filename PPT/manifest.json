@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "format": "html",
+  "metadata": {
+    "title": "ProofBridge — IIC 3.0 MUJ Final Pitch",
+    "description": "Cryptographic Skill Verification & Talent Intelligence Network. Theme: EdTech (PS-08). Team Outliers.",
+    "author": "Team Outliers"
+  },
+  "canvas": {"width": 1920, "height": 1080},
+  "playlist": [
+    "01-title.html",
+    "02-problem.html",
+    "03-gap-users.html",
+    "04-solution.html",
+    "05-features.html",
+    "06-tech-stack.html",
+    "07-network-intelligence.html",
+    "08-feasibility-impact.html",
+    "09-team.html"
+  ]
+}

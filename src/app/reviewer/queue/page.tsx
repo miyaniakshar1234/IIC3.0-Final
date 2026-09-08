@@ -40,14 +40,14 @@ interface SubmissionItem {
 const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
   {
     id: 'sub-sql-001', student_name: 'Meera Patel', student_program: 'MCA 2026',
-    student_institution: 'Demo College of Computing', challenge_title: 'Explain Monthly Sales from Messy Dataset',
+    student_institution: 'Manipal University Jaipur (MUJ)', challenge_title: 'Explain Monthly Sales from Messy Dataset',
     target_skill: 'SQL (Structured Query Language)', required_level: 3, weight: 35,
     submitted_time_ago: '2 hours ago', urgency_label: 'Needs Review (< 24h SLA)', urgency_variant: 'amber',
     status: 'pending', evaluation_url: '/reviewer/evaluations/sub-sql-001',
   },
   {
     id: 'sub-html-002', student_name: 'Aarav Sharma', student_program: 'B.Tech CS 2026',
-    student_institution: 'Demo College of Computing', challenge_title: 'Build Accessible Keyboard Navigation Flow',
+    student_institution: 'Manipal University Jaipur (MUJ)', challenge_title: 'Build Accessible Keyboard Navigation Flow',
     target_skill: 'HTML/CSS & Accessibility (WCAG 2.2)', required_level: 3, weight: 25,
     submitted_time_ago: '1 day ago', urgency_label: 'Completed & Published', urgency_variant: 'emerald',
     status: 'completed', evaluated_level: 3, evaluated_date: 'Sep 07, 2026',
@@ -55,14 +55,19 @@ const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
   },
   {
     id: 'sub-api-003', student_name: 'Rohan Gupta', student_program: 'MCA 2026',
-    student_institution: 'Demo College of Computing', challenge_title: 'Robust REST Client with Exponential Backoff',
+    student_institution: 'Manipal University Jaipur (MUJ)', challenge_title: 'Robust REST Client with Exponential Backoff',
     target_skill: 'API Integration & Resilience', required_level: 2, weight: 20,
     submitted_time_ago: '3 hours ago', urgency_label: 'In Progress', urgency_variant: 'blue',
     status: 'pending', evaluation_url: '/reviewer/evaluations/sub-api-003',
   },
 ];
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function ReviewerQueuePage() {
+  const { user } = useAuth();
+  const isDemoReviewer = user?.email?.includes('alok.sharma') ?? false;
+
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
 
@@ -89,7 +94,9 @@ export default function ReviewerQueuePage() {
     };
   }, []);
 
-  const submissions = DEFAULT_SUBMISSIONS.map((s) => {
+  const baseSubmissions = isDemoReviewer ? DEFAULT_SUBMISSIONS : [];
+
+  const submissions = baseSubmissions.map((s) => {
     if (s.id === 'sub-sql-001' && hasVerifiedSql) {
       return {
         ...s,
@@ -122,7 +129,9 @@ export default function ReviewerQueuePage() {
           <div>
             <div className="section-label mb-1">Reviewer Workspace</div>
             <h1 className="text-2xl font-black text-text-primary">Evaluation Queue</h1>
-            <p className="text-xs text-text-muted font-mono mt-0.5">Dr. Alok Sharma · Faculty Evaluator · Demo College of Computing</p>
+            <p className="text-xs text-text-muted font-mono mt-0.5">
+              {user?.name || 'Faculty Evaluator'} · Faculty Evaluator · {user?.institutionName || 'Institution'}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             {pending > 0 && (

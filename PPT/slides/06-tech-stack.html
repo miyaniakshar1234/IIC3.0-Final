@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ProofBridge — Technology Stack & Cryptographic Standards</title>
+<link rel="stylesheet" href="../assets/base.css">
+</head>
+<body>
+<div class="slide-container" data-screen-label="06 Tech Stack">
+
+  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:-200px;top:-200px;width:800px;height:800px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-emerald" style="position:absolute;left:1300px;top:550px;width:900px;height:900px;opacity:0.35;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="grid-overlay" style="z-index:2;"></div>
+  <div data-object="true" data-object-type="shape" class="matrix-dots" style="z-index:2;"></div>
+
+  <!-- Chrome -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:72px;width:600px;z-index:10;">
+    <span class="pill" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);color:#10B981;">
+      <span class="dot" style="background:#10B981;"></span>05 · SYSTEM ARCHITECTURE &amp; TECH STACK
+    </span>
+  </div>
+  <div data-object="true" data-object-type="image" style="position:absolute;left:1720px;top:64px;width:120px;height:72px;z-index:10;">
+    <img src="../assets/iic3-logo.png" alt="IIC 3.0" style="width:100%;height:100%;object-fit:contain;object-position:right center;opacity:0.85;">
+  </div>
+
+  <!-- Title -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:136px;width:1600px;z-index:10;">
+    <div class="h1" style="font-size:68px;color:#F8FAFC;letter-spacing:-0.02em;">
+      Production Architecture &amp; <span style="color:#10B981;">Deterministic Engine</span>
+    </div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:248px;width:1500px;z-index:10;">
+    <div class="body" style="font-size:22px;color:rgba(248,250,252,0.7);max-width:1300px;">
+      Built on open W3C standards with zero recurring API costs. Completely deterministic scoring eliminates AI black boxes.
+    </div>
+  </div>
+
+  <!-- 3 Pillars of Technology -->
+  <div style="position:absolute;left:96px;top:330px;width:1728px;display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;z-index:6;">
+    
+    <!-- Column 1: Frontend & User Layer -->
+    <div class="glass" style="padding:28px;border-radius:22px;display:flex;flex-direction:column;justify-content:space-between;">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="eyebrow" style="color:#22D3EE;">Client &amp; Workspace</div>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--white-mute);">NEXT.JS 14</span>
+        </div>
+        <div class="h3" style="font-size:22px;color:#F8FAFC;margin-top:10px;">Reactive Enterprise Frontend</div>
+        <div class="body" style="font-size:14px;margin-top:12px;line-height:1.6;color:var(--white-soft);">
+          Fully responsive workspace providing isolated environments for Students, Faculty Reviewers, Employers, and University Deans.
+        </div>
+
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;font-family:var(--font-mono);font-size:12px;">
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Framework</span><span style="color:#22D3EE;">Next.js 14 (App Router)</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Language</span><span style="color:#22D3EE;">TypeScript (Strict Mode)</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Styling</span><span style="color:#22D3EE;">Tailwind CSS + ThemeToggle</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Motion</span><span style="color:#22D3EE;">Framer Motion micro-interactions</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:#22D3EE;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;margin-top:14px;">
+        Zero layout shifts · Client-side persona isolation
+      </div>
+    </div>
+
+    <!-- Column 2: Backend & Database -->
+    <div class="glass" style="padding:28px;border-radius:22px;display:flex;flex-direction:column;justify-content:space-between;">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="eyebrow" style="color:#D4A853;">Persistence &amp; API</div>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--white-mute);">POSTGRESQL</span>
+        </div>
+        <div class="h3" style="font-size:22px;color:#F8FAFC;margin-top:10px;">PostgreSQL Immutable Store</div>
+        <div class="body" style="font-size:14px;margin-top:12px;line-height:1.6;color:var(--white-soft);">
+          Relational engine managing immutable code revisions, cryptographic hashes, standardized rubrics, and dynamic live state.
+        </div>
+
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;font-family:var(--font-mono);font-size:12px;">
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Database</span><span style="color:#D4A853;">PostgreSQL with Connection Pool</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Revision History</span><span style="color:#D4A853;">Immutable Append-Only Log</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>API Layer</span><span style="color:#D4A853;">RESTful Route Handlers (/api/v1)</span>
+          </div>
+          <div style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>State Engine</span><span style="color:#D4A853;">Atomic Synchronization</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:#D4A853;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;margin-top:14px;">
+        Atomically signed transactions · No race conditions
+      </div>
+    </div>
+
+    <!-- Column 3: Cryptography & Formula -->
+    <div class="glass" style="padding:28px;border-radius:22px;display:flex;flex-direction:column;justify-content:space-between;">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="eyebrow" style="color:#10B981;">Algorithm &amp; Standards</div>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--white-mute);">W3C &amp; MATH</span>
+        </div>
+        <div class="h3" style="font-size:22px;color:#F8FAFC;margin-top:10px;">Deterministic Coverage Engine</div>
+        <div class="body" style="font-size:14px;margin-top:12px;line-height:1.6;color:var(--white-soft);">
+          Mathematical matching without probabilistic hallucinations. Provenance secured via internationally recognized W3C standards.
+        </div>
+
+        <!-- Formula Box -->
+        <div style="margin-top:16px;padding:12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;font-family:var(--font-mono);font-size:12px;color:#F8FAFC;">
+          <div style="color:#10B981;font-weight:700;">coverage-v1 Algorithm:</div>
+          <div style="margin-top:6px;font-size:13px;">Score = &Sigma; [ W<sub>i</sub> &times; min(1, Level / Target) ]</div>
+        </div>
+
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;font-family:var(--font-mono);font-size:12px;">
+          <div style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Proof Standard</span><span style="color:#10B981;">W3C Verifiable Credentials</span>
+          </div>
+          <div style="padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.04);display:flex;justify-content:space-between;">
+            <span>Code Digests</span><span style="color:#10B981;">SHA-256 Immutable Hashes</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:#10B981;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;margin-top:14px;">
+        100% auditable · Explainable hiring math
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom chrome -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1000px;width:900px;z-index:10;">
+    <span class="chrome-page">PROOFBRIDGE · ARCHITECTURE &amp; CRYPTOGRAPHIC STANDARDS · IIC 3.0 MUJ</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1000px;width:220px;z-index:10;text-align:right;">
+    <span class="chrome-page">06 / 09</span>
+  </div>
+
+</div>
+</body>
+</html>

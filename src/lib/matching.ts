@@ -16,6 +16,7 @@ export interface RequiredSkill {
 }
 
 export interface StudentAttainment {
+  attainmentId?: string;
   skillId: string;
   level: number;         // 0 to 4
   reviewedAt: string;
@@ -56,17 +57,54 @@ export function calculateCoverage(
   requiredSkills: RequiredSkill[],
   studentAttainments: StudentAttainment[]
 ): MatchResult {
+  if (requiredSkills.length === 0) {
+    throw new Error('Invalid opportunity: at least one required skill is required');
+  }
+
+  const seenSkillIds = new Set<string>();
+  for (const skill of requiredSkills) {
+    if (seenSkillIds.has(skill.skillId)) {
+      throw new Error(`Invalid opportunity: duplicate required skill ${skill.skillId}`);
+    }
+    seenSkillIds.add(skill.skillId);
+
+    if (!Number.isInteger(skill.requiredLevel) || skill.requiredLevel < 1 || skill.requiredLevel > 4) {
+      throw new Error(`Invalid opportunity: required level for ${skill.skillId} must be an integer from 1 to 4`);
+    }
+    if (!Number.isInteger(skill.weight) || skill.weight <= 0 || skill.weight > 100) {
+      throw new Error(`Invalid opportunity: weight for ${skill.skillId} must be an integer from 1 to 100`);
+    }
+  }
+
+  for (const attainment of studentAttainments) {
+    if (!Number.isInteger(attainment.level) || attainment.level < 0 || attainment.level > 4) {
+      throw new Error(`Invalid attainment: level for ${attainment.skillId} must be an integer from 0 to 4`);
+    }
+    if (!Number.isFinite(Date.parse(attainment.reviewedAt))) {
+      throw new Error(`Invalid attainment: reviewedAt for ${attainment.skillId} must be an ISO date`);
+    }
+  }
+
   // Validate weights
   const totalWeight = requiredSkills.reduce((sum, s) => sum + s.weight, 0);
   if (totalWeight !== 100) {
     throw new Error(`Invalid opportunity: skill weights must sum to 100, got ${totalWeight}`);
   }
 
-  // Create a map of active attainments, selecting highest level per skill
+  // Select the highest level, then newest review, then the smallest stable ID.
   const attainmentMap = new Map<string, StudentAttainment>();
   for (const att of studentAttainments) {
     const existing = attainmentMap.get(att.skillId);
-    if (!existing || att.level > existing.level) {
+    const attTime = Date.parse(att.reviewedAt);
+    const existingTime = existing ? Date.parse(existing.reviewedAt) : Number.NEGATIVE_INFINITY;
+    const attId = att.attainmentId ?? att.revisionId ?? '';
+    const existingId = existing?.attainmentId ?? existing?.revisionId ?? '';
+    const winsTie =
+      existing &&
+      att.level === existing.level &&
+      (attTime > existingTime || (attTime === existingTime && attId.localeCompare(existingId) < 0));
+
+    if (!existing || att.level > existing.level || winsTie) {
       attainmentMap.set(att.skillId, att);
     }
   }

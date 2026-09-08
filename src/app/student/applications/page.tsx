@@ -76,7 +76,7 @@ export default function StudentApplicationsPage() {
               My Active Applications
             </h1>
             <p className="text-xs sm:text-sm text-text-secondary font-mono max-w-2xl leading-relaxed">
-              Track candidate recruitment stages, review immutable evidence grants shared with employers, and monitor status updates.
+              Synthetic preview of recruitment stages and the evidence snapshot intended for an employer application.
             </p>
           </div>
 

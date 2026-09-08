@@ -5,15 +5,13 @@ import { getDbPool } from '@/lib/server/db';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const opportunityId = params.id;
-  const { searchParams } = new URL(request.url);
-
-  // Default to Meera ('00000000-0000-0000-0000-000000000001')
-  const studentId = searchParams.get('student_id') || '00000000-0000-0000-0000-000000000001';
-  const queryOverride = searchParams.get('include_sql_review');
+  // This unauthenticated evaluation sandbox exposes one synthetic persona only.
+  // Production must derive the student from the authenticated session.
+  const studentId = '00000000-0000-0000-0000-000000000001';
 
   const requiredSkills: RequiredSkill[] = [
     { skillId: '30000000-0000-0000-0000-000000000001', skillName: 'SQL', requiredLevel: 3, weight: 35 },
@@ -77,8 +75,7 @@ export async function GET(
     });
   }
 
-  // Allow query param override if explicitly passed, else adhere to live DB truth
-  const shouldIncludeSql = queryOverride !== null ? queryOverride === 'true' : hasLiveSql;
+  const shouldIncludeSql = hasLiveSql;
 
   if (shouldIncludeSql && !studentAttainments.some((a) => a.skillId === '30000000-0000-0000-0000-000000000001')) {
     studentAttainments.push({
@@ -104,6 +101,7 @@ export async function GET(
         opportunity_title: 'Junior Data Analyst Intern',
         employer_name: 'Sample Analytics Studio',
         has_verified_sql: shouldIncludeSql,
+        data_scope: 'synthetic_single_persona_demo',
       },
       meta: {
         request_id: crypto.randomUUID(),
