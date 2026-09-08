@@ -78,7 +78,7 @@ export default function HomePage() {
         <section className="relative text-center max-w-4xl mx-auto pt-8 space-y-7">
           {/* Section label */}
           <div className="flex justify-center">
-            <div className="section-label">IIC 3.0 MUJ · Open Innovation · PS-08</div>
+            <div className="section-label animate-float">IIC 3.0 MUJ · Open Innovation · PS-08</div>
           </div>
 
           {/* Headline */}
@@ -122,7 +122,7 @@ export default function HomePage() {
         </section>
 
         {/* ── 2. SCORE LEAP COCKPIT ── */}
-        <section className="pb-card-accent rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto overflow-hidden relative">
+        <section className="pb-card-accent soft-shimmer rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto overflow-hidden relative">
           {/* Ambient pulse */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" />
 

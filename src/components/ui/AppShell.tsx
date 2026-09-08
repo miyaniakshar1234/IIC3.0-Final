@@ -49,9 +49,14 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative">
-      {/* Dot grid ambient bg */}
-      <div className="dot-grid" />
-      <div className="ambient-bg pointer-events-none fixed inset-0 z-0" />
+      {/* Architectural Grid, Matrix Dots & Soft Ambient Glow Orbs */}
+      <div className="bg-grid-pattern" />
+      <div className="matrix-dots" />
+      <div className="ambient-glow-orbs">
+        <div className="ambient-glow-orb-1" />
+        <div className="ambient-glow-orb-2" />
+        <div className="ambient-glow-orb-3" />
+      </div>
 
       {/* ── HEADER ── */}
       <header className="pb-header sticky top-0 z-50">
