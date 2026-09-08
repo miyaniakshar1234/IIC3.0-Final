@@ -65,8 +65,10 @@ export default function EvidencePassportPage() {
     avatarInitial: user?.avatarInitials || 'MP',
   };
 
-  // Audited Evidence Dataset for Meera Patel
-  const reviewedAttainments: EvidenceDetail[] = [
+  const isMeera = user?.email.includes('meera.patel');
+
+  // Audited Evidence Dataset for Meera Patel (Only show if logged in as Meera for pitch purposes)
+  const reviewedAttainments: EvidenceDetail[] = isMeera ? [
     {
       skillName: 'Spreadsheets',
       reviewedLevel: 3,
@@ -112,7 +114,7 @@ export default function EvidencePassportPage() {
           criterionTitle: 'Clarity & Structure',
           scoreLevel: 3,
           levelDescription: 'Presents complex technical ideas clearly with logical sections and trade-off explanations',
-          reviewerRationale: 'Logical structure throughout. Minor formatting improvements suggested for diagram captions.'
+          reviewerRationale: 'Logical structure structure throughout. Minor formatting improvements suggested for diagram captions.'
         }
       ]
     },
@@ -137,7 +139,7 @@ export default function EvidencePassportPage() {
         }
       ]
     }
-  ];
+  ] : [];
 
   const sqlAttainment: EvidenceDetail = {
     skillName: 'SQL (Structured Query Language)',
@@ -166,7 +168,7 @@ export default function EvidencePassportPage() {
     : reviewedAttainments;
 
   // Requirement Gaps for Target Role
-  const currentGaps = hasVerifiedSql
+  const currentGaps = (hasVerifiedSql || !isMeera)
     ? []
     : [
         {
@@ -183,11 +185,11 @@ export default function EvidencePassportPage() {
       ];
 
   // Self-Declared Skills (Unverified claims)
-  const selfDeclaredSkills = [
+  const selfDeclaredSkills = isMeera ? [
     { skillName: 'Python Data Analysis', declaredLevel: 2, declaredDate: 'Aug 28, 2026' },
     { skillName: 'Git & Version Control', declaredLevel: 3, declaredDate: 'Aug 25, 2026' },
     { skillName: 'HTML & CSS', declaredLevel: 2, declaredDate: 'Aug 20, 2026' },
-  ];
+  ] : [];
 
   const openEvidenceDetail = (evidence: EvidenceDetail) => {
     setSelectedEvidence(evidence);
