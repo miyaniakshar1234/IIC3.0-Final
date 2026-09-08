@@ -18,6 +18,7 @@ import {
   Zap,
   CheckCircle2,
   Sparkles,
+  Layers,
 } from 'lucide-react';
 
 export default function LoginPage() {

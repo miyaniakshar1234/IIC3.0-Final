@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
+  Layers,
 } from 'lucide-react';
 
 const FALLBACK_UNIVERSITIES = [
