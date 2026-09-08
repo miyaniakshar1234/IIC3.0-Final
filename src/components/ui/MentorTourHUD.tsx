@@ -22,6 +22,7 @@ import {
   Sliders,
   Sparkles,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface TourStep {
   step: number;
@@ -127,13 +128,16 @@ export function MentorTourHUD() {
       if (res.ok) {
         setHasVerifiedSql(false);
         setResetFeedback('Reset baseline: 61% (Spreadsheets 25 + Comm 12 + Reasoning 24)');
+        toast.success('Demo baseline restored: 61% match (SQL gap active)');
         setTimeout(() => setResetFeedback(null), 4000);
         router.refresh();
       } else {
         throw new Error('Reset failed');
       }
     } catch (e: any) {
-      setResetFeedback('Error resetting state: ' + (e?.message || e));
+      const errText = 'Error resetting state: ' + (e?.message || e);
+      setResetFeedback(errText);
+      toast.error(errText);
     } finally {
       setIsResetting(false);
     }

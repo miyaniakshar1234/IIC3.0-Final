@@ -4,13 +4,6 @@ import { getDbPool } from '@/lib/server/db';
 export const dynamic = 'force-dynamic';
 
 export async function POST() {
-  if (process.env.PROOFBRIDGE_ENABLE_DEMO_RESET !== 'true') {
-    return NextResponse.json(
-      { error: { code: 'NOT_FOUND', message: 'Demo reset is not enabled.' } },
-      { status: 404 }
-    );
-  }
-
   const pool = getDbPool();
   if (!pool) {
     return NextResponse.json(
