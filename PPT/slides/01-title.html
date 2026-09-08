@@ -2,47 +2,59 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>MediBridge — Title</title>
+<title>ProofBridge — Title Slide</title>
 <link rel="stylesheet" href="../assets/base.css">
 </head>
 <body>
 <div class="slide-container" data-screen-label="01 Title">
 
-  <!-- Ambient depth -->
-  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:1350px;top:-200px;width:900px;height:900px;z-index:1;"></div>
-  <div data-object="true" data-object-type="shape" class="orb orb-teal" style="position:absolute;left:-300px;top:600px;width:900px;height:900px;z-index:1;"></div>
-  <div data-object="true" data-object-type="shape" class="orb orb-emerald" style="position:absolute;left:700px;top:400px;width:500px;height:500px;opacity:0.30;z-index:1;"></div>
+  <!-- Ambient depth orbs -->
+  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:1300px;top:-200px;width:950px;height:950px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-teal" style="position:absolute;left:-300px;top:550px;width:900px;height:900px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-emerald" style="position:absolute;left:750px;top:380px;width:550px;height:550px;opacity:0.35;z-index:1;"></div>
   <div data-object="true" data-object-type="shape" class="grid-overlay" style="z-index:2;"></div>
 
-  <!-- Abstract medical network SVG (decorative, right side) -->
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:1100px;top:120px;width:820px;height:840px;z-index:3;opacity:0.55;">
+  <!-- Abstract cryptographic trust network SVG -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:1100px;top:120px;width:820px;height:840px;z-index:3;opacity:0.65;">
     <svg viewBox="0 0 820 840" width="820" height="840" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="nodeGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#22D3EE" stop-opacity="1"/>
+          <stop offset="0%" stop-color="#D4A853" stop-opacity="1"/>
           <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
         </radialGradient>
         <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.6"/>
+          <stop offset="0%" stop-color="#D4A853" stop-opacity="0.8"/>
+          <stop offset="50%" stop-color="#22D3EE" stop-opacity="0.5"/>
           <stop offset="100%" stop-color="#10B981" stop-opacity="0.2"/>
         </linearGradient>
       </defs>
-      <g fill="none" stroke="url(#lineGrad)" stroke-width="1.2">
+      <g fill="none" stroke="url(#lineGrad)" stroke-width="1.5">
         <path d="M410 90 L180 260 L260 520 L410 680 L620 540 L680 280 Z"/>
         <path d="M410 90 L410 420 L180 260 M410 420 L620 540 M410 420 L680 280 M410 420 L260 520 M410 420 L410 680"/>
-        <path d="M180 260 L260 520 M620 540 L680 280 M260 520 L410 680 M410 680 L620 540 M180 260 L680 280"/>
-        <circle cx="410" cy="420" r="180" stroke="rgba(255,255,255,0.15)"/>
-        <circle cx="410" cy="420" r="280" stroke="rgba(255,255,255,0.08)"/>
+        <circle cx="410" cy="420" r="190" stroke="rgba(212,168,83,0.25)" stroke-dasharray="6 6"/>
+        <circle cx="410" cy="420" r="290" stroke="rgba(34,211,238,0.12)"/>
       </g>
       <g>
-        <circle cx="410" cy="90" r="14" fill="url(#nodeGrad)"/><circle cx="410" cy="90" r="6" fill="#22D3EE"/>
-        <circle cx="180" cy="260" r="12" fill="url(#nodeGrad)"/><circle cx="180" cy="260" r="5" fill="#10B981"/>
-        <circle cx="680" cy="280" r="12" fill="url(#nodeGrad)"/><circle cx="680" cy="280" r="5" fill="#22D3EE"/>
-        <circle cx="260" cy="520" r="10" fill="url(#nodeGrad)"/><circle cx="260" cy="520" r="4" fill="#10B981"/>
-        <circle cx="620" cy="540" r="10" fill="url(#nodeGrad)"/><circle cx="620" cy="540" r="4" fill="#22D3EE"/>
-        <circle cx="410" cy="680" r="14" fill="url(#nodeGrad)"/><circle cx="410" cy="680" r="6" fill="#10B981"/>
-        <circle cx="410" cy="420" r="22" fill="rgba(6,182,212,0.35)" stroke="#22D3EE" stroke-width="1.5"/>
-        <path d="M400 410 h20 M410 400 v20" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="410" cy="90" r="16" fill="url(#nodeGrad)"/><circle cx="410" cy="90" r="7" fill="#D4A853"/>
+        <text x="435" y="95" fill="#D4A853" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">UNIVERSITY ANCHOR</text>
+
+        <circle cx="180" cy="260" r="14" fill="url(#nodeGrad)"/><circle cx="180" cy="260" r="6" fill="#22D3EE"/>
+        <text x="70" y="265" fill="#22D3EE" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">STUDENT TWIN</text>
+
+        <circle cx="680" cy="280" r="14" fill="url(#nodeGrad)"/><circle cx="680" cy="280" r="6" fill="#10B981"/>
+        <text x="710" y="285" fill="#10B981" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">ROLE GENOME</text>
+
+        <circle cx="260" cy="520" r="12" fill="url(#nodeGrad)"/><circle cx="260" cy="520" r="5" fill="#22D3EE"/>
+        <text x="130" y="545" fill="#F8FAFC" font-family="'JetBrains Mono', monospace" font-size="12" opacity="0.8">SHA-256 DIGEST</text>
+
+        <circle cx="620" cy="540" r="12" fill="url(#nodeGrad)"/><circle cx="620" cy="540" r="5" fill="#10B981"/>
+        <text x="645" y="555" fill="#F8FAFC" font-family="'JetBrains Mono', monospace" font-size="12" opacity="0.8">FACULTY RUBRIC</text>
+
+        <circle cx="410" cy="680" r="16" fill="url(#nodeGrad)"/><circle cx="410" cy="680" r="7" fill="#D4A853"/>
+        <text x="350" y="720" fill="#D4A853" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700">W3C CREDENTIAL</text>
+
+        <circle cx="410" cy="420" r="26" fill="rgba(212,168,83,0.3)" stroke="#D4A853" stroke-width="2"/>
+        <text x="397" y="426" fill="#F8FAFC" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="900">PB</text>
       </g>
     </svg>
   </div>
@@ -59,68 +71,102 @@
   <div data-object="true" data-object-type="shape" style="position:absolute;left:96px;top:184px;width:1728px;height:1px;background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.25) 20%, rgba(255,255,255,0.25) 80%, transparent 100%);z-index:5;"></div>
 
   <!-- Event pill -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:240px;width:600px;z-index:10;">
-    <span class="pill"><span class="dot"></span>IIC 3.0 HACKATHON · MUJ 2026 · OPEN INNOVATION</span>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:232px;width:800px;z-index:10;">
+    <span class="pill" style="border-color:rgba(212,168,83,0.4);background:rgba(212,168,83,0.12);color:#D4A853;">
+      <span class="dot" style="background:#D4A853;box-shadow:0 0 10px #D4A853;"></span>
+      IIC 3.0 MUJ · THEME: EDTECH · PS-08 ACADEMIA-INDUSTRY COLLABORATION
+    </span>
   </div>
 
-  <!-- Title -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:308px;width:1180px;z-index:10;">
-    <div class="h1" style="font-size:132px;color:#F8FAFC;">MediBridge</div>
+  <!-- Main Title -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:296px;width:1180px;z-index:10;">
+    <div class="h1" style="font-size:124px;color:#F8FAFC;letter-spacing:-0.03em;line-height:1;">
+      Proof<span style="background:linear-gradient(90deg,#D4A853 0%,#22D3EE 100%);-webkit-background-clip:text;background-clip:text;color:transparent;">Bridge</span>
+    </div>
   </div>
 
-  <!-- Full title -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:472px;width:1200px;z-index:10;">
-    <div class="h2" style="font-size:40px;font-weight:500;color:#F8FAFC;">
-      Intelligent Medicine Accessibility<br>
-      <span style="background:linear-gradient(90deg,#22D3EE 0%,#10B981 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700;">& Availability Network</span>
+  <!-- Subtitle -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:450px;width:1150px;z-index:10;">
+    <div class="h2" style="font-size:38px;font-weight:500;color:#F8FAFC;line-height:1.25;">
+      Cryptographic Skill Verification & Talent Intelligence Network
+    </div>
+    <div style="font-family:var(--font-mono);font-size:18px;color:#22D3EE;margin-top:10px;letter-spacing:0.04em;">
+      Evidence-Backed Portfolios · W3C Standard Proofs · Shortest-Path Employability Engine
     </div>
   </div>
 
   <!-- Tagline -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:640px;width:1100px;z-index:10;">
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:620px;width:1100px;z-index:10;">
     <div style="display:flex;align-items:center;gap:20px;">
-      <div style="width:56px;height:2px;background:#22D3EE;"></div>
-      <div class="body" style="font-size:26px;color:#F8FAFC;font-style:italic;font-weight:300;">
-        From Prescription to Pharmacy — One Connected Network.
+      <div style="width:56px;height:3px;background:#D4A853;"></div>
+      <div class="body" style="font-size:24px;color:#F8FAFC;font-style:italic;font-weight:300;">
+        "Stop trusting what students claim. Mathematically verify what they can build."
       </div>
     </div>
   </div>
 
   <!-- Meta cards row (Domain / Team / Members) -->
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:770px;width:360px;height:200px;z-index:6;"></div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:120px;top:790px;width:312px;height:160px;z-index:10;padding:8px;">
-    <div class="eyebrow" style="font-size:12px;">Domain</div>
-    <div class="h3" style="font-size:30px;color:#F8FAFC;margin-top:14px;">Open Innovation</div>
-    <div class="body" style="font-size:14px;margin-top:16px;">Cross-sector platform bridging patients, prescriptions & pharmacies.</div>
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:740px;width:340px;height:220px;z-index:6;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:120px;top:760px;width:292px;height:180px;z-index:10;padding:8px;">
+    <div class="eyebrow" style="font-size:12px;color:#D4A853;">Problem Statement</div>
+    <div class="h3" style="font-size:24px;color:#F8FAFC;margin-top:12px;">PS-08 · EdTech</div>
+    <div class="body" style="font-size:13px;margin-top:12px;line-height:1.5;color:var(--white-soft);">
+      Portal for Academia–Industry collaboration for skill mapping, internships & placements.
+    </div>
   </div>
 
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:476px;top:770px;width:360px;height:200px;z-index:6;"></div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:500px;top:790px;width:312px;height:160px;z-index:10;padding:8px;">
-    <div class="eyebrow" style="font-size:12px;">Team</div>
-    <div class="h3" style="font-size:30px;color:#F8FAFC;margin-top:14px;">Outliers</div>
-    <div class="body" style="font-size:14px;margin-top:16px;">Four builders. One shared frustration with how medicine reaches people.</div>
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:456px;top:740px;width:340px;height:220px;z-index:6;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:480px;top:760px;width:292px;height:180px;z-index:10;padding:8px;">
+    <div class="eyebrow" style="font-size:12px;color:#22D3EE;">Team Name</div>
+    <div class="h3" style="font-size:28px;color:#F8FAFC;margin-top:12px;">Outliers</div>
+    <div class="body" style="font-size:13px;margin-top:12px;line-height:1.5;color:var(--white-soft);">
+      Bridging universities, student engineering artifacts, and enterprise recruitment.
+    </div>
   </div>
 
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:856px;top:770px;width:740px;height:200px;z-index:6;"></div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:880px;top:790px;width:692px;height:160px;z-index:10;padding:8px;">
-    <div class="eyebrow" style="font-size:12px;">Team Members</div>
+  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:816px;top:740px;width:780px;height:220px;z-index:6;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:840px;top:760px;width:732px;height:180px;z-index:10;padding:8px;">
+    <div class="eyebrow" style="font-size:12px;color:#10B981;">Team Members & Roles</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 32px;margin-top:16px;">
-      <div style="display:flex;align-items:center;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#22D3EE;"></div><span class="h3" style="font-size:20px;color:#F8FAFC;">Akshar Miyani</span></div>
-      <div style="display:flex;align-items:center;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#10B981;"></div><span class="h3" style="font-size:20px;color:#F8FAFC;">Lubhanshi Mathur</span></div>
-      <div style="display:flex;align-items:center;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;"></div><span class="h3" style="font-size:20px;color:#F8FAFC;">Lakshita Sharma</span></div>
-      <div style="display:flex;align-items:center;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#06B6D4;"></div><span class="h3" style="font-size:20px;color:#F8FAFC;">Mohammad Faizan</span></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#D4A853;"></div>
+        <div>
+          <span class="h3" style="font-size:18px;color:#F8FAFC;">Akshar Miyani</span>
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--white-mute);display:block;">Lead Architect & Cryptography</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#22D3EE;"></div>
+        <div>
+          <span class="h3" style="font-size:18px;color:#F8FAFC;">Lubhanshi Mathur</span>
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--white-mute);display:block;">System Engineering & UX</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;"></div>
+        <div>
+          <span class="h3" style="font-size:18px;color:#F8FAFC;">Lakshita Sharma</span>
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--white-mute);display:block;">Academic Rubrics & Dataform</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#10B981;"></div>
+        <div>
+          <span class="h3" style="font-size:18px;color:#F8FAFC;">Mohammad Faizan</span>
+          <span style="font-size:11px;font-family:var(--font-mono);color:var(--white-mute);display:block;">Backend Pipelines & Integration</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Bottom chrome -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1010px;width:900px;z-index:10;">
-    <span class="chrome-page">MEDIBRIDGE · PITCH DECK · IIC 3.0 · 2026</span>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1000px;width:900px;z-index:10;">
+    <span class="chrome-page">PROOFBRIDGE · IIC 3.0 MUJ PITCH · FINAL ROUND</span>
   </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1010px;width:220px;z-index:10;text-align:right;">
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1000px;width:220px;z-index:10;text-align:right;">
     <span class="chrome-page">01 / 09</span>
   </div>
 
 </div>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>

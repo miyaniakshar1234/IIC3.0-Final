@@ -1,107 +1,108 @@
-import collections 
-import collections.abc
-import pptx
+import os
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
-import os
 
-# Create a blank presentation
 prs = Presentation()
 
-# Select a blank slide layout
+# Standard layouts
 blank_slide_layout = prs.slide_layouts[6] 
 title_slide_layout = prs.slide_layouts[0]
 bullet_slide_layout = prs.slide_layouts[1]
 
-# Content for the slides
 slides_data = [
     {
-        "title": "MediBridge: Intelligent Medicine Accessibility & Availability Network",
+        "title": "ProofBridge: Cryptographic Skill Verification Network",
         "content": [
-            "From Prescription to Pharmacy — One Connected Network",
-            "Domain: Open Innovation",
+            "Stop Trusting What Students Claim. Mathematically Verify What They Can Build.",
+            "IIC 3.0 MUJ Hackathon · Theme: EdTech · PS-08 Academia-Industry Collaboration",
             "Team Name: Outliers",
             "Team Members: Akshar Miyani, Lubhanshi Mathur, Lakshita Sharma, Mohammad Faizan"
         ]
     },
     {
-        "title": "The Core Problem",
+        "title": "The Core Problem: Resumes Are Broken",
         "content": [
-            "The Reality: Obtaining a medicine seems simple. However, having a valid prescription does not guarantee access because the patient does not know where the required medicine is actually available.",
-            "The Rural & Semi-Urban Crisis: The problem multiplies outside major cities. Patients face large distances between pharmacies, limited transportation, and zero centralized stock information.",
-            "The Pain Point: A simple medicine search becomes a time-consuming physical journey. Patients travel from pharmacy to pharmacy, wasting money, fuel, and critical time."
+            "Resume Inflation Crisis: Over 78% of engineering resumes contain exaggerated or unverified claims.",
+            "Generative AI CV Flooding: Recruiters spend over 42 hours per technical role filtering AI-generated resume spam.",
+            "Degree Detachment: Broad semester letter grades fail to signal modular production competence (SQL, Docker, APIs).",
+            "Pedigree Bias: Talented students from regional/tier-2 colleges are filtered out by generic keyword ATS tools."
         ]
     },
     {
-        "title": "The Actual Gap & Target Users",
+        "title": "The Market Gap & Stakeholders",
         "content": [
-            "The Market Gap: Existing digital healthcare services focus on online consultation, medicine delivery, or finding pharmacy locations. But finding a pharmacy is NOT the same as finding a pharmacy that can fulfill a specific prescription.",
-            "Our Focus: We are solving the 'Availability Gap' (Prescription -> Medicine Requirements -> Availability -> Verification -> Reservation -> Navigation).",
-            "Target Users: Rural patients, Elderly people, Caregivers, and Independent pharmacies."
+            "The Missing Link: Existing portals (LinkedIn, Internshala) treat skills as self-typed text strings with zero proof.",
+            "The Cryptographic Chain: University Anchor -> GitHub Git Evidence -> Faculty Rubrics -> Role Genomes -> W3C Credentials.",
+            "Students: Verifiable Skill Twin & shortest-path employability roadmap.",
+            "Faculty Evaluators: Structured rubric queues with < 24h SLA and NAAC/NBA accreditation data.",
+            "Industry Employers: Blind vector talent search and 80% reduction in technical screening time.",
+            "University Leadership: Real-time curriculum demand gap radar across student cohorts."
         ]
     },
     {
-        "title": "The Proposed Solution: MediBridge Platform",
+        "title": "The Proposed Solution: ProofBridge Platform",
         "content": [
-            "What is MediBridge? A connected platform that allows a patient to submit a prescription and determine exactly where the required medicines can be obtained locally before leaving home.",
-            "Core User Journey:",
-            "1. Upload: Patient uploads a photograph of a printed or handwritten prescription.",
-            "2. Understanding: System extracts medicine names and dosages with confidence scores.",
-            "3. Availability Search: System scans the inventory of participating local pharmacies.",
-            "4. Complete Prescription Match: Identifies which pharmacy can fulfill 100% of the prescription."
+            "What is ProofBridge? An evidence-based talent intelligence network connecting academia and industry via cryptographic code proofs.",
+            "Pillar 1 - Skill Twin: Dynamic digital twin of student competence linked to frozen Git commit digests.",
+            "Pillar 2 - Role Genome: Requisitions converted into multi-factor capability vectors with weighted rubric levels.",
+            "Pillar 3 - Bridge Me Engine: Shortest-path pathfinder calculating highest-ROI challenges to close eligibility gaps.",
+            "Pillar 4 - Faculty Trust Anchor: Accredited human faculty scoring with 0% AI hallucination, outputting W3C JSON-LD credentials."
         ]
     },
     {
-        "title": "Key Features & USP",
+        "title": "GitHub Ground Truth & Evidence Verification",
         "content": [
-            "'Complete My Prescription': Shows prescription fulfillment percentages (e.g., Pharmacy A: 100%).",
-            "Advance Medicine Reservation: Reserve medicines for a specific pickup time. Pharmacy confirms, reducing travel uncertainty.",
-            "Human Verification System: When handwritten prescriptions are unreadable, the system escalates to a local pharmacist for verification. (The system knows when it does not know).",
-            "Rural Accessibility Mode: Voice-based searches, regional language support (Hindi, Gujarati)."
+            "Real Code as Ground Truth: Direct analysis of GitHub repositories, AST structures, and test suites (e.g. 2,840 lines analyzed).",
+            "Mandatory Student Contribution Defense: Candidates must explain independent problem-solving vs tooling assistance.",
+            "AI & Tooling Transparency Disclosure: Tagging independent authoring, AI syntax verification, or autocomplete copilot.",
+            "Frozen Revision Locks: Atomic PostgreSQL submission locks with server-calculated SHA-256 digests."
         ]
     },
     {
-        "title": "Technology Stack (Zero-Cost & Scalable)",
+        "title": "Technology Stack & Deterministic Engine",
         "content": [
-            "Constraints Met: 100% Zero-Cost APIs, Web-first responsive, Python backend.",
-            "AI/OCR Pipeline: Uses EasyOCR and PaddleOCR for cross-validated handwriting recognition; OpenCV for preprocessing; spaCy NLP for database matching.",
-            "Frontend & UI: React 19 (Vite) with Framer Motion and Vanilla CSS for Glassmorphism.",
-            "Backend & Database: Python FastAPI, Celery + Redis, PostgreSQL + PostGIS for spatial queries.",
-            "Free Mapping: Leaflet.js and OpenStreetMap (bypassing Google Maps APIs)."
+            "Frontend: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, Framer Motion, Next-Themes.",
+            "Backend & Storage: PostgreSQL with connection pooling, immutable revision logs, atomic state synchronization.",
+            "W3C Verifiable Credentials: JSON-LD standard proofs, SHA-256 code digests, Did:pb decentralized identifiers.",
+            "coverage-v1 Algorithm: Deterministic mathematical scoring formula [Score = Sum(Weight * min(1, Level / Target))]."
         ]
     },
     {
-        "title": "Medicine Availability Intelligence (Network)",
+        "title": "Curriculum Intelligence & Blind Talent Radar",
         "content": [
-            "Regional Shortage Detection: Analyzes network searches vs. availability to flag potential regional shortages (e.g., Demand: 87%, Availability: 22% -> Potential Shortage Alert).",
-            "Pharmacy-to-Pharmacy Assistance: If Pharmacy A has 2/3 of the medicines and Pharmacy B has the rest, the network allows them to coordinate.",
-            "Inventory & Expiry Awareness: Provides local pharmacies with data on frequently requested medicines and upcoming inventory expiries."
+            "University Curriculum Gap Radar: Real-time cohort demand analytics (e.g. 620 students: 142 ready, 213 near-ready, 49% Docker gap).",
+            "Proactive Curriculum Adaptation: Enables deans to run targeted bootcamps before placement season begins.",
+            "Blind Vector Hiring: Candidates shortlisted purely by mathematical genome match with zero pedigree or demographic bias.",
+            "1-Click Verification: Third-party employers verify code digests offline without contacting university administration."
         ]
     },
     {
-        "title": "Feasibility, Safety & Social Impact",
+        "title": "Feasibility, Accreditation & Measurable Impact",
         "content": [
-            "Economic Feasibility: Open-source AI and free mapping tools ensure zero API costs, making it highly sustainable for scaling.",
-            "Privacy & Safety Philosophy: Collects only what is necessary. MediBridge is an accessibility platform, not a doctor. AI handles efficiency; Humans handle ambiguity.",
-            "Social & Environmental Impact: Drastically reduces out-of-pocket transportation expenses, lost working hours, and carbon emissions from multi-pharmacy trips."
+            "Zero Recurring Cost: Open W3C standards and self-hosted PostgreSQL eliminate expensive third-party AI/API bills.",
+            "Accreditation Compliance: Automated data export for NAAC Criteria 2 & 5, NBA OBE Criterion 2.6, and NEP 2020 frameworks.",
+            "80% Reduction in Technical Screening: Employers interview pre-verified candidates with zero resume reading.",
+            "3.2x Higher Interview Conversion: Students with evidence-backed Skill Twins demonstrate proven technical capability."
         ]
     },
     {
-        "title": "Team Outliers",
+        "title": "Team Outliers & Future Vision",
         "content": [
-            "Akshar Miyani",
-            "Lubhanshi Mathur",
-            "Lakshita Sharma",
-            "Mohammad Faizan",
+            "Akshar Miyani: Lead Architect, Full-Stack & Cryptography",
+            "Lubhanshi Mathur: System Engineering & UX/UI Design",
+            "Lakshita Sharma: Academic Rubrics & Accreditation Frameworks",
+            "Mohammad Faizan: Backend Pipelines & Infrastructure",
             "",
-            "Vision: To build a connected network where a prescription does not become a search problem."
+            "Vision: Empowering every student to be evaluated by what they can build, not by what they can fabricate."
         ]
     }
 ]
 
-logo_1_path = r'd:\Projects\IIE3.0\PPT\extracted_images\ppt\media\image6.png'
-logo_2_path = r'd:\Projects\IIE3.0\PPT\extracted_images\ppt\media\image10.png'
+# Path to assets
+ppt_dir = os.path.dirname(os.path.abspath(__file__))
+logo_muj = os.path.join(ppt_dir, "assets", "muj-logo.png")
+logo_iic3 = os.path.join(ppt_dir, "assets", "iic3-logo.png")
 
 for i, slide_data in enumerate(slides_data):
     if i == 0:
@@ -123,15 +124,15 @@ for i, slide_data in enumerate(slides_data):
             p.text = item
             p.level = 0
             
-    # Add logos to all slides
+    # Add logos to slides if available
     try:
-        if os.path.exists(logo_1_path):
-            slide.shapes.add_picture(logo_1_path, Inches(0.2), Inches(0.2), width=Inches(1.5))
-        if os.path.exists(logo_2_path):
-            slide.shapes.add_picture(logo_2_path, Inches(8.0), Inches(0.2), width=Inches(1.5))
+        if os.path.exists(logo_muj):
+            slide.shapes.add_picture(logo_muj, Inches(0.4), Inches(0.3), width=Inches(1.8))
+        if os.path.exists(logo_iic3):
+            slide.shapes.add_picture(logo_iic3, Inches(8.2), Inches(0.3), width=Inches(1.4))
     except Exception as e:
-        print("Error adding logo:", e)
+        print(f"Notice on slide {i}: {e}")
 
-output_path = r'd:\Projects\IIE3.0\PPT\MediBridge_Hackathon_Pitch.pptx'
+output_path = os.path.join(ppt_dir, "ProofBridge_Hackathon_Pitch.pptx")
 prs.save(output_path)
 print(f"Presentation saved successfully at {output_path}")

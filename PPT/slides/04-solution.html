@@ -2,133 +2,160 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>MediBridge — Proposed Solution</title>
+<title>ProofBridge — The Proposed Solution</title>
 <link rel="stylesheet" href="../assets/base.css">
 </head>
 <body>
 <div class="slide-container" data-screen-label="04 Solution">
 
-  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:-200px;top:-200px;width:800px;height:800px;z-index:1;"></div>
-  <div data-object="true" data-object-type="shape" class="orb orb-emerald" style="position:absolute;left:1400px;top:500px;width:800px;height:800px;opacity:0.4;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-cyan" style="position:absolute;left:-200px;top:-200px;width:900px;height:900px;opacity:0.4;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" class="orb orb-teal" style="position:absolute;left:1300px;top:500px;width:900px;height:900px;z-index:1;"></div>
   <div data-object="true" data-object-type="shape" class="grid-overlay" style="z-index:2;"></div>
 
   <!-- Chrome -->
   <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:72px;width:600px;z-index:10;">
-    <span class="pill"><span class="dot"></span>03 · The Proposed Solution</span>
+    <span class="pill" style="border-color:rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);color:#10B981;">
+      <span class="dot" style="background:#10B981;box-shadow:0 0 12px #10B981;"></span>03 · THE PROPOSED SOLUTION
+    </span>
   </div>
   <div data-object="true" data-object-type="image" style="position:absolute;left:1720px;top:64px;width:120px;height:72px;z-index:10;">
     <img src="../assets/iic3-logo.png" alt="IIC 3.0" style="width:100%;height:100%;object-fit:contain;object-position:right center;opacity:0.85;">
   </div>
 
-  <!-- Title -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:140px;width:1500px;z-index:10;">
-    <div class="h1" style="font-size:76px;color:#F8FAFC;">The MediBridge <span style="background:linear-gradient(90deg,#22D3EE,#10B981);-webkit-background-clip:text;background-clip:text;color:transparent;">Platform</span>.</div>
-  </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:262px;width:1500px;z-index:10;">
-    <div class="body" style="font-size:22px;color:rgba(248,250,252,0.72);">A connected platform that lets a patient submit a prescription and know <span style="color:#F8FAFC;font-weight:500;">exactly where every medicine can be obtained locally — before leaving home.</span></div>
-  </div>
-
-  <!-- Journey label -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:360px;width:600px;z-index:10;">
-    <div class="eyebrow">The Core User Journey</div>
-  </div>
-
-  <!-- 4 journey steps as connected cards -->
-  <!-- Connector line behind cards -->
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:200px;top:602px;width:1520px;height:2px;background:linear-gradient(90deg, rgba(34,211,238,0.5) 0%, rgba(16,185,129,0.5) 100%);z-index:4;"></div>
-
-  <!-- Card 1: Upload -->
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:96px;top:410px;width:410px;height:520px;z-index:5;"></div>
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:280px;top:582px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#06B6D4,#0F766E);border:3px solid #062F2C;z-index:8;display:flex;align-items:center;justify-content:center;">
-    <div style="font-family:var(--font-mono);font-weight:700;font-size:16px;color:#F8FAFC;text-align:center;line-height:38px;">1</div>
-  </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:128px;top:438px;width:346px;height:460px;z-index:10;padding:8px;">
-    <!-- illustrative mini -->
-    <div style="width:100%;height:150px;border-radius:14px;background:linear-gradient(135deg,rgba(34,211,238,0.10),rgba(15,118,110,0.15));border:1px solid rgba(34,211,238,0.25);display:flex;align-items:center;justify-content:center;">
-      <svg viewBox="0 0 120 90" width="110" height="82">
-        <rect x="10" y="10" width="80" height="70" rx="4" fill="rgba(248,250,252,0.9)" opacity="0.85"/>
-        <line x1="20" y1="24" x2="80" y2="24" stroke="#0F766E" stroke-width="2"/>
-        <line x1="20" y1="36" x2="70" y2="36" stroke="#0B4744" stroke-width="1.5"/>
-        <path d="M20 48 q10 -6 20 0 t20 0" stroke="#0B4744" stroke-width="1.5" fill="none"/>
-        <path d="M20 60 q12 -4 24 0 t24 0" stroke="#0B4744" stroke-width="1.5" fill="none"/>
-        <circle cx="95" cy="70" r="14" fill="#06B6D4" opacity="0.9"/>
-        <path d="M90 70 h10 M95 65 v10" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+  <!-- Section title -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:136px;width:1600px;z-index:10;">
+    <div class="h1" style="font-size:68px;color:#F8FAFC;letter-spacing:-0.02em;">
+      ProofBridge: <span style="background:linear-gradient(90deg,#D4A853 0%,#22D3EE 100%);-webkit-background-clip:text;background-clip:text;color:transparent;">The Cryptographic Trust Layer</span>
     </div>
-    <div class="eyebrow" style="margin-top:80px;">Step 01</div>
-    <div class="h2" style="font-size:30px;color:#F8FAFC;margin-top:10px;">Upload</div>
-    <div class="body" style="font-size:16px;margin-top:14px;line-height:1.55;">Patient uploads a photograph of a <span style="color:#F8FAFC;font-weight:500;">printed or handwritten</span> prescription — from any basic smartphone.</div>
   </div>
 
-  <!-- Card 2: Understanding -->
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:536px;top:410px;width:410px;height:520px;z-index:5;"></div>
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:720px;top:582px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#22D3EE,#0F766E);border:3px solid #062F2C;z-index:8;">
-    <div style="font-family:var(--font-mono);font-weight:700;font-size:16px;color:#F8FAFC;text-align:center;line-height:38px;">2</div>
-  </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:568px;top:438px;width:346px;height:460px;z-index:10;padding:8px;">
-    <div style="width:100%;height:150px;border-radius:14px;background:linear-gradient(135deg,rgba(34,211,238,0.10),rgba(15,118,110,0.15));border:1px solid rgba(34,211,238,0.25);padding:12px;font-family:var(--font-mono);font-size:12px;color:rgba(248,250,252,0.85);">
-      <div style="display:flex;justify-content:space-between;"><span>Paracetamol 500mg</span><span style="color:#10B981;">98%</span></div>
-      <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;"><div style="width:98%;height:100%;background:#10B981;border-radius:2px;"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:12px;"><span>Amoxicillin 250mg</span><span style="color:#10B981;">91%</span></div>
-      <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;"><div style="width:91%;height:100%;background:#10B981;border-radius:2px;"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:12px;"><span>Metf???min</span><span style="color:#F59E0B;">54%</span></div>
-      <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;"><div style="width:54%;height:100%;background:#F59E0B;border-radius:2px;"></div></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:248px;width:1500px;z-index:10;">
+    <div class="body" style="font-size:22px;color:rgba(248,250,252,0.7);max-width:1300px;">
+      An evidence-based talent intelligence network that replaces unverified resumes with mathematically proven Skill Twins anchored by accredited universities.
     </div>
-    <div class="eyebrow" style="margin-top:80px;">Step 02</div>
-    <div class="h2" style="font-size:30px;color:#F8FAFC;margin-top:10px;">Understanding</div>
-    <div class="body" style="font-size:16px;margin-top:14px;line-height:1.55;">System extracts medicine names & dosages, assigning a <span style="color:#F8FAFC;font-weight:500;">confidence score</span> to each — so we know what we don't know.</div>
   </div>
 
-  <!-- Card 3: Availability Search -->
-  <div data-object="true" data-object-type="shape" class="glass" style="position:absolute;left:976px;top:410px;width:410px;height:520px;z-index:5;"></div>
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:1160px;top:582px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#10B981,#0F766E);border:3px solid #062F2C;z-index:8;">
-    <div style="font-family:var(--font-mono);font-weight:700;font-size:16px;color:#F8FAFC;text-align:center;line-height:38px;">3</div>
-  </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1008px;top:438px;width:346px;height:460px;z-index:10;padding:8px;">
-    <div style="width:100%;height:150px;border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,0.10),rgba(15,118,110,0.15));border:1px solid rgba(16,185,129,0.25);position:relative;overflow:hidden;">
-      <svg viewBox="0 0 300 130" width="100%" height="100%">
-        <defs><radialGradient id="pin4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#22D3EE" stop-opacity="0.6"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient></defs>
-        <path d="M0 90 Q80 60 150 80 T300 70" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none"/>
-        <path d="M0 60 Q80 90 150 50 T300 80" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none"/>
-        <circle cx="60" cy="55" r="18" fill="url(#pin4)"/><circle cx="60" cy="55" r="6" fill="#10B981"/>
-        <circle cx="140" cy="80" r="22" fill="url(#pin4)"/><circle cx="140" cy="80" r="7" fill="#22D3EE"/>
-        <circle cx="220" cy="45" r="16" fill="url(#pin4)"/><circle cx="220" cy="45" r="5" fill="#10B981"/>
-        <circle cx="255" cy="95" r="14" fill="url(#pin4)"/><circle cx="255" cy="95" r="5" fill="#F59E0B"/>
-      </svg>
+  <!-- 4 Core Pillars Horizontal Banner -->
+  <div style="position:absolute;left:96px;top:325px;width:1728px;display:grid;grid-template-columns:repeat(4, 1fr);gap:20px;z-index:6;">
+    
+    <div class="glass" style="padding:24px;border-radius:20px;border-top:3px solid #D4A853;">
+      <div style="font-family:var(--font-mono);font-size:11px;font-bold:700;color:#D4A853;letter-spacing:0.1em;">PILLAR 01</div>
+      <div class="h3" style="font-size:20px;color:#F8FAFC;margin-top:8px;">Skill Twin</div>
+      <div class="body" style="font-size:13px;margin-top:8px;line-height:1.5;color:var(--white-soft);">
+        Continuous digital twin of verified student competence derived from real code repositories, not self-reported CV text.
+      </div>
+      <div style="margin-top:14px;font-family:var(--font-mono);font-size:11px;color:#D4A853;">
+        &bull; Frozen Git Revisions (SHA-256)
+      </div>
     </div>
-    <div class="eyebrow" style="margin-top:80px;color:#10B981;">Step 03</div>
-    <div class="h2" style="font-size:30px;color:#F8FAFC;margin-top:10px;">Availability Search</div>
-    <div class="body" style="font-size:16px;margin-top:14px;line-height:1.55;">System scans the <span style="color:#F8FAFC;font-weight:500;">real-time inventory</span> of every participating pharmacy in the patient's local radius.</div>
-  </div>
 
-  <!-- Card 4: Complete Prescription Match -->
-  <div data-object="true" data-object-type="shape" class="glass-strong" style="position:absolute;left:1416px;top:410px;width:410px;height:520px;z-index:5;border-color:rgba(16,185,129,0.5);"></div>
-  <div data-object="true" data-object-type="shape" style="position:absolute;left:1600px;top:582px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#10B981,#22D3EE);border:3px solid #062F2C;z-index:8;box-shadow:0 0 20px rgba(16,185,129,0.6);">
-    <div style="font-family:var(--font-mono);font-weight:700;font-size:16px;color:#F8FAFC;text-align:center;line-height:38px;">4</div>
-  </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1448px;top:438px;width:346px;height:460px;z-index:10;padding:8px;">
-    <div style="width:100%;height:150px;border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,0.18),rgba(34,211,238,0.15));border:1px solid rgba(16,185,129,0.4);padding:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:12px;color:#F8FAFC;"><span>PHARMACY A</span><span style="color:#10B981;font-weight:700;">100%</span></div>
-      <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:6px;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#10B981,#22D3EE);border-radius:3px;"></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:12px;color:#F8FAFC;margin-top:14px;"><span>PHARMACY B</span><span style="color:#F59E0B;font-weight:700;">66%</span></div>
-      <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:6px;"><div style="width:66%;height:100%;background:#F59E0B;border-radius:3px;"></div></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:12px;color:#F8FAFC;margin-top:14px;"><span>PHARMACY C</span><span style="color:rgba(248,250,252,0.5);font-weight:700;">33%</span></div>
-      <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:6px;"><div style="width:33%;height:100%;background:rgba(248,250,252,0.5);border-radius:3px;"></div></div>
+    <div class="glass" style="padding:24px;border-radius:20px;border-top:3px solid #22D3EE;">
+      <div style="font-family:var(--font-mono);font-size:11px;font-bold:700;color:#22D3EE;letter-spacing:0.1em;">PILLAR 02</div>
+      <div class="h3" style="font-size:20px;color:#F8FAFC;margin-top:8px;">Role Genome</div>
+      <div class="body" style="font-size:13px;margin-top:8px;line-height:1.5;color:var(--white-soft);">
+        Job requisitions converted into multi-factor capability vectors with exact rubric levels (L1–L4) and percentage weights.
+      </div>
+      <div style="margin-top:14px;font-family:var(--font-mono);font-size:11px;color:#22D3EE;">
+        &bull; Zero keyword ambiguity
+      </div>
     </div>
-    <div class="eyebrow" style="margin-top:80px;color:#10B981;">Step 04 · The Breakthrough</div>
-    <div class="h2" style="font-size:26px;color:#F8FAFC;margin-top:10px;">Complete Prescription Match</div>
-    <div class="body" style="font-size:16px;margin-top:14px;line-height:1.55;">Instead of medicine-by-medicine, we identify <span style="color:#10B981;font-weight:600;">which single pharmacy fulfills 100%</span> of the prescription.</div>
+
+    <div class="glass" style="padding:24px;border-radius:20px;border-top:3px solid #10B981;">
+      <div style="font-family:var(--font-mono);font-size:11px;font-bold:700;color:#10B981;letter-spacing:0.1em;">PILLAR 03</div>
+      <div class="h3" style="font-size:20px;color:#F8FAFC;margin-top:8px;">Bridge Me Engine</div>
+      <div class="body" style="font-size:13px;margin-top:8px;line-height:1.5;color:var(--white-soft);">
+        Algorithmic pathfinder computing highest-ROI micro-missions to bridge eligibility deficits (e.g. 61% &rarr; 96% match).
+      </div>
+      <div style="margin-top:14px;font-family:var(--font-mono);font-size:11px;color:#10B981;">
+        &bull; Shortest-path employability
+      </div>
+    </div>
+
+    <div class="glass" style="padding:24px;border-radius:20px;border-top:3px solid #F59E0B;">
+      <div style="font-family:var(--font-mono);font-size:11px;font-bold:700;color:#F59E0B;letter-spacing:0.1em;">PILLAR 04</div>
+      <div class="h3" style="font-size:20px;color:#F8FAFC;margin-top:8px;">Faculty Trust Anchor</div>
+      <div class="body" style="font-size:13px;margin-top:8px;line-height:1.5;color:var(--white-soft);">
+        Accredited human faculty grade standardized rubrics with 0% AI hallucination. Output exported as portable W3C credentials.
+      </div>
+      <div style="margin-top:14px;font-family:var(--font-mono);font-size:11px;color:#F59E0B;">
+        &bull; W3C JSON-LD standard
+      </div>
+    </div>
+
   </div>
 
-  <!-- Footer -->
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1024px;width:900px;z-index:10;">
-    <span class="chrome-page">MEDIBRIDGE · PROPOSED SOLUTION</span>
+  <!-- End-to-End User Verification Workflow (Bottom) -->
+  <div data-object="true" data-object-type="shape" class="glass-strong" style="position:absolute;left:96px;top:560px;width:1728px;height:400px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:136px;top:585px;width:1648px;height:350px;z-index:10;padding:8px;">
+    
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div class="eyebrow" style="color:#22D3EE;">Operational Workflow</div>
+        <div class="h2" style="font-size:28px;color:#F8FAFC;margin-top:4px;">How ProofBridge Operates in Real Time</div>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:12px;color:#D4A853;background:rgba(212,168,83,0.12);padding:6px 14px;border-radius:10px;border:1px solid rgba(212,168,83,0.3);">
+        Deterministic Pipeline: 0% Recruiter Guesswork
+      </div>
+    </div>
+
+    <!-- 4 Step Flow Chart -->
+    <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:24px;margin-top:28px;">
+      
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:28px;height:28px;border-radius:8px;background:#D4A853;color:#0F0E0C;font-family:var(--font-mono);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">1</span>
+          <span class="eyebrow" style="color:#D4A853;font-size:11px;">CHALLENGE SANDBOX</span>
+        </div>
+        <div class="h3" style="font-size:17px;color:#F8FAFC;margin-top:12px;">Candidate Solves Challenge</div>
+        <div class="body" style="font-size:13px;margin-top:8px;color:var(--white-soft);line-height:1.5;">
+          Student writes SQL/code against uncurated enterprise anomalies. Validates results in interactive test runner.
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:28px;height:28px;border-radius:8px;background:#22D3EE;color:#0F0E0C;font-family:var(--font-mono);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">2</span>
+          <span class="eyebrow" style="color:#22D3EE;font-size:11px;">ATOMIC CODE FREEZE</span>
+        </div>
+        <div class="h3" style="font-size:17px;color:#F8FAFC;margin-top:12px;">Revision Lock &amp; Audit</div>
+        <div class="body" style="font-size:13px;margin-top:8px;color:var(--white-soft);line-height:1.5;">
+          PostgreSQL creates an immutable frozen revision with SHA-256 hash. Student writes contribution defense &amp; AI disclosure.
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:28px;height:28px;border-radius:8px;background:#F59E0B;color:#0F0E0C;font-family:var(--font-mono);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">3</span>
+          <span class="eyebrow" style="color:#F59E0B;font-size:11px;">FACULTY AUDIT</span>
+        </div>
+        <div class="h3" style="font-size:17px;color:#F8FAFC;margin-top:12px;">Standardized Rubric Grade</div>
+        <div class="body" style="font-size:13px;margin-top:8px;color:var(--white-soft);line-height:1.5;">
+          Accredited faculty inspects revision and scores criteria (L1-L4). Issues institutional digital signature &lt; 24h SLA.
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="width:28px;height:28px;border-radius:8px;background:#10B981;color:#0F0E0C;font-family:var(--font-mono);font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;">4</span>
+          <span class="eyebrow" style="color:#10B981;font-size:11px;">MATHEMATICAL MATCH</span>
+        </div>
+        <div class="h3" style="font-size:17px;color:#F8FAFC;margin-top:12px;">Zero-Friction Hiring</div>
+        <div class="body" style="font-size:13px;margin-top:8px;color:var(--white-soft);line-height:1.5;">
+          Candidate unlocks employer roles automatically. Employer queries exact talent vectors without reading a single CV.
+        </div>
+      </div>
+
+    </div>
   </div>
-  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1024px;width:220px;z-index:10;text-align:right;">
+
+  <!-- Bottom chrome -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:96px;top:1000px;width:900px;z-index:10;">
+    <span class="chrome-page">PROOFBRIDGE · PROPOSED SOLUTION &amp; ARCHITECTURE · IIC 3.0 MUJ</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1620px;top:1000px;width:220px;z-index:10;text-align:right;">
     <span class="chrome-page">04 / 09</span>
   </div>
 
 </div>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>
