@@ -1,51 +1,85 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { 
   ShieldCheck, Target, Database, Zap, ArrowRight, 
   GraduationCap, Building2, Briefcase, FileCode, 
-  CheckCircle2, Network, Lock, Globe
+  CheckCircle2, Network, Lock, Globe, Award, Sparkles,
+  TrendingUp, Code2, Terminal, Sliders, Check, BookOpen,
+  Cpu, Layers, AlertCircle, ChevronRight, FileCheck
 } from 'lucide-react';
 
-const FADE_DOWN = {
+const FADE_DOWN: any = {
   hidden: { opacity: 0, y: -20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
 };
 
-const FADE_UP = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+const FADE_UP: any = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
 };
 
-const STAGGER = {
+const STAGGER: any = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<'students' | 'employers' | 'institutions'>('students');
+
   return (
-    <div className="min-h-screen bg-background selection:bg-accent/30 flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-canvas text-text-primary selection:bg-accent/30 flex flex-col font-sans overflow-x-hidden relative">
       
-      {/* ── CUSTOM LANDING NAV (Replaces AppShell) ── */}
-      <nav className="fixed top-0 inset-x-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-accent flex items-center justify-center shadow-[0_0_15px_rgba(var(--accent-rgb),0.4)]">
+      {/* ── ARCHITECTURAL GRID & MATRIX DOTS ── */}
+      <div className="bg-grid-pattern" />
+      <div className="matrix-dots" />
+
+      {/* ── AMBIENT GLOWING MESH ORBS ── */}
+      <div className="ambient-glow-orbs">
+        <div className="ambient-glow-orb-1" />
+        <div className="ambient-glow-orb-2" />
+        <div className="ambient-glow-orb-3" />
+      </div>
+
+      {/* ── CUSTOM LANDING NAV ── */}
+      <nav className="fixed top-0 inset-x-0 z-50 border-b border-border bg-canvas/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] group-hover:scale-105 transition-transform">
               <Network className="w-5 h-5 text-white" />
             </div>
-            <span className="font-black text-text-primary text-xl tracking-tight">ProofBridge</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link href="/verify" className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-text-muted hover:text-text-primary transition-colors">
-              <ShieldCheck className="w-4 h-4" />
-              Verify Credential
+            <div className="flex flex-col">
+              <span className="font-black text-text-primary text-lg tracking-tight leading-none">ProofBridge</span>
+              <span className="text-[10px] font-mono text-text-muted tracking-wider uppercase mt-0.5">Trust Layer</span>
+            </div>
+          </Link>
+
+          <div className="flex items-center gap-3 sm:gap-6">
+            <Link 
+              href="/verify" 
+              className="hidden md:flex items-center gap-1.5 text-xs font-mono text-text-secondary hover:text-text-primary transition-colors px-2.5 py-1.5 rounded-lg hover:bg-surface border border-transparent hover:border-border"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-success" />
+              <span>Public Verifier</span>
             </Link>
-            <Link href="/auth/login" className="text-sm font-semibold text-text-muted hover:text-text-primary transition-colors">
+
+            {/* Light / Dark Mode Toggle */}
+            <ThemeToggle />
+
+            <Link 
+              href="/auth/login" 
+              className="text-xs sm:text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors"
+            >
               Sign In
             </Link>
-            <Link href="/auth/signup" className="pb-btn-primary py-2 px-5 text-sm group">
+
+            <Link 
+              href="/auth/signup" 
+              className="pb-btn-primary py-2 px-4 sm:px-5 text-xs sm:text-sm group"
+            >
               <span>Get Started</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -53,240 +87,524 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-16 relative z-10">
         
         {/* ── 🚀 HERO SECTION ── */}
-        <section className="relative pt-24 pb-32 text-center flex flex-col items-center px-4 overflow-hidden">
-          {/* Glowing background blob */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
-
+        <section className="relative pt-20 pb-28 text-center flex flex-col items-center px-4 overflow-hidden">
           <motion.div
             variants={STAGGER}
             initial="hidden"
             animate="show"
-            className="relative z-10 space-y-8 flex flex-col items-center max-w-5xl mx-auto"
+            className="space-y-8 flex flex-col items-center max-w-5xl mx-auto"
           >
-            <motion.div variants={FADE_DOWN} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/10 text-accent text-xs font-mono mb-2 shadow-[0_0_20px_rgba(var(--accent-rgb),0.15)]">
-              <span className="relative flex h-2 w-2 mr-1">
+            {/* Hackathon Badge */}
+            <motion.div 
+              variants={FADE_DOWN} 
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border-accent bg-accent-soft text-accent text-xs font-mono shadow-[0_0_25px_rgba(var(--accent-rgb),0.2)]"
+            >
+              <span className="relative flex h-2 w-2 mr-0.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
               </span>
-              IIC 3.0 MUJ EXCLUSIVE PROTOTYPE
+              <span>IIC 3.0 MUJ EXCLUSIVE PROTOTYPE · THEME: EDTECH (PS-08)</span>
             </motion.div>
             
-            <motion.h1 variants={FADE_DOWN} className="text-5xl sm:text-7xl lg:text-8xl font-black text-text-primary tracking-tighter leading-[1.05]">
-              The Ultimate <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent to-purple-500">Trust Layer</span> for Skill Verification.
+            <motion.h1 
+              variants={FADE_DOWN} 
+              className="text-4xl sm:text-6xl lg:text-7xl font-black text-text-primary tracking-tight leading-[1.08] max-w-4xl"
+            >
+              The Cryptographic <span className="text-gradient-amber">Trust Layer</span> for Skill Verification.
             </motion.h1>
             
-            <motion.p variants={FADE_DOWN} className="text-lg sm:text-xl text-text-secondary max-w-3xl leading-relaxed">
-              ProofBridge cryptographically maps academic achievements to industry needs. No more generic resumes. Just mathematically proven skills validated by real institutions.
+            <motion.p 
+              variants={FADE_DOWN} 
+              className="text-base sm:text-lg text-text-secondary max-w-2xl leading-relaxed font-normal"
+            >
+              Replace self-reported resumes with mathematical proof. ProofBridge anchors real student engineering artifacts, maps them to employer capability genomes, and calculates the shortest path to employment.
             </motion.p>
             
-            <motion.div variants={FADE_DOWN} className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 w-full sm:w-auto">
-              <Link href="/auth/signup" className="w-full sm:w-auto pb-btn-primary group relative overflow-hidden px-10 py-4 text-base font-bold shadow-[0_0_30px_rgba(var(--accent-rgb),0.3)] hover:shadow-[0_0_50px_rgba(var(--accent-rgb),0.5)] transition-all rounded-2xl">
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Launch Platform
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
+            <motion.div 
+              variants={FADE_DOWN} 
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full sm:w-auto"
+            >
+              <Link 
+                href="/auth/signup" 
+                className="w-full sm:w-auto pb-btn-primary px-8 py-3.5 text-sm font-bold shadow-lg hover:shadow-xl transition-all rounded-xl flex items-center justify-center gap-2"
+              >
+                <span>Launch Interactive Platform</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="/verify" className="w-full sm:w-auto pb-btn-ghost px-10 py-4 text-base font-mono font-medium text-text-secondary border-border hover:border-text-primary hover:text-text-primary transition-all rounded-2xl flex justify-center items-center gap-2">
-                <ShieldCheck className="w-5 h-5" />
-                Test Verification
+              
+              <Link 
+                href="/verify" 
+                className="w-full sm:w-auto pb-btn-ghost px-7 py-3.5 text-xs sm:text-sm font-mono text-text-secondary border-border hover:border-border-accent hover:text-text-primary transition-all rounded-xl flex justify-center items-center gap-2"
+              >
+                <ShieldCheck className="w-4 h-4 text-success" />
+                <span>Verify Live W3C Credential</span>
               </Link>
+            </motion.div>
+
+            {/* Quick stats banner */}
+            <motion.div 
+              variants={FADE_DOWN}
+              className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-3xl"
+            >
+              {[
+                { label: 'AI Hallucination', value: '0%', sub: 'Deterministic scoring' },
+                { label: 'Evaluation SLA', value: '< 24h', sub: 'Accredited faculty' },
+                { label: 'Proof Standard', value: 'W3C', sub: 'JSON-LD + SHA-256' },
+                { label: 'Match Precision', value: '100%', sub: 'coverage-v1 engine' },
+              ].map((stat, i) => (
+                <div key={i} className="pb-card p-3.5 text-center space-y-0.5 border-border">
+                  <div className="metric-value text-xl sm:text-2xl text-accent">{stat.value}</div>
+                  <div className="text-[11px] font-bold text-text-primary font-mono">{stat.label}</div>
+                  <div className="text-[10px] text-text-muted">{stat.sub}</div>
+                </div>
+              ))}
             </motion.div>
           </motion.div>
         </section>
 
-        {/* ── 🏢 LOGO TICKER ── */}
-        <section className="border-y border-border bg-surface py-8 overflow-hidden relative">
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
-          
-          <div className="flex flex-col items-center justify-center space-y-4 max-w-7xl mx-auto px-6">
-            <p className="text-xs font-bold text-text-muted tracking-widest uppercase text-center">
-              Designed for the Next Generation of Ecosystems
+        {/* ── 🏢 INSTITUTIONAL TRUST TICKER ── */}
+        <section className="border-y border-border bg-surface/50 py-6 overflow-hidden relative backdrop-blur-sm">
+          <div className="flex flex-col items-center justify-center space-y-3 max-w-7xl mx-auto px-6">
+            <p className="text-[11px] font-mono font-bold text-text-muted tracking-widest uppercase text-center">
+              Designed for Academic Institutions · Accreditation Bodies · Enterprise Hiring
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
-              <div className="flex items-center gap-2 font-black text-xl tracking-tighter"><GraduationCap className="w-8 h-8"/> MUJ</div>
-              <div className="flex items-center gap-2 font-black text-xl tracking-tighter"><Building2 className="w-7 h-7"/> TechCorp</div>
-              <div className="flex items-center gap-2 font-black text-xl tracking-tighter"><Briefcase className="w-7 h-7"/> Analytics Studio</div>
-              <div className="flex items-center gap-2 font-black text-xl tracking-tighter"><Globe className="w-7 h-7"/> GlobalEd</div>
+            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-14 text-text-muted font-mono text-xs font-semibold">
+              <span className="flex items-center gap-2 text-text-secondary">
+                <GraduationCap className="w-4 h-4 text-accent" /> Manipal University Jaipur (MUJ)
+              </span>
+              <span className="flex items-center gap-2 text-text-secondary">
+                <Building2 className="w-4 h-4 text-info" /> NAAC A+ Accredited Framework
+              </span>
+              <span className="flex items-center gap-2 text-text-secondary">
+                <Briefcase className="w-4 h-4 text-success" /> Sample Analytics Studio
+              </span>
+              <span className="flex items-center gap-2 text-text-secondary">
+                <Lock className="w-4 h-4 text-warning" /> SHA-256 Digest Standard
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* ── ⚠️ THE PROBLEM STATEMENT (WHY PROOFBRIDGE MATTERS) ── */}
+        <section className="py-24 px-6 max-w-7xl mx-auto">
+          <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
+            <span className="section-label">The Broken Paradigm</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Why Traditional Resumes Are Dead
+            </h2>
+            <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-normal">
+              In an era of generative AI, resumes can be fabricated in seconds. Employers spend hundreds of hours filtering noise, while qualified students remain invisible.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                title: 'Resume Inflation & Ghost Skills',
+                desc: 'Over 78% of software engineering resumes contain exaggerated competencies. Keywords on paper do not translate to production competence.',
+                badge: 'The Candidate Problem',
+                badgeColor: 'text-danger bg-danger-soft border-danger/20',
+                stat: '78%',
+                statLabel: 'Contain Unverified Claims'
+              },
+              {
+                title: 'Degree Detachment from Industry',
+                desc: 'Transcripts show letter grades across broad theoretical courses, completely failing to signal modular, tool-specific mastery like SQL or Docker.',
+                badge: 'The University Problem',
+                badgeColor: 'text-warning bg-warning-soft border-warning/20',
+                stat: '64%',
+                statLabel: 'Curriculum Skills Gap'
+              },
+              {
+                title: 'Screening Overload & Noise',
+                desc: 'Recruiters drown in thousands of AI-tuned applications for single openings. Keyword filtering causes massive false positives and rejected top talent.',
+                badge: 'The Employer Problem',
+                badgeColor: 'text-info bg-info-soft border-info/20',
+                stat: '42 hrs',
+                statLabel: 'Wasted Screening per Hire'
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="pb-card p-6 sm:p-8 space-y-4 border-border flex flex-col justify-between">
+                <div className="space-y-3">
+                  <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${item.badgeColor}`}>
+                    {item.badge}
+                  </span>
+                  <h3 className="text-lg font-bold text-text-primary leading-snug">{item.title}</h3>
+                  <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">{item.desc}</p>
+                </div>
+
+                <div className="pt-4 border-t border-border flex items-baseline justify-between">
+                  <span className="metric-value text-2xl text-text-primary">{item.stat}</span>
+                  <span className="text-[11px] font-mono text-text-muted">{item.statLabel}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── 🧬 THE 4 PILLARS OF PROOFBRIDGE ── */}
+        <section className="py-24 px-6 bg-surface/30 border-y border-border relative">
+          <div className="max-w-7xl mx-auto space-y-16">
+            <div className="text-center space-y-3 max-w-3xl mx-auto">
+              <span className="section-label">Algorithmic Innovation</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                The 4 Architectural Breakthroughs
+              </h2>
+              <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
+                ProofBridge is not another job board. It is an end-to-end cryptographic infrastructure connecting education directly to employment.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  id: '01',
+                  title: 'Skill Twin (Evidence-Backed Competence)',
+                  summary: 'A continuously-updated digital twin of candidate competence. Unlike static resumes, every point in a Skill Twin points directly to an immutable code repository revision and human evaluation score.',
+                  tech: 'SHA-256 Digest + PostgreSQL Immutable Audit Log',
+                  icon: Cpu,
+                  color: 'text-accent',
+                  border: 'border-border-accent',
+                  highlights: ['Frozen code revision snapshots', 'Explicit student contribution statements', 'Tooling & AI transparency disclosures']
+                },
+                {
+                  id: '02',
+                  title: 'Role Genome (Standardized Job DNA)',
+                  summary: 'Employers specify opportunities as mathematical skill requirements with explicit target levels (L1-L4) and percentage weights, eliminating ambiguous job descriptions.',
+                  tech: 'Multi-Factor Capability Vectors',
+                  icon: Target,
+                  color: 'text-info',
+                  border: 'border-info/30',
+                  highlights: ['Weighted rubric requirements', 'Role-specific threshold baselines', 'Zero keyword bias']
+                },
+                {
+                  id: '03',
+                  title: 'Bridge Me (Shortest Path Engine)',
+                  summary: 'An algorithmic pathfinder calculating the highest-ROI challenges to close eligibility gaps. Tells candidates exactly: "Complete this 2-hour SQL challenge to leap from 61% to 96% match."',
+                  tech: 'High-ROI Pathfinder + What-If Sandbox',
+                  icon: TrendingUp,
+                  color: 'text-success',
+                  border: 'border-success/30',
+                  highlights: ['Calculates highest-weight deficit', 'Direct sandbox scenario modeling', 'Instant role unlock projections']
+                },
+                {
+                  id: '04',
+                  title: 'Deterministic Rubric & Trust Anchors',
+                  summary: 'AI never issues credentials autonomously. Multi-tiered rubrics are scored by qualified human faculty evaluators, forging a cryptographic Trust Anchor endorsed by university leadership.',
+                  tech: 'W3C Standard JSON-LD Verifiable Credentials',
+                  icon: ShieldCheck,
+                  color: 'text-warning',
+                  border: 'border-warning/30',
+                  highlights: ['4-tier faculty rubric grading (L1-L4)', 'NAAC/NBA accreditation alignment', 'Public offline-verifiable proof hash']
+                },
+              ].map((pillar) => {
+                const Icon = pillar.icon;
+                return (
+                  <div key={pillar.id} className="pb-card p-6 sm:p-8 space-y-6 border-border hover:border-border-bright transition-all">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-surface-raised border border-border flex items-center justify-center">
+                          <Icon className={`w-5 h-5 ${pillar.color}`} />
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-mono font-bold text-text-muted">BREAKTHROUGH {pillar.id}</span>
+                          <h3 className="text-base sm:text-lg font-bold text-text-primary leading-tight">{pillar.title}</h3>
+                        </div>
+                      </div>
+                      <span className="metric-value text-xl text-text-muted">{pillar.id}</span>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                      {pillar.summary}
+                    </p>
+
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-text-muted">Core Capabilities:</span>
+                      <ul className="space-y-1.5">
+                        {pillar.highlights.map((h, i) => (
+                          <li key={i} className="text-xs text-text-secondary flex items-center gap-2">
+                            <Check className="w-3.5 h-3.5 text-accent shrink-0" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="pt-3 border-t border-border flex items-center justify-between text-[11px] font-mono text-text-muted">
+                      <span>Tech: {pillar.tech}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* ── 🧬 INTERACTIVE TRUST GRAPH ── */}
-        <section className="relative w-full max-w-7xl mx-auto py-32 px-6">
-          <motion.div 
-            initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} variants={FADE_UP}
-            className="text-center space-y-6 mb-16 max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-surface text-text-secondary text-xs font-bold uppercase tracking-widest shadow-sm">
-              <ShieldCheck className="w-4 h-4 text-accent" />
-              The Cryptographic Core
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black text-text-primary tracking-tight">
-              Forging the Trust Anchor
+        <section className="relative w-full max-w-7xl mx-auto py-24 px-6">
+          <div className="text-center space-y-3 mb-16 max-w-3xl mx-auto">
+            <span className="section-label">Cryptographic Provenance</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Forging the Unforgeable Proof Chain
             </h2>
-            <p className="text-lg text-text-secondary leading-relaxed">
-              When a University Dean approves a student, a cryptographic "Trust Anchor" is created. Every project the student completes is signed with this anchor, making it completely impossible to fake.
+            <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
+              Every step from institutional endorsement to code submission and faculty grading is cryptographically linked and mathematically verifiable.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="relative bg-canvas rounded-[3rem] border border-border shadow-2xl overflow-hidden p-8 sm:p-20">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(var(--accent-rgb),0.05),transparent)] pointer-events-none" />
-            
-            <div className="relative h-64 sm:h-96 w-full flex items-center justify-center max-w-4xl mx-auto">
-              {/* SVG Connections */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }} viewBox="0 0 1000 400" preserveAspectRatio="none">
+          <div className="relative pb-card p-6 sm:p-12 border-border overflow-hidden">
+            <div className="relative h-64 sm:h-80 w-full flex items-center justify-center max-w-4xl mx-auto">
+              {/* SVG Animated Connections */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 400" preserveAspectRatio="none">
                 <motion.path
                   d="M 150,200 C 300,200 400,200 500,200"
-                  stroke="rgba(var(--accent-rgb), 0.5)"
-                  strokeWidth="4"
+                  stroke="rgba(212, 168, 83, 0.4)"
+                  strokeWidth="3"
                   fill="none"
-                  strokeDasharray="8 8"
+                  strokeDasharray="6 6"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 2, repeat: Infinity, repeatType: 'loop', ease: 'linear' }}
                 />
                 <motion.path
                   d="M 500,200 C 600,200 700,200 850,200"
-                  stroke="rgba(var(--success-rgb), 0.5)"
-                  strokeWidth="4"
+                  stroke="rgba(74, 222, 128, 0.4)"
+                  strokeWidth="3"
                   fill="none"
-                  strokeDasharray="8 8"
+                  strokeDasharray="6 6"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 2, delay: 0.5, repeat: Infinity, repeatType: 'loop', ease: 'linear' }}
                 />
               </svg>
 
-              <div className="relative z-10 w-full flex justify-between items-center px-4 sm:px-12">
-                {/* University */}
-                <motion.div 
-                  initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2, type: 'spring' }} viewport={{ once: true }}
-                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-surface border-2 border-accent flex flex-col items-center justify-center shadow-[0_0_40px_rgba(var(--accent-rgb),0.3)] relative group"
-                >
-                  <Building2 className="w-10 h-10 sm:w-12 sm:h-12 text-accent mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] sm:text-xs font-mono font-bold text-accent tracking-widest">DEAN</span>
-                </motion.div>
+              <div className="relative z-10 w-full flex justify-between items-center px-2 sm:px-8">
+                {/* University Node */}
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-raised border border-border-accent flex flex-col items-center justify-center shadow-md text-center p-2">
+                  <Building2 className="w-7 h-7 text-accent mb-1" />
+                  <span className="text-[10px] font-mono font-bold text-accent">UNIVERSITY</span>
+                  <span className="text-[9px] text-text-muted mt-0.5">Anchors Student</span>
+                </div>
 
-                {/* Student */}
-                <motion.div 
-                  initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ delay: 0.4, type: 'spring' }} viewport={{ once: true }}
-                  className="w-32 h-32 sm:w-44 sm:h-44 rounded-full bg-surface border-4 border-text-primary flex flex-col items-center justify-center shadow-2xl relative group"
-                >
-                  <div className="absolute inset-0 rounded-full bg-accent/20 animate-ping opacity-30" />
-                  <GraduationCap className="w-12 h-12 sm:w-16 sm:h-16 text-text-primary mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-[11px] sm:text-sm font-mono font-bold text-text-primary tracking-widest">STUDENT</span>
-                </motion.div>
+                {/* Student Node */}
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-surface-raised border-2 border-text-primary flex flex-col items-center justify-center shadow-xl text-center p-3 relative">
+                  <div className="absolute inset-0 rounded-full bg-accent/10 animate-ping opacity-25" />
+                  <GraduationCap className="w-9 h-9 text-text-primary mb-1" />
+                  <span className="text-xs font-mono font-bold text-text-primary">STUDENT TWIN</span>
+                  <span className="text-[9px] text-accent mt-0.5 font-mono">SHA-256 Digest</span>
+                </div>
 
-                {/* Employer */}
-                <motion.div 
-                  initial={{ scale: 0, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ delay: 0.6, type: 'spring' }} viewport={{ once: true }}
-                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-surface border-2 border-success flex flex-col items-center justify-center shadow-[0_0_40px_rgba(var(--success-rgb),0.3)] relative group"
-                >
-                  <Briefcase className="w-10 h-10 sm:w-12 sm:h-12 text-success mb-2 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] sm:text-xs font-mono font-bold text-success tracking-widest">HIRING</span>
-                </motion.div>
+                {/* Employer Node */}
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-surface-raised border border-success/30 flex flex-col items-center justify-center shadow-md text-center p-2">
+                  <Briefcase className="w-7 h-7 text-success mb-1" />
+                  <span className="text-[10px] font-mono font-bold text-success">EMPLOYER</span>
+                  <span className="text-[9px] text-text-muted mt-0.5">Direct Vector Match</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Step breakdown */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 border-t border-border mt-8 text-xs font-mono">
+              <div className="p-3 bg-canvas rounded-xl border border-border space-y-1">
+                <span className="text-accent font-bold">Phase 1: Affiliation</span>
+                <p className="text-text-muted leading-relaxed font-sans text-[11px]">
+                  University Dean verifies enrollment, generating an accredited Trust Anchor linked to NAAC/NBA metrics.
+                </p>
+              </div>
+              <div className="p-3 bg-canvas rounded-xl border border-border space-y-1">
+                <span className="text-info font-bold">Phase 2: Code Submission</span>
+                <p className="text-text-muted leading-relaxed font-sans text-[11px]">
+                  Student solves real challenges in SQL/Code sandbox. Revision hash frozen atomically in PostgreSQL.
+                </p>
+              </div>
+              <div className="p-3 bg-canvas rounded-xl border border-border space-y-1">
+                <span className="text-success font-bold">Phase 3: Faculty Endorsement</span>
+                <p className="text-text-muted leading-relaxed font-sans text-[11px]">
+                  Accredited faculty scores against pre-published rubric (L1-L4). W3C verifiable credential minted.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── 🧱 THREE PILLARS ── */}
-        <section className="bg-surface border-y border-border py-32 px-6">
-          <div className="max-w-7xl mx-auto space-y-16">
-            <div className="text-center space-y-4 max-w-3xl mx-auto">
-              <div className="inline-flex justify-center text-xs font-bold tracking-widest text-text-muted uppercase">System Architecture</div>
-              <h2 className="text-4xl sm:text-5xl font-black text-text-primary tracking-tight">
-                Built for Absolute Reality
+        {/* ── 👥 WHO PROOFBRIDGE IS FOR (TABBED EXPLORER) ── */}
+        <section className="py-24 px-6 bg-surface/30 border-y border-border">
+          <div className="max-w-5xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <span className="section-label">Ecosystem Solutions</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+                Designed for the Entire Education-to-Work Ecosystem
               </h2>
             </div>
 
-            <motion.div 
-              variants={STAGGER} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            >
-              {[
-                {
-                  icon: Database,
-                  title: 'Deterministic Engine',
-                  body: 'Coverage-v1 mathematically scores skills against rigorous rubrics. Zero AI hallucination, 100% precision.',
-                  color: 'text-accent', bg: 'bg-accent/10', border: 'border-accent/30', glow: 'group-hover:shadow-[0_0_30px_rgba(var(--accent-rgb),0.2)]'
-                },
-                {
-                  icon: Lock,
-                  title: 'W3C Verifiable Proofs',
-                  body: 'Every credential exports as a W3C Standard JSON-LD format with SHA-256 cryptographic anchors attached to code artifacts.',
-                  color: 'text-success', bg: 'bg-success/10', border: 'border-success/30', glow: 'group-hover:shadow-[0_0_30px_rgba(var(--success-rgb),0.2)]'
-                },
-                {
-                  icon: Target,
-                  title: 'Zero-Friction Hiring',
-                  body: 'Employers query precise skill vectors, bypassing resumes entirely to find immediate exact matches instantly.',
-                  color: 'text-purple-500', bg: 'bg-purple-500/10', border: 'border-purple-500/30', glow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]'
-                }
-              ].map((pillar, idx) => (
-                <motion.div key={idx} variants={FADE_UP} className={`pb-card p-10 space-y-6 bg-background transition-all duration-300 ${pillar.glow} hover:-translate-y-2 cursor-default`}>
-                  <div className={`w-16 h-16 rounded-2xl ${pillar.bg} border ${pillar.border} flex items-center justify-center`}>
-                    <pillar.icon className={`w-8 h-8 ${pillar.color}`} />
-                  </div>
+            {/* Tab buttons */}
+            <div className="flex justify-center">
+              <div className="inline-flex p-1 bg-surface rounded-xl border border-border gap-1">
+                {[
+                  { id: 'students', label: 'For Students', icon: GraduationCap },
+                  { id: 'employers', label: 'For Employers', icon: Briefcase },
+                  { id: 'institutions', label: 'For Universities', icon: Building2 },
+                ].map((t) => {
+                  const Icon = t.icon;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => setActiveTab(t.id as any)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                        activeTab === t.id
+                          ? 'bg-surface-raised text-text-primary border border-border-bright shadow-sm'
+                          : 'text-text-muted hover:text-text-primary'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      <span>{t.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Tab content cards */}
+            <div className="pb-card p-6 sm:p-10 border-border">
+              {activeTab === 'students' && (
+                <div className="space-y-6">
                   <div>
-                    <h3 className="text-2xl font-black text-text-primary leading-tight mb-4">{pillar.title}</h3>
-                    <p className="text-base text-text-secondary leading-relaxed">{pillar.body}</p>
+                    <h3 className="text-xl font-bold text-text-primary">Ditch Resumes. Prove Your Skills.</h3>
+                    <p className="text-sm text-text-secondary mt-1">
+                      Build an immutable digital twin of your engineering competence. Take structured industry challenges, get evaluated by qualified faculty, and qualify automatically for top internships.
+                    </p>
                   </div>
-                </motion.div>
-              ))}
-            </motion.div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      'Verifiable Skill Passport shareable via simple HTTPS link',
+                      'Shortest Path "Bridge Me" algorithm points to highest-ROI challenges',
+                      'Transparent Rubrics: know exactly what Proficient Level 3 means',
+                      'Direct hiring radar visibility to partner employers without applications'
+                    ].map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-xs text-text-secondary">
+                        <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/auth/signup" className="pb-btn-primary text-xs inline-flex items-center gap-2">
+                    <span>Create Student Account</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              )}
+
+              {activeTab === 'employers' && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-text-primary">Zero-Resume Talent Acquisition.</h3>
+                    <p className="text-sm text-text-secondary mt-1">
+                      Stop reading self-reported claims. Define your role genome as exact skill weights, and query candidate vectors mathematically.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      'Define exact role genomes (e.g., SQL Level 3 @ 35% weight)',
+                      'Instant mathematical matching via coverage-v1 algorithm',
+                      'Inspect frozen code submissions and faculty evaluation notes',
+                      'Cryptographic audit trail eliminates credential fraud entirely'
+                    ].map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-xs text-text-secondary">
+                        <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/auth/signup" className="pb-btn-primary text-xs inline-flex items-center gap-2">
+                    <span>Post Role Requisition</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              )}
+
+              {activeTab === 'institutions' && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-text-primary">Accreditation Metrics &amp; Curriculum Intelligence.</h3>
+                    <p className="text-sm text-text-secondary mt-1">
+                      Give university leadership real-time visibility into student skill attainment, curriculum gaps against market demand, and NAAC/NBA accreditation evidence.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      'Live cohort competency radar across departments and degrees',
+                      'Automated institutional trust anchor issuance for enrolled students',
+                      'Accreditation-ready audit trails for NAAC/NBA compliance',
+                      'Real-time employer demand insights showing which skills to teach'
+                    ].map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-xs text-text-secondary">
+                        <CheckCircle2 className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/auth/signup" className="pb-btn-primary text-xs inline-flex items-center gap-2">
+                    <span>Register Institution</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 
-        {/* ── 🔮 FINAL CTA ── */}
-        <section className="py-32 px-6">
-          <div className="max-w-5xl mx-auto relative overflow-hidden rounded-[3rem] border border-border bg-surface shadow-2xl p-12 sm:p-24 text-center space-y-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-canvas to-purple-500/20 opacity-60" />
-            <div className="absolute inset-0 backdrop-blur-3xl" />
-            
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }} whileInView={{ opacity: 1, scale: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-              className="relative z-10 space-y-8"
-            >
-              <div className="w-24 h-24 mx-auto bg-accent/20 rounded-3xl flex items-center justify-center border border-accent/40 shadow-[0_0_40px_rgba(var(--accent-rgb),0.5)]">
-                <Zap className="w-12 h-12 text-accent animate-pulse" />
-              </div>
-              <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black text-text-primary tracking-tight max-w-4xl mx-auto leading-[1.1]">
+        {/* ── 🔮 FINAL CALL TO ACTION ── */}
+        <section className="py-28 px-6">
+          <div className="max-w-4xl mx-auto relative pb-card p-10 sm:p-16 text-center space-y-8 border-border overflow-hidden">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-accent-soft border border-border-accent flex items-center justify-center">
+              <Zap className="w-8 h-8 text-accent animate-pulse" />
+            </div>
+
+            <div className="space-y-3 max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
                 Ready to Bridge the Skills Gap?
               </h2>
-              <p className="text-text-secondary text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
-                Stop relying on unverified resumes. Deploy ProofBridge to build deterministic Skill Twins and hire with absolute, mathematical confidence.
+              <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
+                Experience the deterministic trust layer for education and hiring. Try the live interactive prototype now.
               </p>
-              <div className="flex justify-center pt-8">
-                <Link href="/auth/signup" className="pb-btn-primary px-12 py-5 text-lg font-bold shadow-[0_0_50px_rgba(var(--accent-rgb),0.5)] hover:scale-105 transition-transform duration-300 rounded-2xl flex items-center gap-3">
-                  Access Platform <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-            </motion.div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+              <Link 
+                href="/auth/signup" 
+                className="w-full sm:w-auto pb-btn-primary px-8 py-3.5 text-sm font-bold shadow-md hover:shadow-lg transition-all rounded-xl"
+              >
+                Access Platform Now
+              </Link>
+              <Link 
+                href="/auth/login" 
+                className="w-full sm:w-auto pb-btn-ghost px-8 py-3.5 text-xs sm:text-sm font-mono text-text-secondary hover:text-text-primary transition-all rounded-xl"
+              >
+                Fast Persona Sandbox Switcher →
+              </Link>
+            </div>
           </div>
         </section>
 
       </main>
 
-      {/* ── 📝 SIMPLE FOOTER ── */}
-      <footer className="border-t border-border bg-surface py-12 px-6 text-center">
+      {/* ── 📝 FOOTER ── */}
+      <footer className="border-t border-border bg-surface/50 py-12 px-6 text-center relative z-10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center space-y-4">
-          <div className="flex items-center gap-2 text-text-primary font-black text-xl">
-            <Network className="w-5 h-5 text-accent" />
-            ProofBridge
+          <div className="flex items-center gap-2.5 text-text-primary font-bold text-base">
+            <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center text-white text-xs">P</div>
+            <span>ProofBridge Network</span>
           </div>
-          <p className="text-sm text-text-muted">
-            &copy; {new Date().getFullYear()} ProofBridge Consortium. IIC 3.0 MUJ Finalist. All rights reserved.
+          <p className="text-xs text-text-muted max-w-md font-mono">
+            Cryptographic skill verification platform built for IIC 3.0 MUJ Hackathon · Theme: EdTech (PS-08).
           </p>
-          <div className="flex items-center justify-center gap-6 text-sm text-text-muted mt-4">
-            <Link href="#" className="hover:text-accent transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-accent transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-accent transition-colors">Documentation</Link>
+          <div className="flex items-center justify-center gap-6 text-xs text-text-muted mt-2 font-mono">
+            <Link href="/verify" className="hover:text-accent transition-colors">Public Verifier</Link>
+            <Link href="/auth/login" className="hover:text-accent transition-colors">Sign In</Link>
+            <Link href="/auth/signup" className="hover:text-accent transition-colors">Register</Link>
           </div>
         </div>
       </footer>

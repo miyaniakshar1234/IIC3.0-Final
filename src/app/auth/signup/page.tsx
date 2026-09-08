@@ -21,6 +21,7 @@ import {
   Info,
   Layers,
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 const FALLBACK_UNIVERSITIES = [
   { id: 'inst-muj', name: 'Manipal University Jaipur (MUJ)', code: 'U-0683', accreditation: 'NAAC A+ · NBA' },
@@ -104,11 +105,38 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative">
+    <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative selection:bg-accent/30 overflow-x-hidden">
       <div className="bg-grid-pattern" />
       <div className="matrix-dots" />
       
-      <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Ambient glowing mesh orbs for soft animations */}
+      <div className="ambient-glow-orbs">
+        <div className="ambient-glow-orb-1" />
+        <div className="ambient-glow-orb-2" />
+        <div className="ambient-glow-orb-3" />
+      </div>
+
+      {/* Top action bar with Return to Home & Theme Toggle */}
+      <header className="relative z-20 w-full max-w-5xl mx-auto px-6 pt-6 flex items-center justify-between">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-text-muted hover:text-text-primary transition-colors font-mono"
+        >
+          &larr; Back to Platform Home
+        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/verify"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-text-primary transition-colors"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-success" />
+            Public Verifier
+          </Link>
+          <ThemeToggle />
+        </div>
+      </header>
+
+      <div className="flex-1 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl w-full mx-auto animate-fade-in space-y-8">
           {/* Header */}
           <div className="text-center space-y-2 max-w-xl mx-auto">

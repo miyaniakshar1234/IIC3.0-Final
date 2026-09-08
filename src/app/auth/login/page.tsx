@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth, UserRole, PRESET_USERS } from '@/context/AuthContext';
-import { AppShell } from '@/components/ui/AppShell';
 import { toast } from 'sonner';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import {
   GraduationCap,
   ClipboardCheck,
@@ -16,7 +16,6 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
-  CheckCircle2,
   Sparkles,
   Layers,
 } from 'lucide-react';
@@ -109,16 +108,44 @@ export default function LoginPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative">
+    <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative selection:bg-accent/30 overflow-x-hidden">
+      {/* Background Architectural Grid & Matrix Dots */}
       <div className="bg-grid-pattern" />
       <div className="matrix-dots" />
       
-      <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Ambient glowing mesh orbs for soft animations */}
+      <div className="ambient-glow-orbs">
+        <div className="ambient-glow-orb-1" />
+        <div className="ambient-glow-orb-2" />
+        <div className="ambient-glow-orb-3" />
+      </div>
+      
+      {/* Top action bar with Return to Home & Theme Toggle */}
+      <header className="relative z-20 w-full max-w-5xl mx-auto px-6 pt-6 flex items-center justify-between">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-text-muted hover:text-text-primary transition-colors font-mono"
+        >
+          &larr; Back to Platform Home
+        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/verify"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono text-text-muted hover:text-text-primary transition-colors"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-success" />
+            Public Verifier
+          </Link>
+          <ThemeToggle />
+        </div>
+      </header>
+
+      <div className="flex-1 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-4xl w-full mx-auto animate-fade-in space-y-8">
           {/* Header */}
           <div className="text-center space-y-2 max-w-xl mx-auto">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 mb-6 group cursor-pointer">
-              <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-accent group-hover:scale-105 transition-transform">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 mb-4 group cursor-pointer">
+              <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)] group-hover:scale-105 transition-transform">
                 <Layers className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl text-text-primary tracking-tight group-hover:text-accent transition-colors">
@@ -134,7 +161,7 @@ export default function LoginPage() {
               Sign In to ProofBridge
             </h1>
             <p className="text-xs sm:text-sm text-text-secondary">
-              Select your role to access your dedicated workspace with full permission boundaries.
+              Select your role to access your dedicated workspace with cryptographic permission boundaries.
             </p>
           </div>
 
