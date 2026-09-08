@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusBadge, ApplicationStatus } from '@/components/employer/StatusBadge';
@@ -199,6 +199,52 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            const hasSql = Boolean(json.data.has_verified_sql);
+            setCandidates((prev) =>
+              prev.map((c) => {
+                if (c.student_name === 'Meera Patel') {
+                  return {
+                    ...c,
+                    reviewed_coverage: hasSql ? 96 : 61,
+                    skills: c.skills.map((s) => {
+                      if (s.skill_name.includes('SQL')) {
+                        return {
+                          ...s,
+                          reviewed_level: hasSql ? 3 : 0,
+                          contribution: hasSql ? 35 : 0,
+                          reviewer_name: hasSql ? 'Dr. Sharma' : 'Pending Review',
+                          reviewed_at: hasSql ? (json.data.sql_reviewed_at || '2026-09-08T16:00:00Z') : 'Pending',
+                        };
+                      }
+                      return s;
+                    }),
+                  };
+                }
+                return c;
+              })
+            );
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load live state for applicants:', err);
+      }
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleOpenDrawer = (candidate: CandidateSnapshotData) => {
     setSelectedCandidate(candidate);

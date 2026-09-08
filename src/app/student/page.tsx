@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusChip } from '@/components/student/StatusChip';
@@ -28,20 +28,50 @@ import {
 export default function StudentDashboardPage() {
   const [isEmptyAccount, setIsEmptyAccount] = useState(false);
   const [showCalculation, setShowCalculation] = useState(false);
+  const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
+  const [liveCoverage, setLiveCoverage] = useState(61);
+  const [submissionStatus, setSubmissionStatus] = useState<'submitted' | 'reviewed'>('submitted');
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+            setLiveCoverage(json.data.match_coverage?.reviewed_coverage ?? 61);
+            setSubmissionStatus(json.data.submission_status ?? 'submitted');
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load live state for student:', e);
+      }
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const student = {
     name: 'Meera Patel',
     avatarInitial: 'MP',
     program: 'MCA 2026',
     institution: 'Demo College of Computing',
-    headline: 'Aspiring Data Analyst · 3 Verified Attainments',
+    headline: hasVerifiedSql
+      ? 'Aspiring Data Analyst · 4 Verified Attainments (SQL Verified)'
+      : 'Aspiring Data Analyst · 3 Verified Attainments',
   };
 
   const targetOpportunity = {
     id: '40000000-0000-0000-0000-000000000001',
     title: 'Junior Data Analyst Intern',
     employer: 'Sample Analytics Studio',
-    reviewedCoverage: 61,
+    reviewedCoverage: hasVerifiedSql ? 96 : 61,
     potentialCoverage: 96,
   };
 
@@ -59,16 +89,24 @@ export default function StudentDashboardPage() {
     { skill: 'Spreadsheets', requiredLevel: 3, reviewedLevel: 3, weight: 25, contribution: 25, formulaNote: '25 × min(3/3, 1) = 25 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Written Communication', requiredLevel: 4, reviewedLevel: 3, weight: 16, contribution: 12, formulaNote: '16 × min(3/4, 1) = 12 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Analytical Reasoning', requiredLevel: 3, reviewedLevel: 3, weight: 24, contribution: 24, formulaNote: '24 × min(3/3, 1) = 24 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
-    { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
+    hasVerifiedSql
+      ? { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 3, weight: 35, contribution: 35, formulaNote: '35 × min(3/3, 1) = 35 pts (verified Level 3)', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Just now' }
+      : { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
   ];
 
   const recentSubmissions = [
     { id: 'sub-sheet-001', title: 'Dynamic Budget Tracker', skill: 'Spreadsheets', status: 'reviewed' as const, reviewedDate: 'Sep 6' },
-    { id: 'sub-sql-001',   title: 'Explain Monthly Sales from Messy Dataset', skill: 'SQL', status: 'awaiting-review' as const, reviewedDate: null },
+    {
+      id: 'sub-sql-001',
+      title: 'Explain Monthly Sales from Messy Dataset',
+      skill: 'SQL',
+      status: hasVerifiedSql || submissionStatus === 'reviewed' ? ('reviewed' as const) : ('awaiting-review' as const),
+      reviewedDate: hasVerifiedSql ? 'Just now' : null,
+    },
     { id: 'sub-comm-001',  title: 'Stakeholder Communication Report', skill: 'Communication', status: 'reviewed' as const, reviewedDate: 'Sep 5' },
   ];
 
-  const coverageScore = isEmptyAccount ? 0 : 61;
+  const coverageScore = isEmptyAccount ? 0 : (hasVerifiedSql ? 96 : liveCoverage);
 
   return (
     <AppShell>
@@ -107,10 +145,10 @@ export default function StudentDashboardPage() {
         {/* ── STAT BENTO ROW ── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: 'Coverage Score', value: isEmptyAccount ? '0%' : '61%',  sub: 'vs Junior DA role',       icon: Target,     color: 'text-accent'   },
-            { label: 'Potential Score', value: isEmptyAccount ? '—' : '96%',   sub: '+35% if SQL reviewed',    icon: TrendingUp, color: 'text-success'  },
-            { label: 'Submissions',    value: isEmptyAccount ? '0' : '3',      sub: '1 awaiting review',       icon: Code2,      color: 'text-info'     },
-            { label: 'Attainments',    value: isEmptyAccount ? '0' : '3',      sub: 'Faculty-verified proofs', icon: Award,      color: 'text-warning'  },
+            { label: 'Coverage Score', value: isEmptyAccount ? '0%' : `${coverageScore}%`, sub: 'vs Junior DA role', icon: Target, color: 'text-accent' },
+            { label: 'Potential Score', value: isEmptyAccount ? '—' : '96%', sub: hasVerifiedSql ? '✓ Max Score Reached' : '+35% if SQL reviewed', icon: TrendingUp, color: 'text-success' },
+            { label: 'Submissions', value: isEmptyAccount ? '0' : '3', sub: hasVerifiedSql ? 'All reviewed & verified' : '1 awaiting review', icon: Code2, color: 'text-info' },
+            { label: 'Attainments', value: isEmptyAccount ? '0' : (hasVerifiedSql ? '4' : '3'), sub: hasVerifiedSql ? '4 Faculty proofs (SQL Level 3)' : 'Faculty-verified proofs', icon: Award, color: 'text-warning' },
           ].map(({ label, value, sub, icon: Icon, color }) => (
             <div key={label} className="pb-card p-4 space-y-2">
               <div className="flex items-center justify-between">

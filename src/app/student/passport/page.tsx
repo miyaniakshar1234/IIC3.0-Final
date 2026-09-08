@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import { StatusChip } from '@/components/student/StatusChip';
@@ -27,6 +27,30 @@ export default function EvidencePassportPage() {
   const [activeTab, setActiveTab] = useState<'all' | 'reviewed' | 'gaps' | 'declared'>('all');
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceDetail | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load live state for passport:', e);
+      }
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   // Student Identity Context
   const student = {
@@ -110,20 +134,48 @@ export default function EvidencePassportPage() {
     }
   ];
 
+  const sqlAttainment: EvidenceDetail = {
+    skillName: 'SQL (Structured Query Language)',
+    reviewedLevel: 3,
+    requiredLevel: 3,
+    reviewerName: 'Dr. Alok Sharma',
+    reviewerTitle: 'Associate Professor & CS Evaluator',
+    reviewedDate: 'Sep 08, 2026',
+    challengeTitle: 'Explain Monthly Sales from Messy Dataset',
+    contributionStatement: `I designed the CTE to eliminate duplicate order records using ROW_NUMBER() over order_id ordered by latest update timestamp. I filtered out null buyer IDs and negative invoice amounts.`,
+    externalLinks: [
+      'https://github.com/meerasharma/sales-deduplication-query'
+    ],
+    criteriaResults: [
+      {
+        criterionTitle: 'SQL Query Correctness, Deduplication & Validation',
+        scoreLevel: 3,
+        levelDescription: 'Cleanly handles duplicate IDs, NULL values, and multi-table joins; validates intermediate results and explains trade-offs.',
+        reviewerRationale: 'Clean deduplication using ROW_NUMBER() window function and proper handling of NULL keys.'
+      }
+    ]
+  };
+
+  const currentAttainments = hasVerifiedSql
+    ? [...reviewedAttainments, sqlAttainment]
+    : reviewedAttainments;
+
   // Requirement Gaps for Target Role
-  const requirementGaps = [
-    {
-      skillName: 'SQL (Structured Query Language)',
-      requiredLevel: 3,
-      reviewedLevel: 0,
-      weight: 35,
-      status: 'not-demonstrated' as const,
-      challengeId: '50000000-0000-0000-0000-000000000001',
-      challengeTitle: 'Explain Monthly Sales from Messy Dataset',
-      targetRole: 'Junior Data Analyst Intern at Sample Analytics Studio',
-      impactNote: 'Addressing this requirement via successful human review could raise reviewed coverage from 61% to 96%.'
-    }
-  ];
+  const currentGaps = hasVerifiedSql
+    ? []
+    : [
+        {
+          skillName: 'SQL (Structured Query Language)',
+          requiredLevel: 3,
+          reviewedLevel: 0,
+          weight: 35,
+          status: 'not-demonstrated' as const,
+          challengeId: '50000000-0000-0000-0000-000000000001',
+          challengeTitle: 'Explain Monthly Sales from Messy Dataset',
+          targetRole: 'Junior Data Analyst Intern at Sample Analytics Studio',
+          impactNote: 'Addressing this requirement via successful human review could raise reviewed coverage from 61% to 96%.'
+        }
+      ];
 
   // Self-Declared Skills (Unverified claims)
   const selfDeclaredSkills = [
@@ -211,11 +263,11 @@ export default function EvidencePassportPage() {
             {/* Quick Metrics Cockpit */}
             <div className="flex items-center gap-2 bg-canvas p-3 rounded-2xl border border-border shrink-0 self-start lg:self-center shadow-inner">
               <div className="px-4 py-1 text-center border-r border-border">
-                <span className="metric-value text-3xl text-success block leading-tight">3</span>
+                <span className="metric-value text-3xl text-success block leading-tight">{currentAttainments.length}</span>
                 <span className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">Reviewed</span>
               </div>
               <div className="px-4 py-1 text-center border-r border-border">
-                <span className="metric-value text-3xl text-warning block leading-tight">1</span>
+                <span className="metric-value text-3xl text-warning block leading-tight">{currentGaps.length}</span>
                 <span className="text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider">Gap</span>
               </div>
               <div className="px-4 py-1 text-center">
@@ -245,7 +297,7 @@ export default function EvidencePassportPage() {
                 : 'text-text-muted hover:text-text-primary hover:bg-surface-hover'
             }`}
           >
-            All Skills ({reviewedAttainments.length + requirementGaps.length + selfDeclaredSkills.length})
+            All Skills ({currentAttainments.length + currentGaps.length + selfDeclaredSkills.length})
           </button>
 
           <button
@@ -258,7 +310,7 @@ export default function EvidencePassportPage() {
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
-            Human Reviewed ({reviewedAttainments.length})
+            Human Reviewed ({currentAttainments.length})
           </button>
 
           <button
@@ -271,7 +323,7 @@ export default function EvidencePassportPage() {
             }`}
           >
             <AlertCircle className="w-3.5 h-3.5" />
-            Requirement Gaps ({requirementGaps.length})
+            Requirement Gaps ({currentGaps.length})
           </button>
 
           <button
@@ -302,12 +354,12 @@ export default function EvidencePassportPage() {
                 </p>
               </div>
               <span className="text-xs font-mono font-semibold text-success bg-success/10 px-3 py-1 rounded-full border border-success/30 hidden sm:inline">
-                {reviewedAttainments.length} Active Records
+                {currentAttainments.length} Active Records
               </span>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
-              {reviewedAttainments.map((item, idx) => (
+              {currentAttainments.map((item, idx) => (
                 <div
                   key={idx}
                   onClick={() => openEvidenceDetail(item)}
@@ -380,7 +432,12 @@ export default function EvidencePassportPage() {
             </div>
 
             <div className="space-y-3">
-              {requirementGaps.map((gap, idx) => (
+              {currentGaps.length === 0 ? (
+                <div className="bg-success/5 border border-success/30 rounded-2xl p-6 text-center text-xs font-mono text-success">
+                  ✓ All target role skill requirements have been verified by faculty review! Zero critical gaps.
+                </div>
+              ) : (
+                currentGaps.map((gap, idx) => (
                 <div
                   key={idx}
                   className="bg-warning/5 border border-warning/30 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-5"
@@ -411,7 +468,7 @@ export default function EvidencePassportPage() {
                     Open SQL Challenge Workspace →
                   </Link>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
         )}

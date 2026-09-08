@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
 import {
@@ -37,7 +37,7 @@ interface SubmissionItem {
   evaluation_url: string;
 }
 
-const SUBMISSIONS: SubmissionItem[] = [
+const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
   {
     id: 'sub-sql-001', student_name: 'Meera Patel', student_program: 'MCA 2026',
     student_institution: 'Demo College of Computing', challenge_title: 'Explain Monthly Sales from Messy Dataset',
@@ -64,10 +64,48 @@ const SUBMISSIONS: SubmissionItem[] = [
 
 export default function ReviewerQueuePage() {
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
+  const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
 
-  const visible = SUBMISSIONS.filter(s => filter === 'all' ? true : s.status === filter);
-  const pending = SUBMISSIONS.filter(s => s.status === 'pending').length;
-  const completed = SUBMISSIONS.filter(s => s.status === 'completed').length;
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load live state for reviewer queue:', e);
+      }
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const submissions = DEFAULT_SUBMISSIONS.map((s) => {
+    if (s.id === 'sub-sql-001' && hasVerifiedSql) {
+      return {
+        ...s,
+        status: 'completed' as const,
+        urgency_label: 'Completed & Published (Level 3)',
+        urgency_variant: 'emerald' as const,
+        evaluated_level: 3,
+        evaluated_date: 'Just now',
+      };
+    }
+    return s;
+  });
+
+  const visible = submissions.filter((s) => (filter === 'all' ? true : s.status === filter));
+  const pending = submissions.filter((s) => s.status === 'pending').length;
+  const completed = submissions.filter((s) => s.status === 'completed').length;
 
   const urgencyStyle: Record<string, string> = {
     amber:   'bg-warning/10 text-warning border-warning/25',
@@ -99,7 +137,7 @@ export default function ReviewerQueuePage() {
         {/* ── STATS ── */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Total Queue',  value: SUBMISSIONS.length, icon: ClipboardCheck, color: 'text-accent'  },
+            { label: 'Total Queue',  value: submissions.length, icon: ClipboardCheck, color: 'text-accent'  },
             { label: 'Pending',      value: pending,            icon: Clock,          color: 'text-warning' },
             { label: 'Completed',    value: completed,          icon: CheckCircle2,   color: 'text-success' },
           ].map(({ label, value, icon: Icon, color }) => (
@@ -125,7 +163,7 @@ export default function ReviewerQueuePage() {
                   : 'text-text-muted hover:text-text-primary'
               }`}
             >
-              {f} {f === 'pending' ? `(${pending})` : f === 'completed' ? `(${completed})` : `(${SUBMISSIONS.length})`}
+              {f} {f === 'pending' ? `(${pending})` : f === 'completed' ? `(${completed})` : `(${submissions.length})`}
             </button>
           ))}
         </div>

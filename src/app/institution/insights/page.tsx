@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppShell } from '@/components/ui/AppShell';
 import {
   Users,
@@ -39,11 +39,46 @@ export default function InstitutionInsightsPage() {
   const [selectedOpportunity, setSelectedOpportunity] = useState('Junior Data Analyst Intern');
   const [bootcampScheduled, setBootcampScheduled] = useState(false);
   const [selectedSkillModal, setSelectedSkillModal] = useState<SkillGapItem | null>(null);
+  const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveState() {
+      try {
+        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (isMounted && json.data) {
+            setHasVerifiedSql(Boolean(json.data.has_verified_sql));
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load live state for institution insights:', err);
+      }
+    }
+    loadLiveState();
+    const interval = setInterval(loadLiveState, 4000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const isSmallCohort = selectedCohort === 'Small Cohort Demo';
 
   const skillGaps: SkillGapItem[] = [
-    { id: 'sql', name: 'SQL (Structured Query Language)', category: 'Data & Analytics', industryTarget: 3, cohortAvg: 1.8, deficitPct: -42, status: 'high_risk', statusLabel: 'High Risk Deficit', studentsDeficient: 42, totalEvaluated: 100 },
+    {
+      id: 'sql',
+      name: 'SQL (Structured Query Language)',
+      category: 'Data & Analytics',
+      industryTarget: 3,
+      cohortAvg: hasVerifiedSql ? 1.83 : 1.8,
+      deficitPct: hasVerifiedSql ? -41 : -42,
+      status: 'high_risk',
+      statusLabel: hasVerifiedSql ? 'Deficit Improving (−41%)' : 'High Risk Deficit',
+      studentsDeficient: hasVerifiedSql ? 41 : 42,
+      totalEvaluated: 100,
+    },
     { id: 'spreadsheets', name: 'Spreadsheets & Auditing', category: 'Data & Analytics', industryTarget: 3, cohortAvg: 2.9, deficitPct: -4, status: 'aligned', statusLabel: 'Aligned', studentsDeficient: 4, totalEvaluated: 100 },
     { id: 'communication', name: 'Written Technical Comm', category: 'Professional Skills', industryTarget: 4, cohortAvg: 3.1, deficitPct: -18, status: 'moderate', statusLabel: 'Moderate Deficit', studentsDeficient: 18, totalEvaluated: 100 },
     { id: 'reasoning', name: 'Analytical Reasoning', category: 'Cognitive', industryTarget: 3, cohortAvg: 3.0, deficitPct: 0, status: 'aligned', statusLabel: 'Aligned', studentsDeficient: 0, totalEvaluated: 100 },
@@ -132,9 +167,9 @@ export default function InstitutionInsightsPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: 'Enrolled Students',     value: isSmallCohort ? '4' : '120',  sub: isSmallCohort ? '4 Active' : '94 Active', icon: Users,      color: 'text-info',    badge: 'text-success bg-success/10 border-success/20' },
-            { label: 'Verified Attainments',  value: isSmallCohort ? '11' : '342', sub: '+28 this week',                          icon: Award,      color: 'text-accent',  badge: 'text-accent bg-accent-soft border-border-accent' },
+            { label: 'Verified Attainments',  value: isSmallCohort ? '11' : (hasVerifiedSql ? '343' : '342'), sub: hasVerifiedSql ? '+29 this week' : '+28 this week', icon: Award, color: 'text-accent', badge: 'text-accent bg-accent-soft border-border-accent' },
             { label: 'Avg Placement Readiness',value: '64%',                        sub: 'Across 14 target roles',                 icon: TrendingUp, color: 'text-success', badge: 'text-success bg-success/10 border-success/20' },
-            { label: 'Critical Deficit Alert', value: 'SQL',                        sub: 'P0 · −42% below L3 benchmark',          icon: AlertTriangle, color: 'text-warning', badge: 'text-warning bg-warning/10 border-warning/20' },
+            { label: 'Critical Deficit Alert', value: 'SQL',                        sub: hasVerifiedSql ? 'P0 · −41% below L3 benchmark' : 'P0 · −42% below L3 benchmark', icon: AlertTriangle, color: 'text-warning', badge: 'text-warning bg-warning/10 border-warning/20' },
           ].map(({ label, value, sub, icon: Icon, color, badge }) => (
             <div key={label} className="pb-card p-5 space-y-3 hover:border-border-bright transition-all group">
               <div className="flex items-center justify-between">
