@@ -1,106 +1,184 @@
 # ProofBridge — Faizan (Student Experience Engineer)
-## Antigravity AI Master Playbook — Evaluation-Wise (Day 1 & Day 2)
+## Master Antigravity AI Modular Playbook (Evaluation 1 → 2 → 3)
 
-**Role:** Student Experience Engineer & Frontend Specialist  
-**Primary Branch:** `feat/student-experience`  
-**Core Responsibilities:** Student Dashboard, Evidence Passport, Bounded Challenge Workspace, Evidence Drawer, Submission Modals, and Application Tracking.
-
----
-
-## 🎯 Hackathon Evaluation Timeline & Objectives
-
-| Milestone | Target Time | Key Deliverables for Faizan | Success Criterion |
-| :--- | :--- | :--- | :--- |
-| **Evaluation 1** (Mentoring Round 1) | **Day 1: 8:00 PM – 10:00 PM** | Student Dashboard (`/student`), Evidence Passport (`/student/passport`), and SQL Challenge Workspace (`/challenges/[id]`). | Mentors can see Meera's baseline ($61\%$), open the evidence drawer, click "Start SQL Challenge", and inspect the query + contribution statement. |
-| **Evaluation 2** (Midnight Checkpoint) | **Day 2: 1:00 AM – 3:00 AM** | Live submission workflow to database, submission status updates, and Evidence Passport reflection when reviewer marks it approved. | Submitting challenge triggers pending state, and once approved, Evidence Passport adds the SQL attainment. |
-| **Evaluation 3** (Final Judging & Pitch) | **Day 2: 11:00 AM – 2:00 PM** | Pixel-perfect UI polish, responsive mobile view, animated coverage bar ($61\% \rightarrow 96\%$), 0 layout bugs. | Smooth visual experience during the live 5-minute jury pitch. |
+**Role:** Student Experience Engineer & Frontend UI Specialist  
+**Git Branch:** `feat/student-experience`  
+**Assigned Directory Ownership:**  
+- `src/app/student/**`, `src/app/challenges/**`
+- `src/components/student/**` (`CoverageBar.tsx`, `EvidenceDrawer.tsx`, `StatusChip.tsx`, `StudentNav.tsx`, etc.)
 
 ---
 
-## 🎨 CRITICAL UI UPGRADE DIRECTIVES (Avoid "Ugly / Generic" UI)
+## 🛑 CROSS-MEMBER DEPENDENCY & BLOCKING RULES
 
-> [!IMPORTANT]
-> The current prototype needs high-end SaaS visual polish (similar to Linear, Vercel, or Stripe). Plain gray borders and flat boxes look unfinished. Follow these design standards:
+Before writing code or opening PRs, verify your dependencies with teammates:
 
-1. **Card Styling:** Use `bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md hover:border-blue-400/60 transition-all`.
-2. **Status Chips & Pills:**
-   - Reviewed: `bg-emerald-50 text-emerald-700 border border-emerald-200/80 font-semibold px-2.5 py-1 rounded-full text-xs`
-   - In Review / Pending: `bg-amber-50 text-amber-800 border border-amber-200/80 font-semibold px-2.5 py-1 rounded-full text-xs`
-   - Not Yet Demonstrated: `bg-slate-100 text-slate-600 border border-slate-200 font-medium px-2.5 py-1 rounded-full text-xs`
-3. **Hero Banners:** Use rich gradients (`bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white`) with subtle glowing blur elements.
-4. **Code Blocks:** For SQL solutions, use a dark IDE theme (`bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl p-4 border border-slate-800`).
+```mermaid
+graph TD
+    DEV[Akshar: origin/develop] -->|PULL FIRST| F1[Faizan: Pull latest AppShell & DB Models]
+    F1 --> F2[Faizan: Build Submission & Passport]
+    F2 -->|PUSH & MERGE| LAK[Lakshita: Needs Faizan's Submission Format to Review]
+    LAK -->|Reviews SQL Level 3| F3[Faizan: Coverage Bar Jumps 61% -> 96%]
+```
+
+### ⚠️ BLOCKING CHECKS:
+1. **Always pull `origin/develop` before editing:** Akshar regularly updates core styling and API routes. If you do not pull first, you risk overwriting backend contracts.
+2. **Do NOT touch files in `supabase/` or `src/app/reviewer/` or `src/app/employer/`:** Lakshita and Akshar own those directories.
+3. **If Lakshita is waiting for submission data:** Your challenge page `/challenges/[id]` provides the payload (SQL query, Contribution Statement, AI disclosure) that Dr. Sharma evaluates. Keep this payload contract consistent.
+4. **Before pushing to GitHub:** You MUST run `npm run build` locally. Never push code that breaks compilation!
 
 ---
 
-## 📋 Evaluation 1: Polish Student Flow & Submit Workflow (8:00 PM – 10:00 PM Day 1)
+# 📅 EVALUATION 1: MENTORING ROUND 1 (DAY 1: 17:30 – 21:00)
+**Goal:** Deliver a visually stunning Student Dashboard, Evidence Passport, Evidence Drawer, and SQL Challenge Workspace with modern SaaS styling.
 
-### Objectives:
-1. Pull latest `origin/develop` to get Akshar's updated modern `AppShell` and backend tables.
-2. Polish the Evidence Drawer (`EvidenceDrawer.tsx`) to clearly show the human reviewer’s name (Dr. Sharma), date, and 4 rubric criteria scores.
-3. Polish the Challenge Workspace (`/challenges/[id]`) so the SQL editor, Contribution Statement box, and AI disclosure form look clean and professional.
+---
 
-### 🤖 Paste This Exact Prompt Into Your Antigravity AI:
-
+### 🔹 Prompt 1.1: Pull Latest `develop` & Environment Sanity Check
 ```text
-You are pair programming with Faizan, the Student Experience Engineer of ProofBridge for IIC 3.0 MUJ.
-Our team lead Akshar has updated develop with modern AppShell styling and backend schemas.
-Please execute the following:
-1. Run:
+You are pair programming with Faizan (Student Experience Engineer).
+Task:
+1. Fetch latest changes from remote and merge develop into our feature branch:
    git checkout develop
    git pull origin develop
    git checkout feat/student-experience
    git merge develop
-2. Polish the UI across all student pages (src/app/student, src/app/student/passport, src/app/challenges/[id], and src/components/student/):
-   - Replace any plain, ugly gray borders with modern rounded-2xl cards (border-slate-200/80, shadow-xs, subtle hover).
-   - Enhance the Evidence Drawer (EvidenceDrawer.tsx) with a smooth sliding animation, clean rubric rating cards (Level 1-4), and verified human reviewer badge.
-   - In Challenge Workspace (/challenges/[id]), style the SQL code editor with a sleek dark code theme (slate-900 with emerald syntax text), and clear callouts for Contribution Statement and AI Disclosure.
-3. Test locally using 'npm run typecheck' and 'npm run build'.
-4. Commit and push:
-   git push origin feat/student-experience
-Notify me as soon as all pages build cleanly without any styling or type errors.
+2. Confirm that our branch has Akshar's updated AppShell and global styling.
+3. Run 'npm run build' to verify our base is healthy.
 ```
 
 ---
 
-## 📋 Evaluation 2: Live API Binding & Multi-State Testing (1:00 AM – 3:00 AM Day 2)
-
-### Objectives:
-1. Connect the student submission action to the live backend API route (`POST /api/v1/submissions`) created by Akshar.
-2. Verify that clicking "Finalize Submission" successfully records the submission with its Contribution Statement in Supabase.
-3. Test the "Simulate Empty Student Account" toggle to ensure judges can see both a new student (0 attainments) and Meera (61% baseline).
-
-### 🤖 Paste This Exact Prompt Into Your Antigravity AI:
-
+### 🔹 Prompt 1.2: Upgrade Student Dashboard Styling (No Plain / Ugly UI)
 ```text
-You are pair programming with Faizan for Evaluation 2 (Midnight Checkpoint).
-We must ensure the student submission loop connects live to the database without mock stubs.
-1. Run:
+You are pair programming with Faizan.
+Task:
+1. Open 'src/app/student/page.tsx'.
+2. Upgrade the UI to modern high-end SaaS standards:
+   - Ensure all cards use 'bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all'.
+   - The 'Next Step' hero banner must use a rich dark gradient: 'bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-lg relative overflow-hidden'.
+   - Color-code the status chips:
+     * Reviewed Level 3: emerald pill (bg-emerald-50 text-emerald-700 border-emerald-200)
+     * Gap / Missing: amber pill (bg-amber-50 text-amber-700 border-amber-200)
+   - Style the 'coverage-v1' accordion breakdown with clean monospace formulas and clear tabular weights.
+3. Verify with 'npm run build'.
+```
+
+---
+
+### 🔹 Prompt 1.3: Polish Evidence Drawer (`src/components/student/EvidenceDrawer.tsx`)
+```text
+You are pair programming with Faizan.
+Task:
+1. Open 'src/components/student/EvidenceDrawer.tsx'.
+2. Enhance the slide-over drawer animation with a smooth backdrop blur:
+   - Container: 'fixed inset-y-0 right-0 max-w-xl w-full bg-white shadow-2xl border-l border-slate-200 z-50 overflow-y-auto p-6 space-y-6 animate-in slide-in-from-right duration-300'.
+   - Reviewer Badge: Display 'Verified by Dr. Alok Sharma (Associate Professor & Analytics Mentor)' with a verified checkmark icon.
+   - Criteria Breakdown: Display 4 clean rubric cards showing criteria ratings (Level 1 to 4) with faculty rationale quotes.
+   - External Proof Links: GitHub repository and Google Sheet links styled as clickable pill buttons opening in a new tab.
+3. Verify that clicking an attainment on the Evidence Passport page opens this drawer smoothly.
+```
+
+---
+
+### 🔹 Prompt 1.4: Refactor Challenge Workspace with Dark IDE Code Theme (`/challenges/[id]`)
+```text
+You are pair programming with Faizan.
+Task:
+1. Open 'src/app/challenges/[id]/page.tsx'.
+2. Elevate the Challenge Workspace UI:
+   - Code Editor: Style the SQL solution editor inside a dark IDE box ('bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl p-5 border border-slate-800 shadow-inner').
+   - Contribution Statement: Provide an expansive text box with an informative callout:
+     'Explain what you built yourself, what edge cases you resolved, and any AI assistance utilized.'
+   - AI Disclosure Toggle: Clean toggle pills: 'Used ChatGPT for SQL syntax verification', 'No AI used', 'Custom prompts'.
+   - Finalize Submission Modal: Clicking 'Finalize Submission' opens a crisp confirmation dialog prompting the student to verify their statements before signing off.
+3. Test locally using 'npm run build'.
+```
+
+---
+
+### 🔹 Prompt 1.5: Build Verification & Push to Remote
+```text
+You are pair programming with Faizan.
+Task:
+1. Run 'npm run typecheck'.
+2. Run 'npm run build'. Confirm 0 warnings and 0 errors.
+3. Commit and push:
+   git add .
+   git commit -m "style(student): upgrade dashboard, evidence drawer, and challenge workspace with modern SaaS polish"
+   git push origin feat/student-experience
+4. Notify Akshar that 'feat/student-experience' is ready for review.
+```
+
+---
+
+# 📅 EVALUATION 2: MIDNIGHT CHECKPOINT (DAY 1: 21:00 – DAY 2: 03:00)
+**Goal:** Connect live submission action to the database, test the empty student account simulation, and handle submission state transitions.
+
+---
+
+### 🔹 Prompt 2.1: Wire Finalize Submission Button to API
+```text
+You are pair programming with Faizan.
+Prerequisite: Akshar has merged the submission route into develop.
+Task:
+1. Pull develop:
    git checkout develop && git pull origin develop
    git checkout feat/student-experience && git merge develop
-2. In src/app/challenges/[id]/page.tsx:
-   - Wire the 'Finalize Submission' button to send a real POST request to /api/v1/submissions with student_id, challenge_id, submission_body, contribution_statement, and external_links.
-   - Show a crisp success toast/modal: 'Submission Received! Assigned to Dr. Alok Sharma for Rubric Review'.
-3. Ensure the 'Simulate Empty Account' toggle in src/app/student/page.tsx seamlessly flips between:
-   - Empty Account: prompts student to take their first beginner challenge.
-   - Meera Patel: shows 61% baseline coverage with Spreadsheets (L3), Comm (L3), Reasoning (L3).
-4. Run 'npm run build' to guarantee 0 build warnings.
-5. Push to origin feat/student-experience and ping Akshar for review.
+2. In 'src/app/challenges/[id]/page.tsx':
+   - In the submission confirmation handler, call POST '/api/v1/submissions'.
+   - Send payload: { challenge_id, student_id: '00000000-0000-0000-0000-000000000001', submission_body, contribution_statement, ai_disclosure_notes, external_links }.
+   - If response is successful, show a sleek success card:
+     'Submission Received! Assigned to Dr. Alok Sharma for Rubric Review.'
+   - Redirect to '/student' after 2 seconds with submission status chip showing 'Awaiting Faculty Review'.
+3. Verify build with 'npm run build'.
 ```
 
 ---
 
-## 📋 Evaluation 3: Pitch Rehearsal & Visual Polish (11:00 AM – 2:00 PM Day 2)
-
-### Objectives:
-1. Check typography, padding, mobile responsiveness, and micro-animations.
-2. Confirm the animated score jump: when Meera's SQL challenge is marked reviewed, the coverage bar smoothly animates from $61\%$ to $96\%$.
-
-### 🤖 Paste This Exact Prompt Into Your Antigravity AI:
-
+### 🔹 Prompt 2.2: Test Empty Student Account Simulation Toggle
 ```text
-You are pair programming with Faizan for Evaluation 3 (Final Pitch Prep).
-1. Review all student routes on both mobile (375px) and desktop (1280px) viewports to fix any clipping or awkward text wrapping.
-2. Add smooth progress bar transitions (transition-all duration-700 ease-out) to CoverageBar.tsx so the jump from 61% to 96% looks visually compelling during the live presentation.
-3. Verify that all external evidence links (GitHub repo, Google Sheet, PDF) open cleanly in new tabs with rel='noopener noreferrer'.
-4. Run 'npm run build' and push the final polish to origin feat/student-experience.
+You are pair programming with Faizan.
+Task:
+1. In 'src/app/student/page.tsx', verify the 'Simulate Empty/New Student Account' toggle button.
+2. In 'Empty State' mode:
+   - Show a modern onboarding card: 'Add Your First Verifiable Evidence'.
+   - Explain how ProofBridge replaces resume claims with authentic proof.
+   - Provide a primary CTA button: 'Start Beginner Challenge: Explain Monthly Sales →' linking to /challenges/50000000-0000-0000-0000-000000000001.
+3. In 'Seeded Account' mode:
+   - Restore Meera Patel's baseline: 61% reviewed coverage, 3 verified attainments.
+4. Ensure switching between the two modes is instantaneous without page reload.
+```
+
+---
+
+# 📅 EVALUATION 3: FINAL JURY EVALUATION (DAY 2: 08:00 – 14:00)
+**Goal:** Animate the $61\% \rightarrow 96\%$ coverage score leap, audit responsive mobile views, and rehearse the student demo.
+
+---
+
+### 🔹 Prompt 3.1: Animate the $61\% \rightarrow 96\%$ Coverage Leap
+```text
+You are pair programming with Faizan.
+Task:
+1. In 'src/components/student/CoverageBar.tsx':
+   - Ensure the progress fill uses smooth CSS animations: 'transition-all duration-700 ease-out'.
+   - Add visual flair when coverage hits >= 90%: change progress bar color from electric blue (bg-blue-600) to vibrant emerald (bg-emerald-500) with a subtle glowing aura.
+   - Display a badge: '✓ Qualified for Direct Interview Shortlist' when coverage >= 90%.
+2. Verify in browser that the transition looks impressive for judges.
+```
+
+---
+
+### 🔹 Prompt 3.2: Mobile Responsiveness & Final Polish
+```text
+You are pair programming with Faizan.
+Task:
+1. Audit all student screens on mobile viewport (375px width) and tablet viewport (768px):
+   - Fix any horizontal scrolling or text overflows.
+   - Ensure 'StudentNav.tsx' mobile bar displays clear icons and active states.
+2. Run 'npm run build' to confirm 100% clean production build.
+3. Push final polish:
+   git push origin feat/student-experience
+4. Notify Akshar that the Student Experience is locked for final judging.
 ```
