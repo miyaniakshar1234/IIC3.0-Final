@@ -71,6 +71,7 @@ export default function GithubEvaluationPage() {
   const [copiedSnippetIndex, setCopiedSnippetIndex] = useState<number | null>(null);
   const [copiedBadge, setCopiedBadge] = useState(false);
   const [copiedDossier, setCopiedDossier] = useState(false);
+  const [copiedClone, setCopiedClone] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
   const [hoveredLang, setHoveredLang] = useState<LanguageStat | null>(null);
 
@@ -127,7 +128,21 @@ export default function GithubEvaluationPage() {
   useEffect(() => {
     // Initial evaluation on mount with Akshar Miyani
     handleRunAudit('miyaniakshar1234');
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedRepo(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  const handleCopyClone = (url: string) => {
+    navigator.clipboard.writeText(`git clone ${url}.git`);
+    setCopiedClone(true);
+    setTimeout(() => setCopiedClone(false), 2000);
+  };
 
   const handleCopyDigest = () => {
     if (result?.auditDigest) {
@@ -2232,135 +2247,203 @@ Verification URL: https://proofbridge.io/verify/${result.auditDigest.slice(0, 16
 
         {/* DEEP REPOSITORY FORENSIC INSPECTION MODAL */}
         {selectedRepo && (
-          <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-            <div className="bg-card border border-border rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl space-y-6 relative">
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-4 pb-4 border-b border-border/40">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-primary/10 text-primary border border-primary/20">
-                      {selectedRepo.language}
+          <div
+            className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedRepo(null);
+            }}
+          >
+            <div className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-zinc-950 border-2 border-zinc-800 rounded-3xl shadow-[0_25px_70px_-15px_rgba(0,0,0,0.95)] overflow-hidden text-zinc-100 z-10">
+              {/* Top Accent Gradient Bar */}
+              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-primary to-amber-500" />
+
+              {/* Scrollable Content Container */}
+              <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
+                {/* Modal Header */}
+                <div className="flex items-start justify-between gap-4 pb-5 border-b border-zinc-800">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-zinc-900 border border-zinc-700 text-zinc-200 flex items-center gap-1.5 shadow-sm">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                        <span>{selectedRepo.language}</span>
+                      </span>
+
+                      {selectedRepo.isFork ? (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                          Forked Repository
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                          Original Codebase
+                        </span>
+                      )}
+
+                      <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-zinc-900 text-zinc-400 border border-zinc-800">
+                        {selectedRepo.license || 'MIT License'}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-3 pt-1">
+                      <Github className="w-7 h-7 text-primary shrink-0" />
+                      <span className="truncate">{selectedRepo.name}</span>
+                    </h3>
+
+                    <p className="text-sm text-zinc-300 leading-relaxed bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
+                      {selectedRepo.description || 'Public GitHub repository analyzed with ProofBridge Abstract Syntax Tree scanner.'}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedRepo(null)}
+                    className="p-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0 shadow-sm"
+                    title="Close (Esc)"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Git Clone Quick Command Bar */}
+                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 font-mono text-xs text-zinc-300 shadow-inner">
+                  <div className="flex items-center gap-2.5 truncate">
+                    <Terminal className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span className="text-zinc-600 select-none">$</span>
+                    <span className="truncate select-all text-zinc-200">git clone {selectedRepo.url}.git</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyClone(selectedRepo.url)}
+                    className="ml-3 px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm border border-zinc-700"
+                  >
+                    {copiedClone ? <CheckCheck className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedClone ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+
+                {/* Repository Metrics Bento Grid (Solid Zinc-900) */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+                  <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-center shadow-sm">
+                    <div className="text-[10px] uppercase font-mono text-zinc-400 flex items-center justify-center gap-1">
+                      <Star className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Stars</span>
+                    </div>
+                    <div className="text-xl font-black text-amber-400 mt-1 font-mono">
+                      {selectedRepo.stars}
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-center shadow-sm">
+                    <div className="text-[10px] uppercase font-mono text-zinc-400 flex items-center justify-center gap-1">
+                      <GitFork className="w-3.5 h-3.5 text-primary" />
+                      <span>Forks</span>
+                    </div>
+                    <div className="text-xl font-black text-white mt-1 font-mono">
+                      {selectedRepo.forks}
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-center shadow-sm">
+                    <div className="text-[10px] uppercase font-mono text-zinc-400 flex items-center justify-center gap-1">
+                      <HardDrive className="w-3.5 h-3.5 text-sky-400" />
+                      <span>Code Size</span>
+                    </div>
+                    <div className="text-xl font-black text-white mt-1 font-mono">
+                      {(selectedRepo.sizeKB || 0) > 1024
+                        ? `${((selectedRepo.sizeKB || 0) / 1024).toFixed(1)} MB`
+                        : `${selectedRepo.sizeKB || 0} KB`}
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-center shadow-sm">
+                    <div className="text-[10px] uppercase font-mono text-zinc-400 flex items-center justify-center gap-1">
+                      <Eye className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Watchers</span>
+                    </div>
+                    <div className="text-xl font-black text-white mt-1 font-mono">
+                      {selectedRepo.watchers || selectedRepo.stars || 0}
+                    </div>
+                  </div>
+                </div>
+
+                {/* AST Logic & Code Density (Solid Zinc-900) */}
+                <div className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3.5 shadow-sm">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="font-bold text-zinc-200">AST Authentic Logic Depth:</span>
+                    <span className="text-emerald-400 font-black text-sm">
+                      {selectedRepo.authenticLogicPercent}% Human Logic
                     </span>
-                    {selectedRepo.isFork ? (
-                      <span className="px-2 py-0.5 rounded text-xs font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                        Forked Repository
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        Original Codebase
-                      </span>
-                    )}
                   </div>
-                  <h3 className="text-2xl font-black text-foreground mt-2 flex items-center gap-2">
-                    <BookOpen className="w-6 h-6 text-primary" />
-                    <span>{selectedRepo.name}</span>
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {selectedRepo.description}
-                  </p>
+                  <div className="w-full bg-zinc-800 rounded-full h-2.5 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-emerald-500 shadow-sm"
+                      style={{ width: `${selectedRepo.authenticLogicPercent}%` }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-zinc-800/80 text-[11px] font-mono text-zinc-400">
+                    <div>
+                      <span>AST Tokens:</span>
+                      <strong className="text-zinc-200 ml-1 font-bold">{selectedRepo.astTokensParsed.toLocaleString()}</strong>
+                    </div>
+                    <div>
+                      <span>Complexity:</span>
+                      <strong className="text-emerald-400 ml-1 font-bold">{selectedRepo.complexityScore || 3.5}/5.0</strong>
+                    </div>
+                    <div>
+                      <span>Branch:</span>
+                      <strong className="text-zinc-200 ml-1 font-bold">{selectedRepo.defaultBranch || 'main'}</strong>
+                    </div>
+                    <div>
+                      <span>Issues:</span>
+                      <strong className="text-zinc-200 ml-1 font-bold">{selectedRepo.openIssues || 0} open</strong>
+                    </div>
+                  </div>
                 </div>
 
+                {/* Topics & Detected Frameworks */}
+                {selectedRepo.tags && selectedRepo.tags.length > 0 && (
+                  <div className="space-y-2.5">
+                    <div className="text-xs font-bold text-zinc-400 uppercase font-mono">
+                      Detected Topics &amp; Frameworks:
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {selectedRepo.tags.map((tag, tIdx) => (
+                        <span
+                          key={tIdx}
+                          className="px-3 py-1 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs font-mono font-semibold shadow-sm"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Timeline & Metadata */}
+                <div className="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 text-xs font-mono space-y-2 text-zinc-400 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <span>Default Primary Branch:</span>
+                    <strong className="text-zinc-200">{selectedRepo.defaultBranch || 'main'}</strong>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Last Pushed Activity:</span>
+                    <strong className="text-emerald-400">
+                      {new Date(selectedRepo.pushedAt || selectedRepo.updatedAt || '').toLocaleString()}
+                    </strong>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Created Date:</span>
+                    <strong className="text-zinc-200">
+                      {new Date(selectedRepo.createdAt || '').toLocaleDateString()}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer (Solid Zinc-900, non-transparent) */}
+              <div className="p-4 sm:p-5 bg-zinc-900 border-t border-zinc-800 flex items-center justify-between gap-4">
                 <button
+                  type="button"
                   onClick={() => setSelectedRepo(null)}
-                  className="p-2 rounded-xl bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Repository Metrics Bento */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3.5 rounded-xl bg-background/80 border border-border/60 text-center">
-                  <div className="text-[10px] uppercase font-mono text-muted-foreground">Stars</div>
-                  <div className="text-lg font-black text-amber-400 flex items-center justify-center gap-1 mt-1">
-                    <Star className="w-4 h-4" />
-                    <span>{selectedRepo.stars}</span>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-background/80 border border-border/60 text-center">
-                  <div className="text-[10px] uppercase font-mono text-muted-foreground">Forks</div>
-                  <div className="text-lg font-black text-foreground flex items-center justify-center gap-1 mt-1">
-                    <GitFork className="w-4 h-4 text-primary" />
-                    <span>{selectedRepo.forks}</span>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-background/80 border border-border/60 text-center">
-                  <div className="text-[10px] uppercase font-mono text-muted-foreground">Code Size</div>
-                  <div className="text-lg font-black text-foreground mt-1">
-                    {(selectedRepo.sizeKB || 0) > 1024
-                      ? `${((selectedRepo.sizeKB || 0) / 1024).toFixed(1)} MB`
-                      : `${selectedRepo.sizeKB || 0} KB`}
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-background/80 border border-border/60 text-center">
-                  <div className="text-[10px] uppercase font-mono text-muted-foreground">License</div>
-                  <div className="text-sm font-bold text-foreground truncate mt-1.5">
-                    {selectedRepo.license || 'MIT'}
-                  </div>
-                </div>
-              </div>
-
-              {/* AST Logic & Code Density */}
-              <div className="p-5 rounded-2xl bg-muted/30 border border-border/60 space-y-3">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="font-bold text-foreground">AST Authentic Logic Depth:</span>
-                  <span className="text-emerald-400 font-bold">{selectedRepo.authenticLogicPercent}% Original Logic</span>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-emerald-500"
-                    style={{ width: `${selectedRepo.authenticLogicPercent}%` }}
-                  />
-                </div>
-                <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-1">
-                  <span>AST Tokens: {selectedRepo.astTokensParsed.toLocaleString()}</span>
-                  <span>Complexity Grade: {selectedRepo.complexityScore || 3.5}/5.0</span>
-                </div>
-              </div>
-
-              {/* Topics & Frameworks */}
-              {selectedRepo.tags && selectedRepo.tags.length > 0 && (
-                <div className="space-y-2">
-                  <div className="text-xs font-bold text-muted-foreground uppercase font-mono">
-                    Detected Topics &amp; Frameworks:
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {selectedRepo.tags.map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary border border-primary/20 text-xs font-mono"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Timeline & Metadata */}
-              <div className="p-4 rounded-xl bg-background/60 border border-border/40 text-xs font-mono space-y-1.5 text-muted-foreground">
-                <div className="flex items-center justify-between">
-                  <span>Default Branch:</span>
-                  <strong className="text-foreground">{selectedRepo.defaultBranch || 'main'}</strong>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Last Pushed:</span>
-                  <strong className="text-foreground">{new Date(selectedRepo.pushedAt || selectedRepo.updatedAt || '').toLocaleString()}</strong>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Created:</span>
-                  <strong className="text-foreground">{new Date(selectedRepo.createdAt || '').toLocaleDateString()}</strong>
-                </div>
-              </div>
-
-              {/* Modal Actions */}
-              <div className="pt-3 border-t border-border/40 flex items-center justify-between gap-3">
-                <button
-                  onClick={() => setSelectedRepo(null)}
-                  className="px-4 py-2.5 rounded-xl border border-border text-xs font-bold hover:bg-muted transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl border border-zinc-700 bg-zinc-800/80 text-zinc-200 text-xs font-bold hover:bg-zinc-700 hover:text-white transition-colors cursor-pointer shadow-sm"
                 >
                   Close Inspection
                 </button>
@@ -2369,10 +2452,11 @@ Verification URL: https://proofbridge.io/verify/${result.auditDigest.slice(0, 16
                   href={selectedRepo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-2 shadow-md cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg cursor-pointer"
                 >
-                  <span>View on GitHub</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <Github className="w-4 h-4" />
+                  <span>Open Repository on GitHub</span>
+                  <ExternalLink className="w-3.5 h-3.5 ml-0.5" />
                 </a>
               </div>
             </div>
