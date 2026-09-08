@@ -22,10 +22,36 @@ export interface AnalyzedRepo {
   language: string;
   stars: number;
   forks: number;
+  watchers?: number;
+  openIssues?: number;
+  sizeKB?: number;
+  defaultBranch?: string;
+  license?: string;
   url: string;
+  homepage?: string;
+  updatedAt?: string;
+  createdAt?: string;
+  pushedAt?: string;
+  isFork?: boolean;
   astTokensParsed: number;
   authenticLogicPercent: number;
+  complexityScore?: number;
+  primaryFramework?: string;
   tags: string[];
+}
+
+export interface LanguageStat {
+  language: string;
+  percentage: number;
+  sizeKB: number;
+  repoCount: number;
+  color: string;
+}
+
+export interface DetectedFramework {
+  name: string;
+  category: string;
+  evidenceRepo: string;
 }
 
 export interface CommitVelocityPoint {
@@ -43,11 +69,16 @@ export interface GithubEvaluationResult {
   claimedLevel: string;
   repositoriesAnalyzed: number;
   totalLinesParsed: number;
+  totalSizeKB?: number;
+  totalStars?: number;
+  totalForks?: number;
   boilerplateRatio: number;
   authoredVelocityRatio: number;
   astSignals: AstSignal[];
   discoveredSkills: DiscoveredSkill[];
   repositories: AnalyzedRepo[];
+  languageStats?: LanguageStat[];
+  detectedFrameworks?: DetectedFramework[];
   commitVelocity: CommitVelocityPoint[];
   forensics: {
     cyclomaticComplexity: string;
@@ -63,8 +94,13 @@ export interface GithubEvaluationResult {
     bio: string;
     publicRepos: number;
     followers: number;
+    following?: number;
     location: string;
     profileUrl: string;
+    company?: string;
+    blog?: string;
+    twitter?: string;
+    createdAt?: string;
   };
   verifiableCredential: {
     id: string;
