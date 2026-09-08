@@ -354,3 +354,66 @@ Resets the live database to the canonical demonstration seed state.
   }
 }
 ```
+
+---
+
+## 8. GitHub Code Intelligence & AST Auditor
+
+### `POST /api/v1/github/evaluate`
+Audits public repositories and git commit trees to extract syntax tokens, boilerplate ratios, commit velocity, and verifiable competency attainments.
+
+#### Request Body:
+```json
+{
+  "username": "meerasharma"
+}
+```
+
+#### Response `200 OK`:
+```json
+{
+  "success": true,
+  "data": {
+    "username": "meerasharma",
+    "astScore": 89,
+    "status": "VERIFIED",
+    "archetype": "EVIDENCE_BUILDER",
+    "title": "Candidate B — The Evidence-Backed Builder",
+    "claimedLevel": "Intermediate C++ & Data Systems",
+    "repositoriesAnalyzed": 4,
+    "totalLinesParsed": 2840,
+    "boilerplateRatio": 0.16,
+    "authoredVelocityRatio": 0.84,
+    "astSignals": [
+      {
+        "category": "Repository Depth",
+        "finding": "4 C++ & Analytics repositories analyzed — 2,840 lines parsed",
+        "passed": true
+      },
+      {
+        "category": "AST Syntax & Data Structures",
+        "finding": "Extensive STL: std::vector, std::unordered_map, custom iterators, RAII memory management",
+        "passed": true
+      },
+      {
+        "category": "Contribution Defense & Velocity",
+        "finding": "84% authored by candidate (commit velocity verified across 6 months)",
+        "passed": true
+      }
+    ],
+    "discoveredSkills": [
+      {
+        "skillId": "30000000-0000-0000-0000-000000000001",
+        "skillName": "SQL & Relational Modeling",
+        "attainedLevel": 3,
+        "confidence": "HIGH",
+        "evidenceRef": "github.com/meerasharma/sales-analysis-sql",
+        "linesAnalyzed": 840
+      }
+    ],
+    "auditDigest": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+    "analyzedAt": "2026-09-09T03:20:00.000Z"
+  }
+}
+```
+

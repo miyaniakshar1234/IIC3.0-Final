@@ -62,7 +62,19 @@ This guide is optimized to let you verify all core technical claims and experien
 
 ---
 
-### Step 4: Dean Curriculum Gap Radar & OBE Accreditation
+### Step 4: GitHub Profile & Repository AST Evidence Audit (Pitch Slide 5)
+1. Navigate to **"GitHub AST Audit"** (`/student/github-eval`) via the student navigation bar.
+2. Click **"Candidate B: Meera Patel (89% Evidence-Backed)"** or type any public GitHub username.
+3. Click **"Run AST Evidence Audit"**:
+   - Watch the live scanner parse syntax trees, inspect data structures (`std::vector`, `std::unordered_map`), and compute commit velocity.
+   - **Inspect the Verification Log:** 4 repositories analyzed, 2,840 lines parsed, 84% candidate-authored velocity, zero template inflation.
+4. Switch to **"Candidate A: Resume Claimer"** to see how ProofBridge catches resume inflation (43% AST score, 88% boilerplate code, 0 tests):
+   - *“Candidate B wrote ‘Intermediate’. Candidate A wrote ‘Advanced’. Resumes cannot tell the difference. ProofBridge can.”*
+5. Click **"Import Verified Evidence to Skill Twin"** to merge competencies directly into the student passport.
+
+---
+
+### Step 5: Dean Curriculum Gap Radar & OBE Accreditation
 1. Switch persona to **Dean / Institution Coordinator (Demo College of Computing)**.
 2. Navigate to **"Institution Insights"** (`/institution/insights`).
 3. Inspect the **Cohort Gap Radar** across the 2026 Batch:
@@ -71,8 +83,8 @@ This guide is optimized to let you verify all core technical claims and experien
 
 ---
 
-### Step 5: Zero-Gas Offline Verification Test
-1. Open the **Credential Verifier** page (`/verifier`).
+### Step 6: Zero-Gas Offline Verification Test
+1. Open the **Credential Verifier** page (`/verify`).
 2. Paste the student's W3C Verifiable Credential JSON-LD payload.
 3. Click **"Verify Authenticity"**.
 4. The system validates the university's Ed25519 signature and SHA-256 evidence hash in **under 15 milliseconds** with **zero blockchain gas fees**.
