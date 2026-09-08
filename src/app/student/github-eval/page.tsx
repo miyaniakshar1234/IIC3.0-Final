@@ -46,20 +46,33 @@ import {
   Twitter,
   Users,
   HardDrive,
+  Shield,
+  Lock,
+  Briefcase,
+  Flame,
+  Share2,
+  Compass,
+  HelpCircle,
+  Lightbulb,
 } from 'lucide-react';
-import type { GithubEvaluationResult, AnalyzedRepo } from '@/contracts/github';
+import type { GithubEvaluationResult, AnalyzedRepo, LanguageStat } from '@/contracts/github';
 
 export default function GithubEvaluationPage() {
   const [handle, setHandle] = useState('miyaniakshar1234');
   const [isLoading, setIsLoading] = useState(false);
   const [scanStep, setScanStep] = useState(0);
   const [result, setResult] = useState<GithubEvaluationResult | null>(null);
-  const [activeTab, setActiveTab] = useState<'repos-explorer' | 'visualizations' | 'forensics' | 'pitch-benchmark' | 'w3c-credential'>('repos-explorer');
+  const [activeTab, setActiveTab] = useState<
+    'repos-explorer' | 'visualizations' | 'forensics' | 'recruiter-synthesis' | 'pitch-benchmark' | 'w3c-credential'
+  >('repos-explorer');
   const [signalFilter, setSignalFilter] = useState<'all' | 'passed' | 'flagged'>('all');
   const [copiedDigest, setCopiedDigest] = useState(false);
   const [copiedCredential, setCopiedCredential] = useState(false);
   const [copiedSnippetIndex, setCopiedSnippetIndex] = useState<number | null>(null);
+  const [copiedBadge, setCopiedBadge] = useState(false);
+  const [copiedDossier, setCopiedDossier] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
+  const [hoveredLang, setHoveredLang] = useState<LanguageStat | null>(null);
 
   // Repository Explorer State
   const [repoSearch, setRepoSearch] = useState('');
@@ -204,6 +217,126 @@ export default function GithubEvaluationPage() {
     setImportSuccess(true);
     setTimeout(() => setImportSuccess(false), 5000);
   };
+
+  const handleCopyBadge = () => {
+    if (!result) return;
+    const badgeMd = `[![ProofBridge Verified](https://img.shields.io/badge/ProofBridge-Verified%20Level%203%20%E2%80%A2%20${result.astScore}%25%20AST-10b981?style=for-the-badge&logo=github)](https://proofbridge.io/verify/${result.auditDigest.slice(0, 16)})`;
+    navigator.clipboard.writeText(badgeMd);
+    setCopiedBadge(true);
+    setTimeout(() => setCopiedBadge(false), 2000);
+  };
+
+  const handleCopyDossier = () => {
+    if (!result || !result.recruiterSynthesis) return;
+    const text = `PROOFBRIDGE TECHNICAL DOSSIER: @${result.username}
+Candidate: ${result.profileData?.name || result.username} (${result.claimedLevel})
+AST Authenticity Score: ${result.astScore}% (${result.status})
+Core Superpower: ${result.recruiterSynthesis.superpower}
+Authenticity Finding: ${result.recruiterSynthesis.authenticityVerdict}
+Recommended Roles: ${result.recruiterSynthesis.recommendedRoles.join(', ')}
+
+Suggested Technical Interview Questions:
+${result.recruiterSynthesis.tailoredQuestions.map((q, i) => `${i + 1}. ${q.question}\n   [Context: ${q.context}]`).join('\n\n')}
+
+Verified by ProofBridge Cryptographic Engine (Digest: ${result.auditDigest})
+Verification URL: https://proofbridge.io/verify/${result.auditDigest.slice(0, 16)}`;
+    navigator.clipboard.writeText(text);
+    setCopiedDossier(true);
+    setTimeout(() => setCopiedDossier(false), 2000);
+  };
+
+  // Mathematical SVG Donut Arc Segments
+  const donutSegments = useMemo(() => {
+    if (!result?.languageStats || result.languageStats.length === 0) return [];
+    const cx = 100;
+    const cy = 100;
+    const rOuter = 82;
+    const rInner = 52;
+    let currentAngle = -90;
+
+    return result.languageStats.map((stat) => {
+      const angle = (stat.percentage / 100) * 360;
+      const startAngle = currentAngle;
+      const endAngle = currentAngle + Math.max(angle, 1.2);
+      currentAngle += angle;
+
+      const startRad = (startAngle * Math.PI) / 180;
+      const endRad = (endAngle * Math.PI) / 180;
+
+      const x1 = cx + rOuter * Math.cos(startRad);
+      const y1 = cy + rOuter * Math.sin(startRad);
+      const x2 = cx + rOuter * Math.cos(endRad);
+      const y2 = cy + rOuter * Math.sin(endRad);
+
+      const x3 = cx + rInner * Math.cos(endRad);
+      const y3 = cy + rInner * Math.sin(endRad);
+      const x4 = cx + rInner * Math.cos(startRad);
+      const y4 = cy + rInner * Math.sin(startRad);
+
+      const largeArc = angle > 180 ? 1 : 0;
+      const pathData = `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x4} ${y4} Z`;
+
+      return {
+        ...stat,
+        pathData,
+        startAngle,
+        endAngle,
+      };
+    });
+  }, [result?.languageStats]);
+
+  // 6-Axis Developer DNA Radar Chart Math
+  const radarData = useMemo(() => {
+    if (!result?.developerDna) return null;
+    const dna = result.developerDna;
+    const axes = [
+      { label: 'Systems & Low-Level', val: dna.systemsLowLevel, short: 'Systems' },
+      { label: 'Full-Stack Web', val: dna.fullstackWeb, short: 'Web & UI' },
+      { label: 'AST Authenticity', val: dna.astAuthenticity, short: 'AST Depth' },
+      { label: 'Code Modularity', val: dna.codeModularity, short: 'Modularity' },
+      { label: 'Commit Cadence', val: dna.commitCadence, short: 'Cadence' },
+      { label: 'Open Source Impact', val: dna.openSourceImpact, short: 'OSS Impact' },
+    ];
+    const cx = 130;
+    const cy = 130;
+    const maxR = 85;
+
+    const gridLevels = [0.25, 0.5, 0.75, 1.0].map((lvl) => {
+      const points = axes.map((_, i) => {
+        const angle = (i * 60 - 90) * (Math.PI / 180);
+        return `${cx + maxR * lvl * Math.cos(angle)},${cy + maxR * lvl * Math.sin(angle)}`;
+      });
+      return points.join(' ');
+    });
+
+    const dataPoints = axes.map((axis, i) => {
+      const angle = (i * 60 - 90) * (Math.PI / 180);
+      const r = maxR * (axis.val / 100);
+      return {
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle),
+        labelX: cx + (maxR + 26) * Math.cos(angle),
+        labelY: cy + (maxR + 14) * Math.sin(angle),
+        ...axis,
+      };
+    });
+
+    const polygonPath = dataPoints.map((p) => `${p.x},${p.y}`).join(' ');
+
+    return { cx, cy, maxR, gridLevels, dataPoints, polygonPath };
+  }, [result?.developerDna]);
+
+  // Polyglot Diversity Index
+  const polyglotScore = useMemo(() => {
+    if (!result?.languageStats) return 5.0;
+    const count = result.languageStats.length;
+    const hasSystems = result.languageStats.some((l) => ['Zig', 'Rust', 'C', 'C++'].includes(l.language));
+    const hasWeb = result.languageStats.some((l) => ['TypeScript', 'JavaScript'].includes(l.language));
+    let score = count * 1.5;
+    if (hasSystems) score += 2.5;
+    if (hasWeb) score += 1.5;
+    return Math.min(Math.round(score * 10) / 10, 9.8);
+  }, [result?.languageStats]);
 
   // Filtered and Sorted Repositories
   const filteredAndSortedRepos = useMemo(() => {
@@ -622,6 +755,18 @@ export default function GithubEvaluationPage() {
               </button>
 
               <button
+                onClick={() => setActiveTab('recruiter-synthesis')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                  activeTab === 'recruiter-synthesis'
+                    ? 'bg-emerald-600 text-white shadow-sm font-bold'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+                }`}
+              >
+                <Briefcase className="w-4 h-4" />
+                <span>Recruiter &amp; Security Dossier</span>
+              </button>
+
+              <button
                 onClick={() => setActiveTab('pitch-benchmark')}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                   activeTab === 'pitch-benchmark'
@@ -804,54 +949,268 @@ export default function GithubEvaluationPage() {
             {/* TAB 2: LANGUAGE & TECH VISUALIZATIONS */}
             {activeTab === 'visualizations' && (
               <div className="space-y-8">
-                {/* Visual 1: Multi-Color Language Distribution Bar */}
-                <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-border/40 gap-2">
+                {/* Visual 1: Interactive Polyglot Donut Chart & Architecture Diversity Suite */}
+                <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-3">
                     <div>
-                      <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
+                        <Compass className="w-3.5 h-3.5" />
+                        <span>INTERACTIVE POLYGLOT AST CODE INTELLIGENCE</span>
+                      </div>
+                      <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
                         <BarChart3 className="w-5 h-5 text-primary" />
-                        <span>Polyglot Code Volume Distribution</span>
+                        <span>Polyglot Language Volume &amp; Density Engine</span>
                       </h3>
-                      <p className="text-xs text-muted-foreground">
-                        Exact byte-volume breakdown across all {result.repositoriesAnalyzed} repositories.
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Interactive radial telemetry across {result.repositoriesAnalyzed} repositories. Hover or click any arc to inspect and filter codebases.
                       </p>
                     </div>
-                    <div className="text-xs font-mono font-bold text-muted-foreground">
-                      Total Analyzed: {((result.totalSizeKB || 0) / 1024).toFixed(1)} MB
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase font-mono text-muted-foreground">Total Codebase Size</div>
+                        <div className="text-base font-mono font-bold text-foreground">
+                          {((result.totalSizeKB || 0) / 1024).toFixed(1)} MB ({result.totalLinesParsed.toLocaleString()} est. lines)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dual Bento: Donut Graph on Left, Polyglot Diversity Index on Right */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    {/* Left: Interactive Radial SVG Donut */}
+                    <div className="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-background/60 border border-border/60 rounded-2xl relative">
+                      <div className="relative w-64 h-64 flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" className="w-full h-full transform -rotate-90">
+                          {donutSegments.map((seg, idx) => {
+                            const isHovered = hoveredLang?.language === seg.language;
+                            return (
+                              <path
+                                key={idx}
+                                d={seg.pathData}
+                                fill={seg.color}
+                                className="transition-all duration-300 cursor-pointer opacity-90 hover:opacity-100 hover:scale-105"
+                                style={{
+                                  transformOrigin: '100px 100px',
+                                  filter: isHovered ? 'drop-shadow(0 0 8px rgba(255,255,255,0.4))' : 'none',
+                                }}
+                                onMouseEnter={() => setHoveredLang(seg)}
+                                onMouseLeave={() => setHoveredLang(null)}
+                                onClick={() => {
+                                  setSelectedLanguage(seg.language);
+                                  setActiveTab('repos-explorer');
+                                }}
+                              />
+                            );
+                          })}
+                        </svg>
+
+                        {/* Donut Center Telemetry HUD */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none p-4">
+                          {hoveredLang ? (
+                            <div className="space-y-0.5 animate-fade-in">
+                              <span
+                                className="w-3 h-3 rounded-full inline-block mx-auto mb-1"
+                                style={{ backgroundColor: hoveredLang.color }}
+                              />
+                              <div className="text-sm font-black text-foreground">{hoveredLang.language}</div>
+                              <div className="text-xl font-black font-mono text-primary">{hoveredLang.percentage}%</div>
+                              <div className="text-[10px] font-mono text-muted-foreground">
+                                {((hoveredLang.sizeKB || 0) / 1024).toFixed(1)} MB • {hoveredLang.repoCount} repo{hoveredLang.repoCount > 1 ? 's' : ''}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-0.5">
+                              <div className="text-[10px] uppercase tracking-wider font-mono text-muted-foreground">Primary</div>
+                              <div className="text-sm font-black text-foreground">
+                                {result.languageStats?.[0]?.language || 'Polyglot'}
+                              </div>
+                              <div className="text-lg font-black font-mono text-emerald-400">
+                                {result.languageStats?.[0]?.percentage || 0}%
+                              </div>
+                              <div className="text-[10px] font-mono text-muted-foreground">
+                                {result.languageStats?.length || 0} distinct stacks
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-2 text-[11px] font-mono text-muted-foreground text-center">
+                        <span className="text-primary font-bold">Hint:</span> Click any segment to filter repositories directly
+                      </div>
+                    </div>
+
+                    {/* Right: Polyglot Diversity Index & Architecture Breakdown */}
+                    <div className="lg:col-span-7 space-y-4">
+                      <div className="p-5 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                              ProofBridge Polyglot Diversity Index
+                            </span>
+                            <h4 className="text-lg font-black text-foreground mt-0.5">
+                              {polyglotScore >= 8.5
+                                ? 'Elite Polyglot Systems Architect'
+                                : polyglotScore >= 6.5
+                                ? 'Multi-Paradigm Full-Stack Engineer'
+                                : 'Specialized Single-Stack Developer'}
+                            </h4>
+                          </div>
+                          <div className="text-2xl font-black font-mono text-primary bg-background/80 px-3 py-1.5 rounded-xl border border-primary/30">
+                            {polyglotScore} <span className="text-xs text-muted-foreground font-normal">/ 10</span>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Evaluates true algorithmic versatility across memory-managed systems engines (Zig/Rust/C), application platforms (TypeScript/Next.js), scientific scripts (Python), and data infrastructure (SQL).
+                        </p>
+
+                        <div className="flex items-center gap-2 flex-wrap pt-1">
+                          {result.languageStats?.some((l) => ['Zig', 'Rust', 'C', 'C++'].includes(l.language)) && (
+                            <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                              <Cpu className="w-3 h-3" />
+                              <span>Systems Hacker (Low-Level)</span>
+                            </span>
+                          )}
+                          {result.languageStats?.some((l) => ['TypeScript', 'JavaScript'].includes(l.language)) && (
+                            <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30 flex items-center gap-1">
+                              <Code2 className="w-3 h-3" />
+                              <span>Full-Stack Web Artisan</span>
+                            </span>
+                          )}
+                          {result.languageStats?.some((l) => ['Python'].includes(l.language)) && (
+                            <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                              <Sparkles className="w-3 h-3" />
+                              <span>AI &amp; Compute Pipeline</span>
+                            </span>
+                          )}
+                          {result.languageStats?.some((l) => ['SQL'].includes(l.language)) && (
+                            <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-orange-500/10 text-orange-400 border border-orange-500/30 flex items-center gap-1">
+                              <Layers className="w-3 h-3" />
+                              <span>Relational Analytics</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Quick Language Badges */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        {result.languageStats?.map((lang, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => {
+                              setSelectedLanguage(lang.language);
+                              setActiveTab('repos-explorer');
+                            }}
+                            className="p-3 rounded-xl bg-background/80 hover:bg-muted/50 border border-border/50 hover:border-primary/50 text-left transition-all cursor-pointer group"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span
+                                className="w-3 h-3 rounded-full shrink-0 shadow-sm"
+                                style={{ backgroundColor: lang.color }}
+                              />
+                              <div className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                                {lang.language}
+                              </div>
+                            </div>
+                            <div className="text-[11px] font-mono text-muted-foreground mt-1 flex items-center justify-between">
+                              <span>{lang.percentage}%</span>
+                              <span>{((lang.sizeKB || 0) / 1024).toFixed(1)} MB</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
                   {/* Multi-segment proportional visualizer bar */}
-                  <div className="w-full h-4 rounded-full overflow-hidden flex bg-muted shadow-inner">
-                    {result.languageStats?.map((lang, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          width: `${Math.max(lang.percentage, 2)}%`,
-                          backgroundColor: lang.color,
-                        }}
-                        className="h-full transition-all duration-500 hover:opacity-80"
-                        title={`${lang.language}: ${lang.percentage}% (${((lang.sizeKB || 0) / 1024).toFixed(1)} MB)`}
-                      />
-                    ))}
+                  <div className="space-y-2 pt-2">
+                    <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+                      <span>Proportional Byte-Volume Bar</span>
+                      <span>100% of Verified Code Volume</span>
+                    </div>
+                    <div className="w-full h-4 rounded-full overflow-hidden flex bg-muted shadow-inner">
+                      {result.languageStats?.map((lang, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            width: `${Math.max(lang.percentage, 2)}%`,
+                            backgroundColor: lang.color,
+                          }}
+                          className="h-full transition-all duration-500 hover:opacity-80 cursor-pointer"
+                          title={`${lang.language}: ${lang.percentage}% (${((lang.sizeKB || 0) / 1024).toFixed(1)} MB)`}
+                          onClick={() => {
+                            setSelectedLanguage(lang.language);
+                            setActiveTab('repos-explorer');
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Language Legend Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
-                    {result.languageStats?.map((lang, idx) => (
-                      <div key={idx} className="p-3 rounded-xl bg-background/80 border border-border/50 flex items-center gap-3">
-                        <span
-                          className="w-3.5 h-3.5 rounded-full shrink-0 shadow-sm"
-                          style={{ backgroundColor: lang.color }}
-                        />
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-foreground truncate">{lang.language}</div>
-                          <div className="text-[11px] font-mono text-muted-foreground">
-                            {lang.percentage}% • {lang.repoCount} repo{lang.repoCount > 1 ? 's' : ''}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  {/* Deep LOC & Byte Density Matrix Table */}
+                  <div className="pt-4 border-t border-border/40 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-bold text-sm text-foreground flex items-center gap-2">
+                        <FileCode2 className="w-4 h-4 text-primary" />
+                        <span>Detailed Code Volume &amp; Lines of Code (LOC) Density</span>
+                      </h4>
+                      <span className="text-xs font-mono text-muted-foreground">
+                        {result.languageStats?.length} Languages Analyzed
+                      </span>
+                    </div>
+
+                    <div className="overflow-x-auto rounded-xl border border-border/60">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead className="bg-muted/40 border-b border-border/60 text-muted-foreground font-semibold">
+                          <tr>
+                            <th className="p-3">Language</th>
+                            <th className="p-3">Engineering Paradigm</th>
+                            <th className="p-3">Volume Share</th>
+                            <th className="p-3">Total Size</th>
+                            <th className="p-3">Est. LOC</th>
+                            <th className="p-3">Repos</th>
+                            <th className="p-3 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border/40">
+                          {result.languageStats?.map((lang, idx) => (
+                            <tr key={idx} className="hover:bg-muted/20 transition-colors">
+                              <td className="p-3 flex items-center gap-2 font-bold text-foreground">
+                                <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: lang.color }} />
+                                <span>{lang.language}</span>
+                              </td>
+                              <td className="p-3 text-muted-foreground">
+                                <span className="px-2 py-0.5 rounded bg-muted text-[10px]">
+                                  {lang.paradigm || 'General Purpose'}
+                                </span>
+                              </td>
+                              <td className="p-3 font-bold text-primary">{lang.percentage}%</td>
+                              <td className="p-3 text-muted-foreground">
+                                {(lang.sizeKB || 0) > 1024 ? `${((lang.sizeKB || 0) / 1024).toFixed(1)} MB` : `${lang.sizeKB || 0} KB`}
+                              </td>
+                              <td className="p-3 text-emerald-400 font-bold">
+                                {(lang.estimatedLOC || Math.round((lang.sizeKB || 10) * 28)).toLocaleString()}
+                              </td>
+                              <td className="p-3 text-foreground font-bold">{lang.repoCount}</td>
+                              <td className="p-3 text-right">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedLanguage(lang.language);
+                                    setActiveTab('repos-explorer');
+                                  }}
+                                  className="text-[11px] text-primary hover:underline font-bold cursor-pointer"
+                                >
+                                  Filter Repos →
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
 
@@ -931,6 +1290,266 @@ export default function GithubEvaluationPage() {
             {/* TAB 3: COMMIT VELOCITY & FORENSICS */}
             {activeTab === 'forensics' && (
               <div className="space-y-8">
+                {/* Visual Component 1: 16-Week GitHub-Style Contribution Rhythm & Heatmap */}
+                <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-3">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 mb-2">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>AUTHENTIC COMMIT RHYTHM &amp; STREAK CADENCE</span>
+                      </div>
+                      <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
+                        <Flame className="w-5 h-5 text-amber-500" />
+                        <span>GitHub Contribution Heatmap &amp; Cadence Matrix</span>
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        16-week daily contribution matrix distinguishing organic, iterative engineering from single-day copy-paste dump events.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold border ${
+                          result.astScore >= 70
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                        }`}
+                      >
+                        {result.astScore >= 70 ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>ORGANIC ITERATION VERIFIED</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                            <span>BULK DUMP ANOMALY</span>
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 16-Week Heatmap Matrix Grid */}
+                  <div className="p-4 rounded-2xl bg-background/60 border border-border/60 overflow-x-auto">
+                    <div className="min-w-[680px]">
+                      <div className="flex items-center gap-1.5 justify-between mb-2 text-[10px] font-mono text-muted-foreground px-1">
+                        <span>16 Weeks Ago</span>
+                        <span>12 Weeks Ago</span>
+                        <span>8 Weeks Ago</span>
+                        <span>4 Weeks Ago</span>
+                        <span>Present Week</span>
+                      </div>
+
+                      <div className="flex items-start gap-1.5">
+                        {/* Day labels Mon, Wed, Fri */}
+                        <div className="flex flex-col justify-between h-[100px] text-[9px] font-mono text-muted-foreground pr-2 pt-0.5">
+                          <span>Mon</span>
+                          <span>Wed</span>
+                          <span>Fri</span>
+                          <span>Sun</span>
+                        </div>
+
+                        {/* 16 Weeks Columns */}
+                        <div className="flex items-center gap-1.5 flex-1">
+                          {result.contributionRhythm?.weeks.map((week, wIdx) => (
+                            <div key={wIdx} className="flex flex-col gap-1.5 flex-1">
+                              {week.days.map((day, dIdx) => {
+                                let bgClass = 'bg-muted/40';
+                                if (day.level === 1) bgClass = 'bg-emerald-950 border border-emerald-800/40 text-emerald-400';
+                                else if (day.level === 2) bgClass = 'bg-emerald-800';
+                                else if (day.level === 3) bgClass = 'bg-emerald-600';
+                                else if (day.level === 4) bgClass = 'bg-emerald-400';
+
+                                return (
+                                  <div
+                                    key={dIdx}
+                                    title={`${day.date}: ${day.count} commit${day.count === 1 ? '' : 's'}`}
+                                    className={`w-full aspect-square rounded-sm transition-all hover:ring-2 hover:ring-primary cursor-pointer ${bgClass}`}
+                                  />
+                                );
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Heatmap Legend */}
+                      <div className="mt-3 pt-3 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <span>Less</span>
+                          <span className="w-2.5 h-2.5 rounded-sm bg-muted/40" />
+                          <span className="w-2.5 h-2.5 rounded-sm bg-emerald-950" />
+                          <span className="w-2.5 h-2.5 rounded-sm bg-emerald-800" />
+                          <span className="w-2.5 h-2.5 rounded-sm bg-emerald-600" />
+                          <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
+                          <span>More</span>
+                        </div>
+                        <span className="text-foreground font-bold">
+                          {result.contributionRhythm?.totalContributions || 124} commits in last 112 days
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Rhythm Telemetry Bento */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="p-4 rounded-xl bg-background/80 border border-border/60">
+                      <div className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
+                        <Flame className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Current Streak</span>
+                      </div>
+                      <div className="text-2xl font-black text-foreground mt-1">
+                        {result.contributionRhythm?.currentStreak || 0} <span className="text-xs text-muted-foreground font-normal">days</span>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-0.5">Consecutive active days</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-background/80 border border-border/60">
+                      <div className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
+                        <Award className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>Longest Streak</span>
+                      </div>
+                      <div className="text-2xl font-black text-emerald-400 mt-1">
+                        {result.contributionRhythm?.longestStreak || 0} <span className="text-xs text-muted-foreground font-normal">days</span>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-0.5">Sustained sprint record</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-background/80 border border-border/60">
+                      <div className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-primary" />
+                        <span>Weekend Ratio</span>
+                      </div>
+                      <div className="text-2xl font-black text-foreground mt-1">
+                        {result.contributionRhythm?.weekendRatio || 0}%
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-0.5">Passion &amp; hackathon cadence</div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-background/80 border border-border/60">
+                      <div className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
+                        <Zap className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Peak Focus Hours</span>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-foreground mt-2 line-clamp-1">
+                        {result.contributionRhythm?.peakHours || '22:00 - 02:00 UTC'}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground mt-0.5">Optimal engineering state</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visual Component 2: 6-Axis Developer DNA / Engineering Radar Chart */}
+                {radarData && (
+                  <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-3">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
+                          <Compass className="w-3.5 h-3.5" />
+                          <span>6-AXIS ENGINEERING RADAR</span>
+                        </div>
+                        <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
+                          <Compass className="w-5 h-5 text-primary" />
+                          <span>Developer DNA &amp; Capability Radar</span>
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Multi-dimensional skill topology mapping candidate depth across memory safety, web engineering, AST authenticity, modularity, and open source impact.
+                        </p>
+                      </div>
+
+                      <div className="px-3.5 py-1.5 rounded-xl bg-primary/15 border border-primary/30 text-xs font-mono font-bold text-primary">
+                        {result.developerDna?.overallArchetype || 'Systems Architect'}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                      {/* Radar Chart SVG */}
+                      <div className="md:col-span-6 flex items-center justify-center p-4 bg-background/60 border border-border/60 rounded-2xl relative">
+                        <svg viewBox="0 0 260 260" className="w-full max-w-[280px] h-auto">
+                          {/* Concentric grid webs */}
+                          {radarData.gridLevels.map((pts, i) => (
+                            <polygon
+                              key={i}
+                              points={pts}
+                              fill="none"
+                              stroke="currentColor"
+                              strokeDasharray="2,2"
+                              className="text-border/60"
+                              strokeWidth="1"
+                            />
+                          ))}
+
+                          {/* Axis rays */}
+                          {radarData.dataPoints.map((dp, i) => (
+                            <line
+                              key={i}
+                              x1={radarData.cx}
+                              y1={radarData.cy}
+                              x2={dp.x}
+                              y2={dp.y}
+                              stroke="currentColor"
+                              className="text-border/40"
+                              strokeWidth="1"
+                            />
+                          ))}
+
+                          {/* Data Polygon */}
+                          <polygon
+                            points={radarData.polygonPath}
+                            fill="rgba(16, 185, 129, 0.25)"
+                            stroke="#10b981"
+                            strokeWidth="2.5"
+                          />
+
+                          {/* Vertex Dots */}
+                          {radarData.dataPoints.map((dp, i) => (
+                            <circle
+                              key={i}
+                              cx={dp.x}
+                              cy={dp.y}
+                              r="4"
+                              className="fill-emerald-400 stroke-background stroke-2"
+                            />
+                          ))}
+
+                          {/* Labels */}
+                          {radarData.dataPoints.map((dp, i) => (
+                            <text
+                              key={i}
+                              x={dp.labelX}
+                              y={dp.labelY}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              className="text-[9px] font-mono fill-muted-foreground font-semibold"
+                            >
+                              {dp.short} ({dp.val}%)
+                            </text>
+                          ))}
+                        </svg>
+                      </div>
+
+                      {/* Radar Breakdown Bars */}
+                      <div className="md:col-span-6 space-y-3.5">
+                        {radarData.dataPoints.map((dp, i) => (
+                          <div key={i} className="space-y-1">
+                            <div className="flex items-center justify-between text-xs font-mono">
+                              <span className="font-bold text-foreground">{dp.label}</span>
+                              <span className="text-emerald-400 font-bold">{dp.val}%</span>
+                            </div>
+                            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                                style={{ width: `${dp.val}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Commit Cadence Bar Chart */}
                 <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-2">
@@ -1130,7 +1749,258 @@ export default function GithubEvaluationPage() {
               </div>
             )}
 
-            {/* TAB 4: PITCH SLIDE 5 BENCHMARK */}
+            {/* TAB 4: RECRUITER & SECURITY DOSSIER */}
+            {activeTab === 'recruiter-synthesis' && (
+              <div className="space-y-8">
+                {/* 1. Recruiter Executive Summary Card */}
+                <div className="bg-card border-2 border-emerald-500/30 rounded-3xl p-6 md:p-8 shadow-lg space-y-6 relative overflow-hidden bg-gradient-to-br from-emerald-950/20 via-card to-card">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-border/40 gap-4">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
+                        <Briefcase className="w-3.5 h-3.5" />
+                        <span>PROOFBRIDGE AI TECHNICAL BRIEFING • FOR HIRING TEAMS</span>
+                      </div>
+                      <h3 className="text-2xl font-black text-foreground">
+                        Candidate Technical Executive Dossier
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Synthesized from {result.repositoriesAnalyzed} repositories, AST tokens, and cryptographic commit history.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleCopyDossier}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-md cursor-pointer"
+                      >
+                        {copiedDossier ? <CheckCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        <span>{copiedDossier ? 'Copied Dossier!' : 'Copy Recruiter Briefing'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Core Superpower */}
+                    <div className="p-5 rounded-2xl bg-background/80 border border-border/60 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 font-mono">
+                        <Zap className="w-4 h-4" />
+                        <span>Core Engineering Superpower</span>
+                      </div>
+                      <p className="text-sm font-medium text-foreground leading-relaxed">
+                        {result.recruiterSynthesis?.superpower || 'Polyglot systems and full-stack engineering proficiency.'}
+                      </p>
+                    </div>
+
+                    {/* Authenticity Verdict */}
+                    <div className="p-5 rounded-2xl bg-background/80 border border-border/60 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Authenticity &amp; Integrity Finding</span>
+                      </div>
+                      <p className="text-sm font-medium text-foreground leading-relaxed">
+                        {result.recruiterSynthesis?.authenticityVerdict || `${result.astScore}% AST Authenticity Score with verified ownership.`}
+                      </p>
+                    </div>
+
+                    {/* Recommended Roles */}
+                    <div className="p-5 rounded-2xl bg-background/80 border border-border/60 space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary font-mono">
+                        <Award className="w-4 h-4" />
+                        <span>Recommended Role Matches</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {result.recruiterSynthesis?.recommendedRoles?.map((role, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-primary/10 text-primary border border-primary/20"
+                          >
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Code-Grounded Technical Interview Questions */}
+                <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between pb-4 border-b border-border/40">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-2">
+                        <HelpCircle className="w-3.5 h-3.5" />
+                        <span>TAILORED RECRUITER QUESTIONS</span>
+                      </div>
+                      <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
+                        <Lightbulb className="w-5 h-5 text-amber-500" />
+                        <span>AST Code-Grounded Interview Questions</span>
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        These questions are dynamically generated from AST anomalies, memory patterns, and frameworks discovered in candidate repositories.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {result.recruiterSynthesis?.tailoredQuestions?.map((q, idx) => (
+                      <div
+                        key={idx}
+                        className="p-5 rounded-2xl bg-muted/20 border border-border/60 hover:border-primary/40 transition-colors space-y-2.5"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary font-mono font-bold text-xs shrink-0 mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <h4 className="text-sm font-bold text-foreground leading-relaxed">
+                              {q.question}
+                            </h4>
+                          </div>
+
+                          {q.repoRef && (
+                            <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 shrink-0">
+                              Ref: {q.repoRef}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="pl-9 text-xs font-mono text-muted-foreground flex items-center gap-2">
+                          <Info className="w-3.5 h-3.5 text-primary shrink-0" />
+                          <span><strong>Why ask this:</strong> {q.context}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Security, License & Supply Chain Auditor */}
+                <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-3">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 mb-2">
+                        <Shield className="w-3.5 h-3.5" />
+                        <span>CODE HYGIENE &amp; SUPPLY CHAIN AUDITOR</span>
+                      </div>
+                      <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
+                        <Lock className="w-5 h-5 text-emerald-500" />
+                        <span>Security, Credentials &amp; Open Source Compliance</span>
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Automated static scans verifying zero hardcoded credentials, commercial license rights, and supply chain exposure.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-xs font-mono">
+                      <div className="px-3 py-1.5 rounded-xl bg-background/80 border border-border/60 text-right">
+                        <div className="text-[10px] uppercase text-muted-foreground">License Compliance</div>
+                        <div className="text-emerald-400 font-bold">{result.securityAudit?.licenseComplianceRate || 94}% Permissive</div>
+                      </div>
+                      <div className="px-3 py-1.5 rounded-xl bg-background/80 border border-border/60 text-right">
+                        <div className="text-[10px] uppercase text-muted-foreground">Clean Repos</div>
+                        <div className="text-foreground font-bold">{result.securityAudit?.cleanRepositoryPercent || 96}% Verified</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {result.securityAudit?.checks?.map((check, idx) => (
+                      <div
+                        key={idx}
+                        className={`p-4 rounded-xl border transition-all ${
+                          check.status === 'PASSED'
+                            ? 'bg-emerald-500/5 border-emerald-500/20'
+                            : 'bg-rose-500/5 border-rose-500/20'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            {check.status === 'PASSED' ? (
+                              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                            )}
+                            <span className="font-bold text-sm text-foreground">{check.name}</span>
+                          </div>
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                              check.status === 'PASSED'
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                                : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
+                            }`}
+                          >
+                            {check.status}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                          {check.finding}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Verified Developer README Badge Generator */}
+                <div className="bg-card border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border/40 gap-3">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>PUBLIC VERIFICATION BADGE</span>
+                      </div>
+                      <h3 className="font-extrabold text-xl text-foreground flex items-center gap-2">
+                        <Award className="w-5 h-5 text-emerald-500" />
+                        <span>ProofBridge Verified README Shield Badge</span>
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Embed this dynamic cryptographic verification shield on your GitHub profile README or portfolio website.
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={handleCopyBadge}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-md cursor-pointer"
+                    >
+                      {copiedBadge ? <CheckCheck className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedBadge ? 'Copied Markdown!' : 'Copy Markdown Badge'}</span>
+                    </button>
+                  </div>
+
+                  {/* Live Badge Preview */}
+                  <div className="p-6 rounded-2xl bg-background/80 border border-border/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-muted-foreground mb-2">
+                        Live Preview:
+                      </div>
+                      <div className="inline-flex items-center rounded-md overflow-hidden shadow-md font-mono text-xs font-bold border border-emerald-500/40">
+                        <div className="bg-zinc-900 text-zinc-200 px-3 py-1.5 flex items-center gap-1.5">
+                          <Github className="w-3.5 h-3.5" />
+                          <span>ProofBridge</span>
+                        </div>
+                        <div className="bg-emerald-600 text-white px-3 py-1.5 flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Verified Level 3 • {result.astScore}% AST</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-xs font-mono text-muted-foreground text-center sm:text-right">
+                      Links directly to tamper-proof verification on ProofBridge Gateway
+                    </div>
+                  </div>
+
+                  {/* Markdown Snippet */}
+                  <div className="p-4 rounded-xl bg-background border border-border/60 font-mono text-xs text-muted-foreground relative group">
+                    <pre className="overflow-x-auto text-emerald-400">
+                      <code>
+                        {`[![ProofBridge Verified](https://img.shields.io/badge/ProofBridge-Verified%20Level%203%20%E2%80%A2%20${result.astScore}%25%20AST-10b981?style=for-the-badge&logo=github)](https://proofbridge.io/verify/${result.auditDigest.slice(0, 16)})`}
+                      </code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: PITCH SLIDE 5 BENCHMARK */}
             {activeTab === 'pitch-benchmark' && (
               <div className="space-y-8">
                 <div className="bg-gradient-to-br from-amber-950/30 via-card to-card border-2 border-amber-500/40 rounded-3xl p-8 shadow-xl relative overflow-hidden">
@@ -1273,7 +2143,7 @@ export default function GithubEvaluationPage() {
               </div>
             )}
 
-            {/* TAB 5: W3C CRYPTOGRAPHIC CREDENTIAL */}
+            {/* TAB 6: W3C CRYPTOGRAPHIC CREDENTIAL */}
             {activeTab === 'w3c-credential' && (
               <div className="space-y-8">
                 <div className="bg-card border border-border/60 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">

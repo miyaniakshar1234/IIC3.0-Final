@@ -46,12 +46,67 @@ export interface LanguageStat {
   sizeKB: number;
   repoCount: number;
   color: string;
+  estimatedLOC?: number;
+  paradigm?: string;
 }
 
 export interface DetectedFramework {
   name: string;
   category: string;
   evidenceRepo: string;
+}
+
+export interface DeveloperDna {
+  systemsLowLevel: number;
+  fullstackWeb: number;
+  astAuthenticity: number;
+  codeModularity: number;
+  commitCadence: number;
+  openSourceImpact: number;
+  overallArchetype: string;
+}
+
+export interface ContributionDay {
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
+}
+
+export interface ContributionRhythm {
+  totalContributions: number;
+  currentStreak: number;
+  longestStreak: number;
+  weekendRatio: number;
+  peakHours: string;
+  weeks: { days: ContributionDay[] }[];
+}
+
+export interface SecurityAuditCheck {
+  name: string;
+  status: 'PASSED' | 'FLAGGED' | 'INFO';
+  category: 'Credentials' | 'License' | 'Dependencies' | 'Git Hygiene';
+  finding: string;
+}
+
+export interface SecurityAuditSummary {
+  secretLeakFree: boolean;
+  licenseComplianceRate: number;
+  zeroDependencyScore: number;
+  cleanRepositoryPercent: number;
+  checks: SecurityAuditCheck[];
+}
+
+export interface TailoredQuestion {
+  question: string;
+  context: string;
+  repoRef?: string;
+}
+
+export interface RecruiterSynthesis {
+  superpower: string;
+  authenticityVerdict: string;
+  recommendedRoles: string[];
+  tailoredQuestions: TailoredQuestion[];
 }
 
 export interface CommitVelocityPoint {
@@ -80,6 +135,10 @@ export interface GithubEvaluationResult {
   languageStats?: LanguageStat[];
   detectedFrameworks?: DetectedFramework[];
   commitVelocity: CommitVelocityPoint[];
+  developerDna?: DeveloperDna;
+  contributionRhythm?: ContributionRhythm;
+  securityAudit?: SecurityAuditSummary;
+  recruiterSynthesis?: RecruiterSynthesis;
   forensics: {
     cyclomaticComplexity: string;
     idiomaticPatternsCount: number;
