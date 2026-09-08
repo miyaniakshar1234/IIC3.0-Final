@@ -48,15 +48,16 @@ export default function SignUpPage() {
     setSelectedRole(role);
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     const institutionObj = REGISTERED_UNIVERSITIES.find((u) => u.id === selectedUni) || REGISTERED_UNIVERSITIES[0];
 
-    setTimeout(() => {
-      signup({
+    try {
+      const success = await signup({
         role: selectedRole,
+        password: password || 'hackathon',
         name: name.trim() || 'New User',
         email: email.trim() || 'student@proofbridge.edu',
         institutionId: selectedRole === 'employer' ? undefined : institutionObj.id,
@@ -68,16 +69,22 @@ export default function SignUpPage() {
         title: title || (selectedRole === 'reviewer' ? 'Assistant Professor' : selectedRole === 'employer' ? 'Senior Recruiter' : undefined),
       });
 
+      if (success) {
+        setRegisteredNotice(true);
+        setTimeout(() => {
+          if (selectedRole === 'student') router.push('/student');
+          else if (selectedRole === 'reviewer') router.push('/reviewer/queue');
+          else if (selectedRole === 'employer') router.push('/employer/opportunities');
+          else if (selectedRole === 'institution') router.push('/institution/insights');
+        }, 900);
+      } else {
+        alert("Registration failed. Email might already exist.");
+      }
+    } catch (e) {
+      alert("An error occurred during registration.");
+    } finally {
       setLoading(false);
-      setRegisteredNotice(true);
-
-      setTimeout(() => {
-        if (selectedRole === 'student') router.push('/student');
-        else if (selectedRole === 'reviewer') router.push('/reviewer/queue');
-        else if (selectedRole === 'employer') router.push('/employer/opportunities');
-        else if (selectedRole === 'institution') router.push('/institution/insights');
-      }, 900);
-    }, 400);
+    }
   };
 
   return (

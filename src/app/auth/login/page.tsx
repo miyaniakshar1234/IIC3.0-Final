@@ -33,24 +33,31 @@ export default function LoginPage() {
     setEmail(PRESET_USERS[role].email);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      login(email, selectedRole);
+    
+    try {
+      const success = await login(email, password, selectedRole);
+      if (success) {
+        toast.success(`Authenticated successfully`);
+        if (selectedRole === 'student') router.push('/student');
+        else if (selectedRole === 'reviewer') router.push('/reviewer/queue');
+        else if (selectedRole === 'employer') router.push('/employer/opportunities');
+        else if (selectedRole === 'institution') router.push('/institution/insights');
+      } else {
+        toast.error('Invalid email or password');
+      }
+    } catch (e) {
+      toast.error('An error occurred during sign in');
+    } finally {
       setLoading(false);
-      toast.success(`Authenticated as ${selectedRole}`);
-      // Redirect to role workspace
-      if (selectedRole === 'student') router.push('/student');
-      else if (selectedRole === 'reviewer') router.push('/reviewer/queue');
-      else if (selectedRole === 'employer') router.push('/employer/opportunities');
-      else if (selectedRole === 'institution') router.push('/institution/insights');
-    }, 600);
+    }
   };
 
   const handleQuickLogin = (role: UserRole) => {
     switchPersona(role);
-    toast.success(`Switched Persona to ${role}`, { description: 'Mock auth successful for hackathon demo.' });
+    toast.success(`Switched Persona to ${role}`, { description: 'Sandbox fast-switch active.' });
     if (role === 'student') router.push('/student');
     else if (role === 'reviewer') router.push('/reviewer/queue');
     else if (role === 'employer') router.push('/employer/opportunities');
@@ -201,7 +208,6 @@ export default function LoginPage() {
                 <label className="text-xs font-semibold text-text-secondary font-mono">
                   Password
                 </label>
-                <span className="text-[10px] text-accent font-mono">Mock Auth (Any password accepted)</span>
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />

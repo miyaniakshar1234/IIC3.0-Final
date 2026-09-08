@@ -128,8 +128,8 @@ const INITIAL_AFFILIATION_REQUESTS: StudentAffiliationRequest[] = [
 interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  login: (email: string, role?: UserRole) => boolean;
-  signup: (userData: Partial<AuthUser> & { role: UserRole }) => void;
+  login: (email: string, password?: string, role?: UserRole) => Promise<boolean>;
+  signup: (userData: Partial<AuthUser> & { role: UserRole, password?: string }) => Promise<boolean>;
   logout: () => void;
   switchPersona: (role: UserRole) => void;
   affiliationRequests: StudentAffiliationRequest[];
@@ -186,57 +186,74 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = (email: string, role?: UserRole): boolean => {
-    // If role provided or matched from preset
-    const targetRole = role || (Object.keys(PRESET_USERS) as UserRole[]).find(
-      (r) => PRESET_USERS[r].email.toLowerCase() === email.toLowerCase()
-    ) || 'student';
+  const login = async (email: string, password?: string, role?: UserRole): Promise<boolean> => {
+    try {
+      // Fallback for demo users that don't have real passwords
+      const isPreset = (Object.keys(PRESET_USERS) as UserRole[]).find(
+        (r) => PRESET_USERS[r].email.toLowerCase() === email.toLowerCase()
+      );
+      if (isPreset) {
+        saveUser(PRESET_USERS[isPreset]);
+        return true;
+      }
 
-    const preset = PRESET_USERS[targetRole];
-    saveUser(preset);
-    return true;
+      const res = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: password || 'hackathon' })
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        saveUser(data.user);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   };
 
-  const signup = (userData: Partial<AuthUser> & { role: UserRole }) => {
-    const initials = (userData.name || 'User')
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+  const signup = async (userData: any & { role: UserRole, password?: string }) => {
+    try {
+      const res = await fetch('/api/v1/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userData.email,
+          password: userData.password || 'hackathon',
+          role: userData.role,
+          name: userData.name,
+          institutionName: userData.institutionName,
+          program: userData.program,
+          rollNumber: userData.rollNumber
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        saveUser(data.user);
 
-    const newUser: AuthUser = {
-      id: `usr-${Date.now()}`,
-      name: userData.name || 'New User',
-      email: userData.email || 'user@proofbridge.edu',
-      role: userData.role,
-      avatarInitials: initials,
-      institutionId: userData.institutionId || 'inst-demo-college',
-      institutionName: userData.institutionName || 'Manipal University Jaipur (MUJ)',
-      program: userData.program,
-      rollNumber: userData.rollNumber,
-      affiliationStatus: userData.role === 'student' ? 'pending_approval' : undefined,
-      title: userData.title,
-      companyName: userData.companyName,
-      department: userData.department,
-    };
-
-    saveUser(newUser);
-
-    // If new student, queue into university affiliation requests!
-    if (userData.role === 'student') {
-      const newReq: StudentAffiliationRequest = {
-        id: `req-${Date.now()}`,
-        studentName: newUser.name,
-        studentEmail: newUser.email,
-        institutionId: newUser.institutionId || 'inst-demo-college',
-        institutionName: newUser.institutionName || 'Manipal University Jaipur (MUJ)',
-        program: newUser.program || 'Degree Program',
-        rollNumber: newUser.rollNumber || 'PENDING',
-        requestedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
-        status: 'pending_approval',
-      };
-      saveRequests([newReq, ...affiliationRequests]);
+        // If new student, queue into university affiliation requests locally for the prototype UI
+        if (userData.role === 'student') {
+          const newReq: StudentAffiliationRequest = {
+            id: `req-${Date.now()}`,
+            studentName: data.user.name,
+            studentEmail: data.user.email,
+            institutionId: data.user.institutionId || 'inst-muj',
+            institutionName: data.user.institutionName || 'Manipal University Jaipur (MUJ)',
+            program: data.user.program || 'Degree Program',
+            rollNumber: data.user.rollNumber || 'PENDING',
+            requestedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
+            status: 'pending_approval',
+          };
+          saveRequests([newReq, ...affiliationRequests]);
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
   };
 
