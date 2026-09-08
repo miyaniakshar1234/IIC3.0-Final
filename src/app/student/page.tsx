@@ -408,7 +408,7 @@ export default function StudentDashboardPage() {
                           <strong>Total Score Calculation:</strong> 25 + 12 + 24 + 0 = <strong>61% reviewed coverage</strong>.
                         </span>
                         <span className="text-accent font-bold">
-                          Adding SQL (35 pts) $\rightarrow$ 96%
+                          Adding SQL (35 pts) → 96%
                         </span>
                       </div>
                     </div>
