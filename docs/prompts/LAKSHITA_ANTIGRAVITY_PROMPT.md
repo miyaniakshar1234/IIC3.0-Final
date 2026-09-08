@@ -1,88 +1,118 @@
 # ProofBridge — Lakshita (Evaluator & Employer Workspaces Engineer)
-## Master Antigravity AI Modular Playbook (Evaluation 1 → 2 → 3)
+## Master Antigravity AI Comprehensive Playbook (Evaluation 1 → 2 → 3)
 
 **Role:** Evaluator & Employer Experience Specialist  
 **Git Branch:** `feat/evaluator-and-employer`  
-**Assigned Directory Ownership:**  
-- `src/app/reviewer/**`, `src/app/employer/**`
-- `src/components/reviewer/**`, `src/components/employer/**`
+**Assigned Ownership:**  
+- Reviewer: `src/app/reviewer/**`, `src/components/reviewer/**`
+- Employer: `src/app/employer/**`, `src/components/employer/**`
 
 ---
 
-## 🛑 CROSS-MEMBER DEPENDENCY & BLOCKING RULES
+## 🧠 PRODUCT KNOWLEDGE BASE (EMBEDDED FOR THE AI)
 
-Before writing code, verify your dependencies:
+### What We Are Building:
+**ProofBridge** is an open-innovation EdTech platform built for **IIC 3.0 MUJ**. It replaces inflated resumes with authentic, human-reviewed proof of student ability.
 
-```mermaid
-graph TD
-    DEV[origin/develop: Akshar DB & Faizan Student] -->|PULL FIRST| L1[Lakshita: Reviewer Queue]
-    L1 -->|Side-by-Side Rubric| L2[Lakshita: Publish Review]
-    L2 -->|Score jumps 61% -> 96%| L3[Lakshita: Employer Candidate Snapshot]
-    L3 -->|MERGE TO DEVELOP| AK[Akshar: Final Golden Loop Validation]
+### Your Persona Focus: The Evaluator & The Recruiter
+1. **The Faculty Evaluator (Dr. Alok Sharma):**
+   - **Who he is:** Associate Professor of Computer Science at Demo College of Computing.
+   - **His Job in ProofBridge:** Open the Reviewer Queue (`/reviewer/queue`), inspect student code submissions side-by-side with an anchored 4-level rubric, select the attained level (e.g. Level 3), write qualitative rationale, and click "Publish Attainment".
+   - **Why this matters to judges:** It proves that ProofBridge has **human integrity**—we do NOT use black-box AI to auto-grade student submissions. Every skill attainment is backed by a named professor's signature!
+
+2. **The Recruiter (Sample Analytics Studio):**
+   - **Who they are:** Hiring team for the Junior Data Analyst Intern role (Jaipur / Hybrid, ₹25,000/mo).
+   - **Their Job in ProofBridge:** Instead of parsing unverified resumes through an ATS filter, they open candidate **Evidence Snapshots** (`/employer/candidates/[id]`). They inspect Meera's verified 96% match, view the exact SQL query Dr. Sharma approved, read Dr. Sharma's review notes, and click "Shortlist for Interview".
+
+---
+
+## 🛑 CROSS-MEMBER DEPENDENCY & "STOP & WAIT" ENGINE
+
+You build the evaluator and recruiter screens. Follow this pre-flight decision tree:
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                  LAKSHITA PRE-FLIGHT GATEWAY                │
+│                                                             │
+│ 1. Did you pull latest 'origin/develop'?                    │
+│    NO  ──> STOP! Run git checkout develop && git pull       │
+│            origin develop && git checkout feat/evaluator-   │
+│            and-employer && git merge develop.               │
+│    YES ──> Proceed to your assigned files.                  │
+│                                                             │
+│ 2. Is Faizan's SQL submission format available in develop?  │
+│    NO  ──> STOP! Ask Akshar if Faizan's PR is merged.       │
+│    YES ──> Safe to build the side-by-side review screen.    │
+│                                                             │
+│ 3. Does your branch compile cleanly?                        │
+│    Run 'npm run build' locally before every git push.       │
+│    FAIL ──> STOP! Fix TypeScript/build errors.              │
+│    PASS ──> Push to origin/feat/evaluator-and-employer.     │
+└─────────────────────────────────────────────────────────────┘
 ```
-
-### ⚠️ BLOCKING CHECKS:
-1. **STOP & PULL FIRST:** Before doing any work, run `git checkout develop && git pull origin develop && git checkout feat/evaluator-and-employer && git merge develop`.
-2. **Do NOT touch files in `supabase/` or `src/app/student/`:** Akshar and Faizan own those directories.
-3. **If Faizan changes submission format:** Verify that the submission details in `/reviewer/evaluations/[id]` match what Faizan built in `/challenges/[id]`.
-4. **Before pushing to GitHub:** Run `npm run build`. If it fails, STOP and fix the errors on your branch before notifying Akshar!
 
 ---
 
 # 📅 EVALUATION 1: MENTORING ROUND 1 (DAY 1: 17:30 – 21:00)
-**Goal:** Deliver the Faculty Review Queue (`/reviewer/queue`) and the Side-by-Side Rubric Evaluation Workspace (`/reviewer/evaluations/[id]`) with working 4-level rubric selector.
+**Evaluation Objective:** Deliver the Faculty Review Queue (`/reviewer/queue`) and the Side-by-Side Rubric Evaluation Workspace (`/reviewer/evaluations/[id]`) with working 4-level rubric selector.
 
 ---
 
 ### 🔹 Prompt 1.1: Pull Latest `develop` & Setup Feature Branch
 ```text
-You are pair programming with Lakshita (Evaluator & Employer Specialist).
-Task:
-1. Pull develop into our feature branch:
+SYSTEM CONTEXT: You are pair programming with Lakshita, Evaluator & Employer Specialist of ProofBridge (IIC 3.0 MUJ).
+TASK: Synchronize our feature branch with Akshar's updated AppShell and global styling.
+INSTRUCTIONS:
+1. Run:
    git checkout develop
    git pull origin develop
    git checkout feat/evaluator-and-employer
    git merge develop
-2. Confirm that AppShell, Tailwind tokens, and shared packages are ready.
-3. Run 'npm run build' to confirm a clean starting state.
+2. Confirm that AppShell.tsx and Tailwind config are available.
+3. Run 'npm run build' to confirm a clean starting base.
+OUTPUT: Confirmation of clean merge and successful build.
 ```
 
 ---
 
 ### 🔹 Prompt 1.2: Build Faculty Review Queue (`src/app/reviewer/queue/page.tsx`)
 ```text
-You are pair programming with Lakshita.
-Task:
-1. Create or update 'src/app/reviewer/queue/page.tsx'.
-2. Wrap inside <AppShell>.
-3. Header Section:
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Build the Faculty Review Queue for Dr. Alok Sharma.
+INSTRUCTIONS:
+1. Create or update 'src/app/reviewer/queue/page.tsx'. Wrap inside <AppShell>.
+2. Header:
    - Title: 'Faculty Review Queue • Dr. Alok Sharma'
    - Subtitle: 'Department of Computer Science • Demo College of Computing'
-   - Stat Pills: '1 Pending Review', '14 Reviews Published this Semester', 'Avg Turnaround: 18 hours'.
-4. Queue Table / Cards:
+   - Stat Pills:
+     * '1 Pending Review' (amber pill)
+     * '14 Reviews Published this Semester' (emerald pill)
+     * 'Turnaround SLA: < 24 Hours' (blue pill)
+3. Queue Cards:
    - Display pending submission card:
-     * Student: Meera Patel (MCA 2026)
+     * Student: Meera Patel (MCA 2026 • Demo College of Computing)
      * Challenge: 'Explain Monthly Sales from Messy Dataset'
      * Target Skill: SQL (Structured Query Language) — Required Level 3
      * Submitted: 2 hours ago
      * Urgency Pill: 'Needs Review (< 24h SLA)' (Amber badge)
-     * Primary CTA: 'Evaluate Submission →' linking to '/reviewer/evaluations/sub-sql-001'.
-5. UI standards: use 'bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all'.
-6. Verify build with 'npm run build'.
+     * Action CTA: 'Evaluate Submission →' linking to '/reviewer/evaluations/sub-sql-001'.
+4. Styling: 'bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:shadow-md transition-all'.
+5. Verify build with 'npm run build'.
+OUTPUT: Confirmation that the reviewer queue builds with zero errors.
 ```
 
 ---
 
 ### 🔹 Prompt 1.3: Build Side-by-Side Rubric Evaluation Workspace (`src/app/reviewer/evaluations/[id]/page.tsx`)
 ```text
-You are pair programming with Lakshita.
-Task:
-1. Create or update 'src/app/reviewer/evaluations/[id]/page.tsx'.
-2. Wrap inside <AppShell>.
-3. Implement a responsive 2-column split-screen layout:
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Build the Side-by-Side Rubric Evaluation Workspace at src/app/reviewer/evaluations/[id]/page.tsx.
+INSTRUCTIONS:
+1. Wrap the page inside <AppShell>.
+2. Implement a responsive 2-column split-screen layout:
    - LEFT COLUMN (Student Artifact Viewer):
-     * Student: Meera Patel • Challenge: Monthly Sales Breakdown
-     * Code Box: PostgreSQL query with syntax formatting in dark IDE container (bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl p-5 border border-slate-800).
+     * Header: Meera Patel • Challenge: Monthly Sales Breakdown
+     * Code Box: PostgreSQL query with syntax formatting in dark IDE container ('bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl p-5 border border-slate-800 shadow-inner').
      * Contribution Statement Box: Meera's statement on cleaning 14 missing date fields and independently writing joins.
      * AI Disclosure Tag: 'ChatGPT used for syntax verification only' (Amber pill).
    - RIGHT COLUMN (Anchored 4-Level Rubric):
@@ -93,42 +123,48 @@ Task:
        Level 3 (Proficient): Proper window functions (LAG), clean NULLIF handling, verified totals.
        Level 4 (Advanced): Complex execution plans, indexing strategies, sub-second latency.
      * State: Clicking Level 3 highlights card with 'ring-2 ring-emerald-500 bg-emerald-50/50 border-emerald-400'.
-     * Reviewer Comments: Textarea with prefilled mentor note:
+     * Reviewer Comments: Textarea with prefilled faculty note:
        'Excellent implementation of window functions and NULLIF division guard. Solid design decisions explained in contribution statement.'
      * Primary CTA: 'Publish Attainment (Level 3)' with confirmation modal.
-4. Verify with 'npm run build'.
+3. Verify with 'npm run build'.
+OUTPUT: Confirmation of build success with zero errors.
 ```
 
 ---
 
 ### 🔹 Prompt 1.4: Verify & Push Evaluation 1 Deliverables
 ```text
-You are pair programming with Lakshita.
-Task:
-1. Run 'npm run typecheck'.
-2. Run 'npm run build'. Confirm 0 errors.
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Run full typecheck and build verification, then push to GitHub.
+INSTRUCTIONS:
+1. Run:
+   npm run typecheck
+   npm run build
+2. Confirm 0 errors.
 3. Commit and push:
    git add src/app/reviewer
    git commit -m "feat(reviewer): implement faculty review queue and side-by-side anchored rubric evaluation"
    git push origin feat/evaluator-and-employer
 4. Notify Akshar that the Reviewer Queue is ready for merge.
+OUTPUT: Git push output and build status.
 ```
 
 ---
 
 # 📅 EVALUATION 2: MIDNIGHT CHECKPOINT (DAY 1: 21:00 – DAY 2: 03:00)
-**Goal:** Build the Employer Hub (`/employer/opportunities`) and the Candidate Evidence Snapshot Viewer (`/employer/candidates/[id]`).
+**Evaluation Objective:** Deliver the Employer Hub (`/employer/opportunities`) and Candidate Evidence Snapshot Viewer (`/employer/candidates/[id]`).
 
 ---
 
 ### 🔹 Prompt 2.1: Build Employer Hub (`src/app/employer/opportunities/page.tsx`)
 ```text
-You are pair programming with Lakshita.
-Task:
-1. Pull latest develop:
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Build the Employer Hub at src/app/employer/opportunities/page.tsx.
+INSTRUCTIONS:
+1. Pull develop:
    git checkout develop && git pull origin develop
    git checkout feat/evaluator-and-employer && git merge develop
-2. Create or update 'src/app/employer/opportunities/page.tsx' wrapped in <AppShell>.
+2. Wrap inside <AppShell>.
 3. Header:
    - 'Employer Hub • Sample Analytics Studio'
    - Status badge: 'Verified Industry Partner' (Emerald pill)
@@ -141,16 +177,18 @@ Task:
      * Written Communication: 16% (Req Level 4)
    - Applicant Ticker: '1 Applicant Ready for Screening'
    - Button: 'Inspect Qualified Candidates (1) →' linking to '/employer/candidates/cand-meera-001'.
-5. Verify build with 'npm run build'.
+5. Verify with 'npm run build'.
+OUTPUT: Confirmation that the employer hub compiles cleanly.
 ```
 
 ---
 
 ### 🔹 Prompt 2.2: Build Candidate Evidence Snapshot Viewer (`src/app/employer/candidates/[id]/page.tsx`)
 ```text
-You are pair programming with Lakshita.
-Task:
-1. Create or update 'src/app/employer/candidates/[id]/page.tsx' wrapped in <AppShell>.
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Build the Candidate Evidence Snapshot Viewer at src/app/employer/candidates/[id]/page.tsx.
+INSTRUCTIONS:
+1. Wrap inside <AppShell>.
 2. Header:
    - Candidate: Meera Patel (MCA 2026 • Demo College of Computing)
    - Freeze Badge: '🔒 Tamper-Resistant Proof Snapshot — Frozen at Application Time' (slate-900 pill with white text).
@@ -163,35 +201,26 @@ Task:
 4. Action CTA:
    - 'Shortlist for Technical Interview' (Primary Green button with confirmation modal).
    - 'Download Full Audit Verification PDF' (Secondary button).
-5. Verify build with 'npm run build' and push to origin feat/evaluator-and-employer.
+5. Verify build with 'npm run build' and push to origin/feat/evaluator-and-employer.
+OUTPUT: Confirmation of build success and clean candidate viewer.
 ```
 
 ---
 
 # 📅 EVALUATION 3: FINAL JURY EVALUATION (DAY 2: 08:00 – 14:00)
-**Goal:** Polish all evaluator and recruiter workflows, eliminate all visual rough edges, and rehearse the live evaluation demo.
+**Evaluation Objective:** Ensure seamless cross-role navigation, polish button modals, and lock evaluator/recruiter workflows.
 
 ---
 
 ### 🔹 Prompt 3.1: Reviewer-to-Employer State Confirmation Modal
 ```text
-You are pair programming with Lakshita.
-Task:
+SYSTEM CONTEXT: You are pair programming with Lakshita on ProofBridge.
+TASK: Add visual feedback when Dr. Sharma publishes an attainment.
+INSTRUCTIONS:
 1. In 'src/app/reviewer/evaluations/[id]/page.tsx':
    - When Dr. Sharma clicks 'Publish Attainment (Level 3)', display a rich animated modal:
      'Attainment Published Successfully! Meera Patel has attained SQL Level 3. Coverage for Junior Data Analyst Intern updated to 96%. Recruiter snapshot refreshed.'
    - Provide a direct link: 'View in Employer Hub →' so judges can immediately see the result!
-2. Run 'npm run build' and push to origin feat/evaluator-and-employer.
-```
-
----
-
-### 🔹 Prompt 3.2: Final Visual Polish & Jury Readiness
-```text
-You are pair programming with Lakshita.
-Task:
-1. Audit reviewer and employer screens on multiple screen sizes.
-2. Ensure all text contrast ratios meet WCAG AA standards.
-3. Verify that all buttons provide visible hover and active states.
-4. Notify Akshar that the Reviewer & Employer workspace is locked and ready for the final pitch.
+2. Run 'npm run build' and push to origin/feat/evaluator-and-employer.
+OUTPUT: Modal test confirmation.
 ```
