@@ -23,12 +23,12 @@ function getDbConfig() {
 
   // Fallback to connection pooler default parameters
   return {
-    user: process.env.PGUSER || 'postgres.evawbpodadolwqlqplgc',
+    user: process.env.PGUSER || 'postgres',
     password: process.env.PGPASSWORD,
-    host: process.env.PGHOST || 'aws-0-ap-northeast-1.pooler.supabase.com',
+    host: process.env.PGHOST || 'localhost',
     port: parseInt(process.env.PGPORT || '5432', 10),
     database: process.env.PGDATABASE || 'postgres',
-    ssl: { rejectUnauthorized: false },
+    ssl: process.env.PGSSL === 'true' ? { rejectUnauthorized: false } : undefined,
   };
 }
 
