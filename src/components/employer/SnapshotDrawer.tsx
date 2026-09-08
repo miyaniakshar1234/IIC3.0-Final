@@ -19,7 +19,8 @@ import {
   Copy,
   Check,
   Eye,
-  Lock
+  Lock,
+  Github,
 } from 'lucide-react';
 import { StatusBadge, ApplicationStatus } from './StatusBadge';
 import { ProofChainViewer } from '@/components/ui/ProofChainViewer';
@@ -301,6 +302,35 @@ FROM monthly_metrics;`}
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* GitHub Code AST Verification */}
+            <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500 shrink-0">
+                  <Github className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-foreground">GitHub Code AST Audit: Verified</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-500">
+                      89% AST SCORE
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    4 repositories analyzed • 2,840 lines parsed • 84% candidate-authored velocity • STL & systems syntax verified.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="/student/github-eval"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono font-semibold text-emerald-500 hover:underline flex items-center gap-1 shrink-0 mt-0.5"
+              >
+                <span>Inspect AST</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
             </div>
 
             {/* Frozen Verified Skill Attainments */}

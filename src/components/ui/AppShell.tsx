@@ -28,6 +28,7 @@ import {
   Code2,
   Clock,
   ArrowRight,
+  Github,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -73,6 +74,7 @@ export function AppShell({ children }: AppShellProps) {
         return [
           { name: 'My Dashboard', href: '/student', icon: GraduationCap },
           { name: 'Skill Passport', href: '/student/passport', icon: ShieldCheck },
+          { name: 'GitHub AST Audit', href: '/student/github-eval', icon: Github },
           { name: 'Mission Workspace', href: '/challenges/30000000-0000-0000-0000-000000000001', icon: Code2 },
           { name: 'Applications', href: '/student/applications', icon: Briefcase },
         ];

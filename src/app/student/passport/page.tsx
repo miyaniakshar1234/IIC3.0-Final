@@ -23,6 +23,7 @@ import {
   Layers,
   Info,
   Zap,
+  Github,
 } from 'lucide-react';
 
 export default function EvidencePassportPage() {
@@ -253,6 +254,33 @@ export default function EvidencePassportPage() {
               My Applications
             </Link>
           </nav>
+        </div>
+
+        {/* 1.1 GITHUB AST CODE EVIDENCE BANNER */}
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/20 via-card to-card border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
+              <Github className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-foreground">GitHub Code AST Evidence Verified</span>
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+                  89% AST SCORE
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                4 repositories analyzed (2,840 lines parsed) • 84% candidate-authored velocity • Verified STL & systems data structures.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/student/github-eval"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm shrink-0"
+          >
+            <span>Inspect AST Audit</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         {/* Affiliation Pending Alert */}
