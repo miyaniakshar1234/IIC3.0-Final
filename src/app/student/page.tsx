@@ -95,16 +95,23 @@ export default function StudentDashboardPage() {
     difficulty: 'Intermediate',
   };
 
-  const skillBreakdown = [
+  const isMeera = user?.email?.includes('meera.patel');
+
+  const skillBreakdown = isMeera ? [
     { skill: 'Spreadsheets', requiredLevel: 3, reviewedLevel: 3, weight: 25, contribution: 25, formulaNote: '25 × min(3/3, 1) = 25 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Written Communication', requiredLevel: 4, reviewedLevel: 3, weight: 16, contribution: 12, formulaNote: '16 × min(3/4, 1) = 12 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     { skill: 'Analytical Reasoning', requiredLevel: 3, reviewedLevel: 3, weight: 24, contribution: 24, formulaNote: '24 × min(3/3, 1) = 24 pts', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Sep 06, 2026' },
     hasVerifiedSql
       ? { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 3, weight: 35, contribution: 35, formulaNote: '35 × min(3/3, 1) = 35 pts (verified Level 3)', status: 'reviewed' as const, reviewer: 'Dr. Alok Sharma', reviewedDate: 'Just now' }
       : { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
+  ] : [
+    { skill: 'Spreadsheets', requiredLevel: 3, reviewedLevel: 0, weight: 25, contribution: 0, formulaNote: '25 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
+    { skill: 'Written Communication', requiredLevel: 4, reviewedLevel: 0, weight: 16, contribution: 0, formulaNote: '16 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
+    { skill: 'Analytical Reasoning', requiredLevel: 3, reviewedLevel: 0, weight: 24, contribution: 0, formulaNote: '24 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
+    { skill: 'SQL (Structured Query Language)', requiredLevel: 3, reviewedLevel: 0, weight: 35, contribution: 0, formulaNote: '35 × 0 = 0 pts (not yet reviewed)', status: 'awaiting-review' as const, reviewer: null, reviewedDate: null },
   ];
 
-  const recentSubmissions = [
+  const recentSubmissions = isMeera ? [
     {
       id: 'sub-sql-001',
       title: 'Explain Monthly Sales from Messy Dataset',
@@ -113,9 +120,9 @@ export default function StudentDashboardPage() {
       reviewedDate: hasVerifiedSql ? 'Just now' : null,
     },
     { id: 'sub-comm-001',  title: 'Stakeholder Communication Report', skill: 'Communication', status: 'reviewed' as const, reviewedDate: 'Sep 5' },
-  ];
+  ] : [];
 
-  const coverageScore = isEmptyAccount ? 0 : (hasVerifiedSql ? 96 : liveCoverage);
+  const coverageScore = isEmptyAccount ? 0 : (isMeera ? (hasVerifiedSql ? 96 : liveCoverage) : 0);
 
   return (
     <AppShell>
