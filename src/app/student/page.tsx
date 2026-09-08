@@ -1,152 +1,392 @@
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { AppShell } from '@/components/ui/AppShell';
-import {
-  GraduationCap,
-  Sparkles,
-  ArrowRight,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
-  Building,
-  Target
+import { CoverageBar } from '@/components/student/CoverageBar';
+import { StatusChip } from '@/components/student/StatusChip';
+import { 
+  ArrowRight, 
+  Sparkles, 
+  Clock, 
+  FileCheck2, 
+  CheckCircle2, 
+  AlertCircle, 
+  Briefcase, 
+  Award,
+  BookOpen,
+  LayoutDashboard,
+  GraduationCap
 } from 'lucide-react';
 
-export default function StudentDashboard() {
+export default function StudentDashboardPage() {
+  const [showCalculation, setShowCalculation] = useState(false);
+  const [isEmptyAccount, setIsEmptyAccount] = useState(false);
+
+  // Synthetic Data for Meera (Demo Student)
+  const targetOpportunity = {
+    id: '40000000-0000-0000-0000-000000000001',
+    title: 'Junior Data Analyst Intern',
+    employer: 'Sample Analytics Studio',
+    currentCoverage: 61,
+    unmetSkill: 'SQL',
+    unmetSkillWeight: 35,
+    requiredLevel: 3,
+  };
+
+  const recommendedChallenge = {
+    id: '50000000-0000-0000-0000-000000000001',
+    title: 'Explain Monthly Sales from Messy Dataset',
+    estimatedTime: '2 hours',
+    skillCovered: 'SQL (Structured Query Language)',
+    weight: 35,
+    difficulty: 'Intermediate',
+    whyRecommended: 'Covering this 35-weight requirement will raise your reviewed coverage for Junior Data Analyst Intern from 61% to 96%.',
+  };
+
+  const recentFeedback = [
+    {
+      skill: 'Spreadsheets',
+      level: 3,
+      reviewer: 'Dr. Alok Sharma',
+      date: 'Sep 06, 2026',
+      challenge: 'Clean and Audit Financial Ledger CSV',
+      notes: 'Demonstrates clean formulas, VLOOKUP, and pivot summaries with accurate error checking.',
+    },
+    {
+      skill: 'Written Communication',
+      level: 3,
+      reviewer: 'Prof. Ananya Sen',
+      date: 'Sep 04, 2026',
+      challenge: 'Technical Briefing: Database Normalization Tradeoffs',
+      notes: 'Clear structural organization and well-justified technical decisions.',
+    }
+  ];
+
+  const activeApplications = [
+    {
+      id: 'app-001',
+      role: 'Junior Data Analyst Intern',
+      company: 'Sample Analytics Studio',
+      status: 'submitted',
+      statusLabel: 'Application Submitted',
+      appliedDate: 'Sep 07, 2026',
+      coverageAtApplication: '61%',
+    }
+  ];
+
   return (
     <AppShell>
       <div className="space-y-8">
-        {/* Welcome Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border rounded-xl p-6">
-          <div>
-            <div className="flex items-center space-x-2 text-xs font-semibold text-accent">
-              <GraduationCap className="w-4 h-4" />
-              <span>Student Workspace • Meera Patel</span>
+        {/* Student Workspace Subnavigation & Identity Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface border border-border rounded-xl p-4 sm:p-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-accent-soft text-accent flex items-center justify-center font-bold">
+              <GraduationCap className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl font-bold text-text-primary mt-1">
-              Welcome back, Meera
-            </h1>
-            <p className="text-xs text-text-secondary mt-0.5">
-              Demo College of Computing • Master of Computer Applications (2026)
-            </p>
-          </div>
-
-          <Link
-            href="/student/passport"
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-md bg-accent-soft text-accent text-xs font-semibold hover:bg-blue-100 transition-colors border border-blue-200"
-          >
-            <span>Open Evidence Passport</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {/* Priority Action: Your Next Step */}
-        <div className="bg-gradient-to-br from-blue-50/70 to-indigo-50/40 border border-blue-200/80 rounded-xl p-6 sm:p-8 space-y-4">
-          <div className="flex items-center space-x-2 text-xs font-bold text-accent uppercase tracking-wider">
-            <Target className="w-4 h-4" />
-            <span>Your Recommended Next Step</span>
-          </div>
-
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <h2 className="text-xl font-bold text-text-primary">
-                Demonstrate SQL for Junior Data Analyst Intern
-              </h2>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                You currently have <strong>61% reviewed coverage</strong> for this role at Sample Analytics Studio.
-                Completing this 2-hour scoped SQL challenge will provide the missing evidence required to boost your coverage to <strong>96%</strong>.
-              </p>
-              <div className="flex items-center space-x-4 text-xs text-text-secondary pt-1">
-                <span className="flex items-center space-x-1">
-                  <Clock className="w-3.5 h-3.5 text-gray-400" />
-                  <span>~120 Minutes</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-bold text-text-primary">Meera Patel</h1>
+                <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                  Verified Candidate
                 </span>
-                <span>•</span>
-                <span>Rubric: 4 Anchored Criteria</span>
-                <span>•</span>
-                <span>AI disclosure allowed</span>
               </div>
+              <p className="text-xs text-text-secondary">
+                Master of Computer Applications (2026) • Demo College of Computing
+              </p>
             </div>
+          </div>
 
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-2 shrink-0">
-              <Link
-                href="/challenges/50000000-0000-0000-0000-000000000001"
-                className="px-5 py-2.5 rounded-md bg-accent text-white font-semibold text-xs text-center hover:bg-accent-hover shadow-sm transition-all flex items-center justify-center space-x-2"
-              >
-                <span>Start Challenge Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-              <Link
-                href="/opportunities/40000000-0000-0000-0000-000000000001"
-                className="px-4 py-2 rounded-md bg-white border border-border text-text-secondary text-xs text-center font-medium hover:text-text-primary hover:bg-gray-50 transition-all"
-              >
-                View Role Breakdown
-              </Link>
-            </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/student"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-soft text-accent"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/student/passport"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition"
+            >
+              Evidence Passport
+            </Link>
+            <Link
+              href="/student/applications"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition"
+            >
+              My Applications
+            </Link>
           </div>
         </div>
 
-        {/* Evidence Passport Quick Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Reviewed Skills Card */}
-          <div className="bg-surface border border-border rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-secondary">Reviewed Skills</span>
-              <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center">
-                3
-              </span>
+        {/* Toggle Empty Account View for testing */}
+        <div className="flex items-center justify-between bg-surface px-4 py-2 rounded-lg border border-border text-xs text-text-secondary">
+          <span>Simulation Mode: <strong>{isEmptyAccount ? 'New Student Account (0 Evidence)' : 'Seeded Candidate (Meera - 61% Baseline)'}</strong></span>
+          <button
+            onClick={() => setIsEmptyAccount(!isEmptyAccount)}
+            className="text-accent hover:underline font-semibold"
+          >
+            {isEmptyAccount ? 'Switch to Seeded Account (Meera)' : 'Simulate Empty/New Student Account'}
+          </button>
+        </div>
+
+        {isEmptyAccount ? (
+          /* Empty State Banner */
+          <div className="bg-surface p-8 rounded-2xl border border-border shadow-sm text-center max-w-2xl mx-auto space-y-4 my-12">
+            <div className="w-16 h-16 rounded-full bg-accent-soft text-accent flex items-center justify-center mx-auto">
+              <Award className="w-8 h-8" />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs py-1 border-b border-gray-100">
-                <span className="font-medium text-text-primary">Spreadsheets</span>
-                <span className="text-emerald-700 font-semibold">Level 3</span>
-              </div>
-              <div className="flex items-center justify-between text-xs py-1 border-b border-gray-100">
-                <span className="font-medium text-text-primary">Written Communication</span>
-                <span className="text-emerald-700 font-semibold">Level 3</span>
-              </div>
-              <div className="flex items-center justify-between text-xs py-1">
-                <span className="font-medium text-text-primary">Analytical Reasoning</span>
-                <span className="text-emerald-700 font-semibold">Level 3</span>
-              </div>
+            <h2 className="text-2xl font-bold text-text-primary">Add Your First Evidence</h2>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              ProofBridge matching is based on verified work, not resume claims. Complete a beginner-friendly challenge to build your Evidence Passport.
+            </p>
+            <div className="pt-2">
+              <Link
+                href={`/challenges/${recommendedChallenge.id}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition shadow-sm"
+              >
+                Start Beginner Challenge: Explain Monthly Sales
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
+        ) : (
+          <>
+            {/* Top Section: Your Next Step Hero Banner */}
+            <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
+              <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none" />
+              
+              <div className="relative z-10 max-w-3xl space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold backdrop-blur-sm border border-blue-400/20">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  YOUR NEXT STEP FOR MATCHING
+                </div>
 
-          {/* Pending Submissions */}
-          <div className="bg-surface border border-border rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-secondary">Awaiting Review</span>
-              <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-800 text-xs font-bold flex items-center justify-center">
-                1
-              </span>
-            </div>
-            <div className="space-y-2">
-              <div className="text-xs py-1">
-                <div className="font-medium text-text-primary truncate">Monthly Sales Query Task</div>
-                <div className="text-[11px] text-text-secondary flex items-center space-x-1 mt-0.5">
-                  <Clock className="w-3 h-3" />
-                  <span>Assigned to Dr. Alok Sharma</span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                  Demonstrate <span className="text-blue-400">SQL</span> to increase your match for {targetOpportunity.title}
+                </h2>
+
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Your current reviewed coverage is <span className="font-bold text-white">61%</span>. You hold reviewed attainments in Spreadsheets, Communication, and Reasoning. Completing the SQL challenge will unlock the missing <span className="font-bold text-amber-300">35-weight requirement</span>.
+                </p>
+
+                <div className="pt-2 flex flex-wrap items-center gap-4">
+                  <Link
+                    href={`/challenges/${recommendedChallenge.id}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent hover:bg-blue-600 text-white font-bold text-sm transition shadow-md"
+                  >
+                    Start SQL Challenge Now
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <Link
+                    href={`/opportunities/${targetOpportunity.id}`}
+                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition border border-slate-700"
+                  >
+                    View Role Requirements & Match
+                  </Link>
                 </div>
               </div>
-            </div>
-          </div>
+            </section>
 
-          {/* Active Applications */}
-          <div className="bg-surface border border-border rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-text-secondary">Target Opportunities</span>
-              <span className="w-6 h-6 rounded-full bg-blue-100 text-accent text-xs font-bold flex items-center justify-center">
-                1
-              </span>
-            </div>
-            <div className="space-y-2">
-              <div className="text-xs py-1">
-                <div className="font-medium text-text-primary">Junior Data Analyst Intern</div>
-                <div className="text-[11px] text-text-secondary">Sample Analytics Studio • 61% Coverage</div>
+            {/* Middle Grid: Coverage Bar + Recommended Challenge */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              
+              {/* Column 1 & 2: Coverage Visualizer & Calculation Disclosure */}
+              <div className="lg:col-span-2 space-y-6">
+                <CoverageBar
+                  currentCoverage={targetOpportunity.currentCoverage}
+                  targetRoleTitle={targetOpportunity.title}
+                  showCalculationToggle={true}
+                  onToggleCalculation={() => setShowCalculation(!showCalculation)}
+                />
+
+                {/* Calculation Accordion */}
+                {showCalculation && (
+                  <div className="bg-surface p-5 rounded-xl border border-border shadow-xs space-y-4 animate-in fade-in duration-200">
+                    <div className="flex items-center justify-between border-b border-border pb-3">
+                      <h4 className="text-sm font-bold text-text-primary flex items-center gap-2">
+                        <BookOpen className="w-4 h-4 text-accent" />
+                        Formula Breakdown: coverage-v1
+                      </h4>
+                      <span className="text-xs font-mono bg-gray-100 px-2 py-0.5 rounded text-gray-600">
+                        Version 1.0 (Deterministic)
+                      </span>
+                    </div>
+
+                    <div className="text-xs text-text-secondary space-y-2 leading-relaxed">
+                      <p>
+                        Role matching evaluates reviewed proficiency levels against target role weights:
+                      </p>
+                      <div className="p-3 bg-canvas rounded-lg font-mono text-text-primary border border-gray-200 text-xs">
+                        contribution_i = weight_i × min(reviewed_level_i / required_level_i, 1)
+                      </div>
+                    </div>
+
+                    <table className="w-full text-xs text-left">
+                      <thead className="bg-canvas text-text-secondary uppercase font-semibold">
+                        <tr>
+                          <th className="p-2.5">Skill</th>
+                          <th className="p-2.5">Req. Level</th>
+                          <th className="p-2.5">Reviewed Level</th>
+                          <th className="p-2.5">Weight</th>
+                          <th className="p-2.5">Contribution</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        <tr>
+                          <td className="p-2.5 font-bold text-text-primary">SQL</td>
+                          <td className="p-2.5">3</td>
+                          <td className="p-2.5 font-semibold text-amber-700">Not demonstrated (0)</td>
+                          <td className="p-2.5">35</td>
+                          <td className="p-2.5 font-bold text-gray-400">0 pts</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-medium text-text-primary">Spreadsheets</td>
+                          <td className="p-2.5">3</td>
+                          <td className="p-2.5 text-emerald-700 font-semibold">Level 3</td>
+                          <td className="p-2.5">25</td>
+                          <td className="p-2.5 font-bold text-emerald-700">25 pts</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-medium text-text-primary">Written Communication</td>
+                          <td className="p-2.5">4</td>
+                          <td className="p-2.5 text-emerald-700 font-semibold">Level 3</td>
+                          <td className="p-2.5">16</td>
+                          <td className="p-2.5 font-bold text-emerald-700">12 pts</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-medium text-text-primary">Analytical Reasoning</td>
+                          <td className="p-2.5">3</td>
+                          <td className="p-2.5 text-emerald-700 font-semibold">Level 3</td>
+                          <td className="p-2.5">24</td>
+                          <td className="p-2.5 font-bold text-emerald-700">24 pts</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 flex items-center justify-between">
+                      <span>Total Current Reviewed Coverage: <strong>61%</strong></span>
+                      <span>After SQL Level 3 Review: <strong className="text-accent text-sm font-bold">96%</strong></span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Recommended Challenge Card */}
+                <div className="bg-surface p-6 rounded-xl border border-border shadow-sm space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-accent bg-accent-soft px-2.5 py-1 rounded-md">
+                        Recommended Challenge
+                      </span>
+                      <h3 className="text-xl font-bold text-text-primary mt-2">
+                        {recommendedChallenge.title}
+                      </h3>
+                    </div>
+                    <span className="flex items-center gap-1 text-xs font-semibold text-text-secondary bg-canvas px-3 py-1 rounded-full border border-border">
+                      <Clock className="w-3.5 h-3.5" />
+                      {recommendedChallenge.estimatedTime}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    {recommendedChallenge.whyRecommended}
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-between pt-2 border-t border-border gap-4 text-xs">
+                    <div className="space-x-4">
+                      <span>Skill: <strong className="text-text-primary">{recommendedChallenge.skillCovered}</strong></span>
+                      <span>Difficulty: <strong className="text-text-primary">{recommendedChallenge.difficulty}</strong></span>
+                    </div>
+                    <Link
+                      href={`/challenges/${recommendedChallenge.id}`}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent text-white font-semibold hover:bg-accent-hover transition"
+                    >
+                      Start Challenge Workspace
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
               </div>
+
+              {/* Column 3: Recent Feedback & Active Applications */}
+              <div className="space-y-6">
+                
+                {/* Active Applications */}
+                <div className="bg-surface p-5 rounded-xl border border-border shadow-sm space-y-4">
+                  <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-accent" />
+                    Active Applications
+                  </h3>
+
+                  <div className="space-y-3">
+                    {activeApplications.map((app) => (
+                      <div key={app.id} className="p-3.5 rounded-lg border border-border bg-canvas space-y-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="text-sm font-bold text-text-primary">{app.role}</h4>
+                            <p className="text-xs text-text-secondary">{app.company}</p>
+                          </div>
+                          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800">
+                            {app.statusLabel}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-text-secondary pt-1 border-t border-gray-200">
+                          <span>Applied: {app.appliedDate}</span>
+                          <span>Coverage: {app.coverageAtApplication}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link
+                    href="/student/applications"
+                    className="block text-center text-xs font-semibold text-accent hover:underline pt-1"
+                  >
+                    View All Applications & Timeline →
+                  </Link>
+                </div>
+
+                {/* Recent Reviewed Feedback */}
+                <div className="bg-surface p-5 rounded-xl border border-border shadow-sm space-y-4">
+                  <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    Recent Human Reviews
+                  </h3>
+
+                  <div className="space-y-3">
+                    {recentFeedback.map((fb, idx) => (
+                      <div key={idx} className="p-3.5 rounded-lg border border-border bg-white space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-bold text-text-primary">{fb.skill}</span>
+                          <span className="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">
+                            Level {fb.level} / 4
+                          </span>
+                        </div>
+                        <p className="text-xs text-text-secondary italic">
+                          &quot;{fb.notes}&quot;
+                        </p>
+                        <div className="pt-1">
+                          <StatusChip status="reviewed" reviewerName={fb.reviewer} reviewedDate={fb.date} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link
+                    href="/student/passport"
+                    className="block text-center text-xs font-semibold text-accent hover:underline pt-1"
+                  >
+                    Open Evidence Passport →
+                  </Link>
+                </div>
+
+              </div>
+
             </div>
-          </div>
-        </div>
+          </>
+        )}
+
       </div>
     </AppShell>
   );

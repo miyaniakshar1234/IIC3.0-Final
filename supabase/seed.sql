@@ -1,6 +1,7 @@
 -- ============================================================================
 -- ProofBridge — Complete Synthetic Seed Fixtures (IIC 3.0 MUJ Final)
 -- Deterministic Demonstration Fixture: Meera (61% -> 96% Match Leap)
+-- Fully Relational: Preserves Every Foreign Key & Audit Invariant
 -- Version: 1.0 (8 Sep 2026)
 -- ============================================================================
 
@@ -129,7 +130,8 @@ INSERT INTO opportunity_skills (opportunity_id, skill_id, required_level, weight
     ('40000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000003', 4, 16),
     ('40000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000004', 3, 24);
 
--- 8. CHALLENGES (Linked to Opportunity)
+-- 8. CHALLENGES
+-- Challenge 1: The Live Demo SQL Challenge
 INSERT INTO challenges (
     id, employer_org_id, opportunity_id, title, brief, status, deadline, effort_minutes, ai_policy, rubric_version
 ) VALUES (
@@ -143,18 +145,46 @@ INSERT INTO challenges (
     120,
     'allowed_with_disclosure',
     1
+),
+-- Challenge 2: Historical Spreadsheets Challenge
+(
+    '50000000-0000-0000-0000-000000000002',
+    '20000000-0000-0000-0000-000000000001',
+    NULL,
+    'Financial Modeling & Multi-Sheet Consolidation',
+    'Construct dynamic forecasting spreadsheet model with pivot tables and sensitivity tables.',
+    'published',
+    now() + INTERVAL '10 days',
+    90,
+    'allowed_with_disclosure',
+    1
+),
+-- Challenge 3: Historical Technical Writing & Reasoning Challenge
+(
+    '50000000-0000-0000-0000-000000000003',
+    '20000000-0000-0000-0000-000000000001',
+    NULL,
+    'Root-Cause Analysis Executive Memorandum',
+    'Analyze an e-commerce checkout outage and communicate technical trade-offs to business stakeholders.',
+    'published',
+    now() + INTERVAL '10 days',
+    60,
+    'allowed_with_disclosure',
+    1
 );
 
 INSERT INTO challenge_audiences (challenge_id, institution_id) VALUES
-    ('50000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001');
+    ('50000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001'),
+    ('50000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001'),
+    ('50000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000001');
 
--- 9. RUBRIC CRITERIA FOR SQL CHALLENGE
+-- 9. RUBRIC CRITERIA
 INSERT INTO rubric_criteria (id, challenge_id, rubric_version, skill_id, title, anchors_json) VALUES
 (
     '60000000-0000-0000-0000-000000000001',
     '50000000-0000-0000-0000-000000000001',
     1,
-    '30000000-0000-0000-0000-000000000001',
+    '30000000-0000-0000-0000-000000000001', -- SQL
     'SQL Query Correctness, Deduplication & Validation',
     jsonb_build_object(
         '0', 'Submitted queries fail to execute or do not demonstrate relational data processing.',
@@ -163,17 +193,81 @@ INSERT INTO rubric_criteria (id, challenge_id, rubric_version, skill_id, title, 
         '3', 'Cleanly handles duplicate IDs, NULL values, and multi-table joins; validates intermediate results and explains trade-offs.',
         '4', 'Production-ready queries with indexing strategy, window functions, and comprehensive data quality boundary tests.'
     )
+),
+(
+    '60000000-0000-0000-0000-000000000002',
+    '50000000-0000-0000-0000-000000000002',
+    1,
+    '30000000-0000-0000-0000-000000000002', -- Spreadsheets
+    'Dynamic Spreadsheets & Lookup Formulations',
+    jsonb_build_object(
+        '0', 'No functional model.',
+        '1', 'Basic sums and formatting.',
+        '2', 'Standard VLOOKUP and pivot tables.',
+        '3', 'Dynamic INDEX/MATCH, validation rules, and error handling.',
+        '4', 'Complete automated scenario modeling with macro/script automation.'
+    )
+),
+(
+    '60000000-0000-0000-0000-000000000003',
+    '50000000-0000-0000-0000-000000000003',
+    1,
+    '30000000-0000-0000-0000-000000000003', -- Communication
+    'Technical Synthesis & Clarity',
+    jsonb_build_object(
+        '0', 'Unstructured notes.',
+        '1', 'Grammatically correct but passive.',
+        '2', 'Presents findings with standard headings.',
+        '3', 'Succinct executive summary with clear causality.',
+        '4', 'Flawless stakeholder communication with defensive nuance.'
+    )
+),
+(
+    '60000000-0000-0000-0000-000000000004',
+    '50000000-0000-0000-0000-000000000003',
+    1,
+    '30000000-0000-0000-0000-000000000004', -- Analytical Reasoning
+    'Problem Decomposition & Root Cause Identification',
+    jsonb_build_object(
+        '0', 'Superficial observations.',
+        '1', 'Identifies immediate symptoms.',
+        '2', 'Isolates contributing factors.',
+        '3', 'Systematic root cause breakdown with validation steps.',
+        '4', 'Anticipates secondary cascading failures.'
+    )
 );
 
--- 10. HISTORICAL REVIEWS & ATTAINMENTS FOR MEERA (Baseline 61% Coverage)
--- Dummy baseline review for Spreadsheet (Level 3), Comm (Level 3), Reasoning (Level 3)
+-- 10. HISTORICAL SUBMISSIONS & REVIEWS FOR MEERA (Baseline 61% Coverage)
+-- Prior Submission A: Spreadsheets
+INSERT INTO submissions (id, student_id, challenge_id, current_revision, status) VALUES
+    ('80000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000002', 1, 'reviewed'),
+    ('80000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000003', 1, 'reviewed');
+
+INSERT INTO submission_revisions (id, submission_id, revision_no, rubric_version, title, body, contribution, submitted_at) VALUES
+    ('81000000-0000-0000-0000-000000000002', '80000000-0000-0000-0000-000000000002', 1, 1, 'Sales Forecast Model', 'Constructed automated forecasting workbook with dynamic lookup tables.', 'Independently designed formulas.', now() - INTERVAL '11 days'),
+    ('81000000-0000-0000-0000-000000000003', '80000000-0000-0000-0000-000000000003', 1, 1, 'Checkout Outage RCA', 'Investigated database lock escalation causing cart abandonment.', 'Synthesized logs and formulated recommendations.', now() - INTERVAL '6 days');
+
+INSERT INTO reviewer_assignments (id, revision_id, reviewer_id, assigned_by, status) VALUES
+    ('82000000-0000-0000-0000-000000000002', '81000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-000000000030', 'completed'),
+    ('82000000-0000-0000-0000-000000000003', '81000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-000000000030', 'completed');
+
+INSERT INTO reviews (id, assignment_id, revision_id, reviewer_id, status, published_at) VALUES
+    ('71000000-0000-0000-0000-000000000002', '82000000-0000-0000-0000-000000000002', '81000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000010', 'published', now() - INTERVAL '10 days'),
+    ('71000000-0000-0000-0000-000000000003', '82000000-0000-0000-0000-000000000003', '81000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000010', 'published', now() - INTERVAL '5 days');
+
+INSERT INTO review_scores (review_id, criterion_id, level, rationale) VALUES
+    ('71000000-0000-0000-0000-000000000002', '60000000-0000-0000-0000-000000000002', 3, 'Robust formula structure and clean error boundaries.'),
+    ('71000000-0000-0000-0000-000000000003', '60000000-0000-0000-0000-000000000003', 3, 'Clear executive narrative; could improve quantitative risk table.'),
+    ('71000000-0000-0000-0000-000000000003', '60000000-0000-0000-0000-000000000004', 3, 'Sound causal chain isolation.');
+
+-- SKILL ATTAINMENTS FOR MEERA (Baseline 61% Coverage)
 INSERT INTO skill_attainments (id, student_id, skill_id, review_id, criterion_id, level, reviewed_at) VALUES
     (
         '70000000-0000-0000-0000-000000000002',
         '00000000-0000-0000-0000-000000000001',
         '30000000-0000-0000-0000-000000000002', -- Spreadsheets
-        '00000000-0000-0000-0000-000000000000',
-        '00000000-0000-0000-0000-000000000000',
+        '71000000-0000-0000-0000-000000000002',
+        '60000000-0000-0000-0000-000000000002',
         3, -- Level 3
         now() - INTERVAL '10 days'
     ),
@@ -181,22 +275,22 @@ INSERT INTO skill_attainments (id, student_id, skill_id, review_id, criterion_id
         '70000000-0000-0000-0000-000000000003',
         '00000000-0000-0000-0000-000000000001',
         '30000000-0000-0000-0000-000000000003', -- Written Communication
-        '00000000-0000-0000-0000-000000000000',
-        '00000000-0000-0000-0000-000000000000',
+        '71000000-0000-0000-0000-000000000003',
+        '60000000-0000-0000-0000-000000000003',
         3, -- Level 3 (Required is 4)
-        now() - INTERVAL '8 days'
+        now() - INTERVAL '5 days'
     ),
     (
         '70000000-0000-0000-0000-000000000004',
         '00000000-0000-0000-0000-000000000001',
         '30000000-0000-0000-0000-000000000004', -- Analytical Reasoning
-        '00000000-0000-0000-0000-000000000000',
-        '00000000-0000-0000-0000-000000000000',
+        '71000000-0000-0000-0000-000000000003',
+        '60000000-0000-0000-0000-000000000004',
         3, -- Level 3
         now() - INTERVAL '5 days'
     );
 
--- 11. MEERA'S PENDING SQL SUBMISSION (For the live demo!)
+-- 11. MEERA'S PENDING SQL SUBMISSION (Ready for the live demo!)
 INSERT INTO submissions (id, student_id, challenge_id, current_revision, status, version) VALUES (
     '80000000-0000-0000-0000-000000000001',
     '00000000-0000-0000-0000-000000000001', -- Meera
