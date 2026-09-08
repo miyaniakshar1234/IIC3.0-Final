@@ -129,7 +129,7 @@ interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
   login: (email: string, password?: string, role?: UserRole) => Promise<boolean>;
-  signup: (userData: Partial<AuthUser> & { role: UserRole, password?: string }) => Promise<boolean>;
+  signup: (userData: Partial<AuthUser> & { role: UserRole, password?: string }) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   switchPersona: (role: UserRole) => void;
   affiliationRequests: StudentAffiliationRequest[];
@@ -214,7 +214,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signup = async (userData: any & { role: UserRole, password?: string }) => {
+  const signup = async (userData: any & { role: UserRole, password?: string }): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await fetch('/api/v1/auth/signup', {
         method: 'POST',
@@ -230,7 +230,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         })
       });
       const data = await res.json();
-      if (data.success && data.user) {
+      if (res.ok && data.success && data.user) {
         saveUser(data.user);
 
         // If new student, queue into university affiliation requests locally for the prototype UI
@@ -248,12 +248,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           };
           saveRequests([newReq, ...affiliationRequests]);
         }
-        return true;
+        return { success: true };
       }
-      return false;
-    } catch (e) {
+      return { success: false, error: data.error || 'Registration failed. Please try again.' };
+    } catch (e: any) {
       console.error(e);
-      return false;
+      return { success: false, error: e.message || 'Network error during registration' };
     }
   };
 

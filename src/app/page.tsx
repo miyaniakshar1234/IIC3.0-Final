@@ -438,7 +438,7 @@ export default function Home() {
                     <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </Link>
                   <Link 
-                    href="/student" 
+                    href="/auth/login?redirect=/student" 
                     className="pb-btn-ghost text-xs py-2.5 justify-center"
                   >
                     <span>View Student Twin</span>
@@ -953,7 +953,7 @@ export default function Home() {
             <Link href="/verify" className="hover:text-accent transition-colors">Public Verifier</Link>
             <Link href="/auth/login" className="hover:text-accent transition-colors">Sign In</Link>
             <Link href="/auth/signup" className="hover:text-accent transition-colors">Create Account</Link>
-            <Link href="/student" className="hover:text-accent transition-colors">Student Twin</Link>
+            <Link href="/auth/login?redirect=/student" className="hover:text-accent transition-colors">Student Twin</Link>
             <Link href="/reviewer/queue" className="hover:text-accent transition-colors">Reviewer Queue</Link>
           </div>
 

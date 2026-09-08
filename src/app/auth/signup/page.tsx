@@ -22,6 +22,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { toast } from 'sonner';
 
 const FALLBACK_UNIVERSITIES = [
   { id: 'inst-muj', name: 'Manipal University Jaipur (MUJ)', code: 'U-0683', accreditation: 'NAAC A+ · NBA' },
@@ -41,6 +42,7 @@ export default function SignUpPage() {
   const [department, setDepartment] = useState('Department of Computer Applications');
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [registeredNotice, setRegisteredNotice] = useState(false);
   const [universities, setUniversities] = useState(FALLBACK_UNIVERSITIES);
 
@@ -63,31 +65,50 @@ export default function SignUpPage() {
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
+    setErrorMessage(null);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
+
+    if (!name.trim()) {
+      setErrorMessage('Full Legal Name is required.');
+      return;
+    }
+
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMessage('A valid email address is required.');
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters.');
+      return;
+    }
+
     setLoading(true);
 
     const institutionObj = universities.find((u) => u.id === selectedUni) || universities[0];
 
     try {
-      const success = await signup({
+      const result = await signup({
         role: selectedRole,
-        password: password || 'hackathon',
-        name: name.trim() || 'New User',
-        email: email.trim() || 'student@proofbridge.edu',
+        password: password,
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
         institutionId: selectedRole === 'employer' ? undefined : institutionObj.id,
-        institutionName: selectedRole === 'employer' ? undefined : institutionObj.name,
+        institutionName: selectedRole === 'employer' ? (companyName || 'Sample Analytics Studio') : institutionObj.name,
         program: selectedRole === 'student' ? program : undefined,
         rollNumber: selectedRole === 'student' ? rollNumber || `PRN-${Math.floor(1000 + Math.random() * 9000)}` : undefined,
-        companyName: selectedRole === 'employer' ? (companyName || 'Partner Tech Labs') : undefined,
+        companyName: selectedRole === 'employer' ? (companyName || 'Sample Analytics Studio') : undefined,
         department: (selectedRole === 'reviewer' || selectedRole === 'institution') ? department : undefined,
         title: title || (selectedRole === 'reviewer' ? 'Assistant Professor' : selectedRole === 'employer' ? 'Senior Recruiter' : undefined),
       });
 
-      if (success) {
+      if (result.success) {
         setRegisteredNotice(true);
+        toast.success('Account provisioned successfully!');
         setTimeout(() => {
           if (selectedRole === 'student') router.push('/student');
           else if (selectedRole === 'reviewer') router.push('/reviewer/queue');
@@ -95,10 +116,14 @@ export default function SignUpPage() {
           else if (selectedRole === 'institution') router.push('/institution/insights');
         }, 900);
       } else {
-        alert("Registration failed. Email might already exist.");
+        const errorText = result.error || 'Registration could not be completed.';
+        setErrorMessage(errorText);
+        toast.error(errorText);
       }
-    } catch (e) {
-      alert("An error occurred during registration.");
+    } catch (e: any) {
+      const errorText = e?.message || 'An unexpected error occurred during registration.';
+      setErrorMessage(errorText);
+      toast.error(errorText);
     } finally {
       setLoading(false);
     }
@@ -236,6 +261,16 @@ export default function SignUpPage() {
                 {selectedRole === 'reviewer' && 'Register your academic department to evaluate student code submissions against rubrics.'}
               </p>
             </div>
+
+            {errorMessage && (
+              <div className="p-3.5 rounded-xl bg-danger/10 border border-danger/30 text-danger text-xs font-mono flex items-start gap-2.5 animate-fade-in">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                <div className="space-y-0.5">
+                  <div className="font-bold">Registration Alert</div>
+                  <div>{errorMessage}</div>
+                </div>
+              </div>
+            )}
 
             <form onSubmit={handleSignup} className="space-y-4">
               {/* Common: Name & Email */}
