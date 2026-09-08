@@ -12,542 +12,367 @@ import {
   Building,
   GraduationCap,
   LineChart,
-  Sparkles,
   Award,
   Zap,
   Lock,
-  ChevronRight,
   Check,
-  Code2,
   Terminal,
-  Cpu,
   Fingerprint,
-  CheckSquare,
-  AlertTriangle
+  Cpu,
+  Sparkles,
+  Code2,
+  Database,
+  BarChart3,
+  ChevronRight,
 } from 'lucide-react';
 
 export default function HomePage() {
   const [hasVerifiedSql, setHasVerifiedSql] = useState(false);
-
-  // Dynamic calculation for the interactive hero cockpit
   const currentScore = hasVerifiedSql ? 96 : 61;
+
+  const pillars = [
+    {
+      num: '01',
+      label: 'Evidence Engine',
+      icon: FileCode,
+      title: 'Verifiable Code Submissions',
+      body: 'Students submit real code to time-boxed challenges. SHA-256 hashed, timestamped, immutable.',
+      accent: 'text-info',
+      border: 'border-info/20',
+      bg: 'bg-info/5',
+    },
+    {
+      num: '02',
+      label: 'Human Rubric',
+      icon: ShieldCheck,
+      title: 'Faculty-Anchored Scoring',
+      body: 'Named faculty reviewers bind scores to specific criteria. No opaque black-box ML scoring.',
+      accent: 'text-success',
+      border: 'border-success/20',
+      bg: 'bg-success/5',
+    },
+    {
+      num: '03',
+      label: 'Match Engine',
+      icon: Cpu,
+      title: 'Deterministic Score Formula',
+      body: 'Coverage score = Σ(weight × rubric_level) / Σ(weight × max_level). Pure math, auditable.',
+      accent: 'text-accent',
+      border: 'border-accent/20',
+      bg: 'bg-accent/5',
+    },
+  ];
+
+  const roles = [
+    { href: '/student',              icon: GraduationCap, label: 'Student',         name: 'Meera Patel',     tag: 'MCA 2026',    desc: 'Build proof. Submit code. Track your verifiable score.',  color: 'text-info',    ring: 'ring-info/30' },
+    { href: '/reviewer/queue',       icon: ShieldCheck,   label: 'Reviewer',        name: 'Dr. Alok Sharma', tag: 'CS Faculty',  desc: 'Evaluate evidence against rubric criteria.',              color: 'text-success', ring: 'ring-success/30' },
+    { href: '/employer/opportunities',icon: Users,         label: 'Employer',        name: 'Neha Verma',      tag: 'Recruiter',   desc: 'Hire on verified proof, not polished resumes.',          color: 'text-accent',  ring: 'ring-accent/30' },
+    { href: '/institution/insights', icon: Building,      label: 'College Dean',    name: 'Prof. Gupta',     tag: 'Dean · MUJ',  desc: 'Institutional analytics across placements and skills.',  color: 'text-warning', ring: 'ring-warning/30' },
+  ];
 
   return (
     <AppShell>
-      <div className="space-y-24 py-4 max-w-6xl mx-auto">
-        {/* ============================================================= */}
-        {/* 1. HERO SECTION: Electric Typography & Ambient Glow           */}
-        {/* ============================================================= */}
-        <section className="relative text-center max-w-4xl mx-auto space-y-6 pt-10">
-          {/* Glowing Beacon Pill */}
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-zinc-900/90 border border-white/15 text-xs font-semibold text-zinc-300 shadow-lg glow-pill-blue">
-            <Sparkles className="w-4 h-4 text-blue-400" />
-            <span className="tracking-wide">IIC 3.0 MUJ • OPEN INNOVATION FINALIST</span>
-            <span className="text-zinc-600">•</span>
-            <span className="text-blue-400 font-mono">PS-08</span>
+      <div className="space-y-20 py-4 max-w-6xl mx-auto animate-fade-in">
+
+        {/* ── 1. HERO ── */}
+        <section className="relative text-center max-w-4xl mx-auto pt-8 space-y-7">
+          {/* Section label */}
+          <div className="flex justify-center">
+            <div className="section-label">IIC 3.0 MUJ · Open Innovation · PS-08</div>
           </div>
 
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.05]">
+          {/* Headline */}
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] text-text-primary">
             Skills Proven,{' '}
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-300 bg-clip-text text-transparent glow-text-blue">
-              Not Claimed.
-            </span>
+            <span className="text-gradient-amber">Not Claimed.</span>
           </h1>
 
-          <p className="text-base sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-normal">
-            Eliminate resume guessing and black-box ATS keyword scanning. ProofBridge connects industry job requirements directly to authentic challenge code, faculty-anchored rubrics, and deterministic math.
+          <p className="text-base sm:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            Eliminate resume guessing and black-box ATS scanning. ProofBridge connects industry job requirements to authentic challenge code, faculty-anchored rubrics, and deterministic math.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-3">
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
               href="/opportunities/40000000-0000-0000-0000-000000000001"
-              className="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-500/25 flex items-center space-x-2 transition-all hover:scale-[1.02]"
+              className="pb-btn-primary text-sm"
             >
-              <Zap className="w-4 h-4 text-amber-300" />
-              <span>Explore Opportunity Match Engine</span>
+              <Zap className="w-4 h-4" />
+              Explore Match Engine
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              href="/student"
-              className="px-6 py-3.5 rounded-xl bg-zinc-900 text-zinc-300 border border-white/15 font-semibold text-xs sm:text-sm hover:bg-zinc-800 hover:text-white transition-all"
-            >
+            <Link href="/student" className="pb-btn-ghost text-sm">
               Enter Student Workspace
             </Link>
           </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1 text-[11px]">
+            {[
+              { icon: Lock,       label: 'SHA-256 Proof Hashes' },
+              { icon: ShieldCheck,label: 'Faculty-Attributed Scores' },
+              { icon: Cpu,        label: 'Deterministic Formula' },
+              { icon: Award,      label: 'No Resume Guesswork' },
+            ].map(({ icon: Icon, label }) => (
+              <span key={label} className="pb-badge">
+                <Icon className="w-3 h-3 text-accent" />
+                {label}
+              </span>
+            ))}
+          </div>
         </section>
 
-        {/* ============================================================= */}
-        {/* 2. THE HERO SHOWCASE: Interactive Cyber Cockpit (The "Aha!")   */}
-        {/* ============================================================= */}
-        <section className="glass-card rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto space-y-6 border border-white/15 relative overflow-hidden">
-          {/* Top Bar with Status and Toggle */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        {/* ── 2. SCORE LEAP COCKPIT ── */}
+        <section className="pb-card-accent rounded-2xl p-6 sm:p-8 max-w-5xl mx-auto overflow-hidden relative">
+          {/* Ambient pulse */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" />
+
+          {/* Header row */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5 mb-6">
             <div>
-              <div className="flex items-center space-x-2.5">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded border border-cyan-500/20">
-                  Engine: coverage-v1
-                </span>
-                <span className="text-zinc-600">•</span>
-                <span className="text-xs text-zinc-400 font-mono">Candidate: Meera Patel vs Junior Data Analyst</span>
-              </div>
-              <h2 className="text-lg sm:text-2xl font-black text-white mt-1.5 tracking-tight flex items-center space-x-2">
-                <span>Deterministic Score Leap Interactive Simulation</span>
+              <div className="section-label mb-1.5">Live Simulation · Coverage Engine v1</div>
+              <h2 className="text-xl sm:text-2xl font-black text-text-primary tracking-tight">
+                Deterministic Score Leap Demo
               </h2>
+              <p className="text-xs text-text-muted mt-0.5 font-mono">
+                Meera Patel vs. Junior Data Analyst · Watch score update live
+              </p>
             </div>
 
-            {/* Interactive Simulation Switch */}
-            <div className="flex items-center space-x-3 bg-zinc-950 p-2 rounded-xl border border-white/10 shadow-inner">
-              <span className="text-xs font-semibold text-zinc-400 pl-2">Faculty Review:</span>
-              <button
-                type="button"
-                onClick={() => setHasVerifiedSql(!hasVerifiedSql)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center space-x-2 shadow-sm ${
-                  hasVerifiedSql
-                    ? 'bg-emerald-600 text-white shadow-emerald-500/25'
-                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                }`}
-              >
-                {hasVerifiedSql ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-200" />
-                    <span>SQL L3 Verified (+35 pts)</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Click to Publish SQL Review</span>
-                  </>
-                )}
-              </button>
-            </div>
+            {/* Toggle */}
+            <button
+              onClick={() => setHasVerifiedSql(!hasVerifiedSql)}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md border ${
+                hasVerifiedSql
+                  ? 'bg-success/10 text-success border-success/30 shadow-success/10'
+                  : 'bg-accent-soft text-accent border-border-accent shadow-accent/10 hover:bg-accent/20'
+              }`}
+            >
+              {hasVerifiedSql
+                ? <><Check className="w-4 h-4" /><span>SQL Level 3 Published ✓</span></>
+                : <><Zap className="w-4 h-4" /><span>Click → Publish SQL Review</span></>
+              }
+            </button>
           </div>
 
-          {/* Dual-Pane Cockpit: Code Viewer Left, Score Gauges Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Left: Code & Proof Card (7 cols) */}
-            <div className="lg:col-span-7 bg-zinc-950/90 rounded-xl p-4 border border-white/10 space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-zinc-400">
-                <div className="flex items-center space-x-2">
-                  <Terminal className="w-4 h-4 text-blue-400" />
-                  <span className="text-zinc-200 font-semibold">meera_deduplication.sql</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Code proof panel */}
+            <div className="lg:col-span-7 bg-canvas rounded-xl p-4 border border-border font-mono text-xs space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-accent" />
+                  <span className="text-text-secondary font-semibold">meera_deduplication.sql</span>
                 </div>
-                <div className="flex items-center space-x-1.5 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <div className="flex items-center gap-1.5 text-[10px] text-success bg-success/10 px-2 py-0.5 rounded-full border border-success/20">
                   <Fingerprint className="w-3 h-3" />
-                  <span>SHA-256 Hash Verified</span>
+                  SHA-256 Verified
                 </div>
               </div>
 
-              {/* Code Snippet */}
-              <div className="text-zinc-300 space-y-1 overflow-x-auto text-[11px] leading-relaxed py-1">
-                <p className="text-zinc-500">-- 2-Hour Bounded Challenge: Clean Revenue Deduplication</p>
-                <p><span className="text-purple-400">WITH</span> clean_orders <span className="text-purple-400">AS</span> (</p>
-                <p className="pl-4"><span className="text-blue-400">SELECT</span> order_id, buyer_id, amount,</p>
-                <p className="pl-8 text-cyan-300">ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) AS rn</p>
-                <p className="pl-4"><span className="text-blue-400">FROM</span> raw_orders <span className="text-purple-400">WHERE</span> order_id <span className="text-purple-400">IS NOT NULL</span></p>
+              <div className="text-text-secondary space-y-0.5 overflow-x-auto text-[11px] leading-relaxed">
+                <p className="text-text-muted">-- 2-Hour Bounded Challenge: Clean Revenue Deduplication</p>
+                <p><span className="text-info">WITH</span> clean_orders <span className="text-info">AS</span> (</p>
+                <p className="pl-4"><span className="text-accent">SELECT</span> order_id, buyer_id, amount,</p>
+                <p className="pl-8 text-success">ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY updated_at DESC) AS rn</p>
+                <p className="pl-4"><span className="text-accent">FROM</span> raw_orders <span className="text-info">WHERE</span> order_id <span className="text-info">IS NOT NULL</span></p>
                 <p>)</p>
-                <p><span className="text-blue-400">SELECT</span> DATE_TRUNC(&apos;month&apos;, order_date), <span className="text-cyan-300">SUM</span>(amount) <span className="text-blue-400">AS</span> net_revenue</p>
-                <p><span className="text-blue-400">FROM</span> clean_orders <span className="text-purple-400">WHERE</span> rn = 1 <span className="text-purple-400">AND</span> amount &gt; 0;</p>
+                <p><span className="text-accent">SELECT</span> DATE_TRUNC(&apos;month&apos;, order_date), <span className="text-success">SUM</span>(amount) <span className="text-accent">AS</span> net_revenue</p>
+                <p><span className="text-accent">FROM</span> clean_orders <span className="text-info">WHERE</span> rn = 1 <span className="text-info">AND</span> amount &gt; 0;</p>
               </div>
 
-              {/* Faculty Review Seal */}
-              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
-                <div className="flex items-center space-x-2 text-zinc-300">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Dr. Alok Sharma (Associate Professor, CS)</span>
+              <div className="pt-2 border-t border-border flex items-center justify-between text-[10px]">
+                <div className="flex items-center gap-1.5 text-text-secondary">
+                  <ShieldCheck className="w-3.5 h-3.5 text-success" />
+                  Dr. Alok Sharma (Assoc. Prof., CS)
                 </div>
-                <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  Level 3 (Proficient)
+                <span className="font-bold text-success bg-success/10 px-2 py-0.5 rounded-full border border-success/20">
+                  Level 3 · Proficient
                 </span>
               </div>
             </div>
 
-            {/* Right: Score Radar & Metric Gauge (5 cols) */}
-            <div className="lg:col-span-5 bg-zinc-950/90 rounded-xl p-5 border border-white/10 space-y-5 text-center sm:text-left">
-              <div className="flex justify-between items-baseline">
-                <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">
-                  Reviewed Match Score
-                </span>
-                <span className="text-xs font-mono text-zinc-500">Weight: 100% Total</span>
+            {/* Score panel */}
+            <div className="lg:col-span-5 bg-canvas rounded-xl p-5 border border-border space-y-5">
+              <div className="flex justify-between items-center">
+                <span className="section-label text-[10px]">Match Score</span>
+                <span className="text-[10px] font-mono text-text-muted">coverage-v1</span>
               </div>
 
-              {/* Huge Jumping Score */}
-              <div className="flex items-baseline space-x-3">
-                <span
-                  className={`text-6xl font-black font-mono tracking-tight transition-all duration-500 ${
-                    hasVerifiedSql ? 'text-emerald-400 glow-text-emerald' : 'text-blue-400 glow-text-blue'
-                  }`}
-                >
+              {/* Big score */}
+              <div className="flex items-baseline gap-3">
+                <span className={`metric-value text-6xl transition-all duration-700 ${
+                  hasVerifiedSql ? 'text-success' : 'text-accent'
+                }`}>
                   {currentScore}%
                 </span>
-                <div className="text-xs text-left">
-                  {hasVerifiedSql ? (
-                    <span className="inline-block font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded text-[11px]">
-                      +35% Leap (SQL Level 3)
-                    </span>
-                  ) : (
-                    <span className="inline-block font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded text-[11px]">
-                      Gap: SQL Missing (35 pts)
-                    </span>
-                  )}
-                  <span className="block text-zinc-500 text-[10px] mt-0.5 font-mono">coverage-v1 formula</span>
+                <div className="text-xs">
+                  {hasVerifiedSql
+                    ? <span className="inline-block font-bold text-success bg-success/10 border border-success/20 px-2 py-0.5 rounded-full text-[10px]">+35% SQL L3 Leap</span>
+                    : <span className="inline-block font-bold text-warning bg-warning/10 border border-warning/20 px-2 py-0.5 rounded-full text-[10px]">Gap: SQL Missing</span>
+                  }
+                  <span className="block text-text-muted text-[10px] mt-0.5 font-mono">Σ(weight×level)/Σ(weight×max)</span>
                 </div>
               </div>
 
-              {/* Glowing Progress Bar */}
-              <div className="space-y-1.5">
-                <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden p-0.5 border border-white/10">
+              {/* Progress bar */}
+              <div className="space-y-1">
+                <div className="w-full h-2.5 bg-surface-raised rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all duration-700 ease-out ${
-                      hasVerifiedSql
-                        ? 'bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 shadow-lg shadow-emerald-500/30'
-                        : 'bg-blue-500 shadow-lg shadow-blue-500/30'
-                    }`}
+                    className={`h-full rounded-full transition-all duration-700 ease-out ${hasVerifiedSql ? 'bg-success' : 'bg-accent'}`}
                     style={{ width: `${currentScore}%` }}
                   />
                 </div>
-                <div className="flex justify-between text-[10px] font-mono text-zinc-500">
-                  <span>Baseline: 61%</span>
-                  <span className="text-emerald-400">Target: 96%</span>
+                <div className="flex justify-between text-[10px] font-mono text-text-muted">
+                  <span>0%</span><span>50%</span><span>100%</span>
                 </div>
               </div>
 
-              {/* Status Callout */}
-              <div
-                className={`p-3 rounded-lg border text-xs leading-relaxed transition-colors ${
-                  hasVerifiedSql
-                    ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-200'
-                    : 'bg-zinc-900 border-white/10 text-zinc-300'
-                }`}
-              >
-                {hasVerifiedSql ? (
-                  <p className="flex items-center space-x-1.5 font-medium">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span><strong>Shortlist Ready:</strong> Candidate meets all 4 weighted requirements with signed proof.</span>
-                  </p>
-                ) : (
-                  <p className="flex items-center space-x-1.5 font-medium text-zinc-400">
-                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span><strong>Gap Actionable:</strong> Completing SQL task unlocks the 35 points needed for eligibility.</span>
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* 4-Skill Breakdown Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="bg-zinc-900/80 rounded-xl p-3.5 border border-white/10 space-y-1">
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400">
-                <span>Spreadsheets (L3)</span>
-                <span className="text-emerald-400 font-bold">+25 pts</span>
-              </div>
-              <div className="text-xs font-bold text-zinc-200 flex items-center space-x-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Verified (25/25)</span>
-              </div>
-            </div>
-
-            <div className="bg-zinc-900/80 rounded-xl p-3.5 border border-white/10 space-y-1">
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400">
-                <span>Communication (L4)</span>
-                <span className="text-blue-400 font-bold">+12 pts</span>
-              </div>
-              <div className="text-xs font-bold text-zinc-200 flex items-center space-x-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-                <span>Partial (3/4 &times; 16)</span>
-              </div>
-            </div>
-
-            <div className="bg-zinc-900/80 rounded-xl p-3.5 border border-white/10 space-y-1">
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400">
-                <span>Reasoning (L3)</span>
-                <span className="text-emerald-400 font-bold">+24 pts</span>
-              </div>
-              <div className="text-xs font-bold text-zinc-200 flex items-center space-x-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Verified (24/24)</span>
-              </div>
-            </div>
-
-            <div
-              className={`rounded-xl p-3.5 border space-y-1 transition-all ${
-                hasVerifiedSql
-                  ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
-                  : 'bg-amber-950/30 border-amber-500/30 text-amber-200'
-              }`}
-            >
-              <div className="flex justify-between text-[11px] font-mono">
-                <span>SQL (L3 • 35% Wt)</span>
-                <span className="font-bold">{hasVerifiedSql ? '+35 pts' : '0 pts'}</span>
-              </div>
-              <div className="text-xs font-bold flex items-center space-x-1">
-                {hasVerifiedSql ? (
-                  <>
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Verified Level 3</span>
-                  </>
-                ) : (
-                  <>
-                    <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Actionable Gap</span>
-                  </>
-                )}
+              {/* Criteria breakdown */}
+              <div className="space-y-2">
+                {[
+                  { label: 'Core SQL',     score: hasVerifiedSql ? 90 : 90, max: 100, active: true },
+                  { label: 'SQL Adv. (L3)',score: hasVerifiedSql ? 100 : 0,  max: 100, active: hasVerifiedSql },
+                  { label: 'Data Modelling',score: 80,                       max: 100, active: true },
+                  { label: 'Explanation', score: hasVerifiedSql ? 85 : 85,  max: 100, active: true },
+                ].map(({ label, score, active }) => (
+                  <div key={label} className="flex items-center gap-2">
+                    <div className={`w-1.5 h-1.5 rounded-full ${active && score > 0 ? 'bg-success' : 'bg-border-bright'}`} />
+                    <span className="text-[10px] font-mono text-text-secondary flex-1">{label}</span>
+                    <span className={`text-[10px] font-mono font-bold ${score > 0 ? 'text-text-primary' : 'text-text-muted'}`}>
+                      {score > 0 ? `${score}%` : '—'}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* ============================================================= */}
-        {/* 3. FOUR PERSONA WORKSPACES: Obsidian Bento Grid              */}
-        {/* ============================================================= */}
+        {/* ── 3. THREE PILLARS ── */}
         <section className="space-y-6">
-          <div className="text-center max-w-md mx-auto space-y-1.5">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              4 Specialized Role Workspaces
+          <div className="text-center space-y-2">
+            <div className="section-label justify-center">The System</div>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              How ProofBridge Works
             </h2>
-            <p className="text-xs text-zinc-400">Test-drive the full loop from every authenticated stakeholder perspective</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Student Card */}
-            <Link
-              href="/student"
-              className="glass-card p-6 rounded-2xl flex flex-col justify-between group hover:border-blue-500/50"
-            >
-              <div className="space-y-3.5">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold border border-blue-500/20 group-hover:scale-105 transition-all">
-                  <GraduationCap className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {pillars.map(({ num, label, icon: Icon, title, body, accent, border, bg }) => (
+              <div key={num} className={`pb-card p-6 space-y-4 ${bg} ${border}`}>
+                <div className="flex items-start justify-between">
+                  <div className={`w-10 h-10 rounded-xl ${bg} border ${border} flex items-center justify-center`}>
+                    <Icon className={`w-5 h-5 ${accent}`} />
+                  </div>
+                  <span className={`font-mono font-black text-3xl ${accent} opacity-30`}>{num}</span>
                 </div>
                 <div>
-                  <div className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-widest">Candidate</div>
-                  <h3 className="font-bold text-base text-white group-hover:text-blue-400 transition-colors mt-0.5">
-                    Evidence Passport
-                  </h3>
+                  <div className={`section-label ${accent} mb-1`}>{label}</div>
+                  <h3 className="text-base font-bold text-text-primary leading-tight">{title}</h3>
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Inspect verified skill badges, view missing job requirements, and submit code with mandatory contribution statements.
-                </p>
+                <p className="text-xs text-text-secondary leading-relaxed">{body}</p>
               </div>
-              <div className="pt-4 flex items-center text-xs font-semibold text-blue-400 group-hover:translate-x-1 transition-transform border-t border-white/10 mt-4">
-                <span>Enter Workspace</span>
-                <ChevronRight className="w-4 h-4 ml-0.5" />
-              </div>
-            </Link>
-
-            {/* Reviewer Card */}
-            <Link
-              href="/reviewer/queue"
-              className="glass-card p-6 rounded-2xl flex flex-col justify-between group hover:border-emerald-500/50"
-            >
-              <div className="space-y-3.5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/20 group-hover:scale-105 transition-all">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest">Faculty Reviewer</div>
-                  <h3 className="font-bold text-base text-white group-hover:text-emerald-400 transition-colors mt-0.5">
-                    Review Queue
-                  </h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Evaluate student code side-by-side with anchored 4-level rubrics and publish tamper-resistant attainments.
-                </p>
-              </div>
-              <div className="pt-4 flex items-center text-xs font-semibold text-emerald-400 group-hover:translate-x-1 transition-transform border-t border-white/10 mt-4">
-                <span>Enter Workspace</span>
-                <ChevronRight className="w-4 h-4 ml-0.5" />
-              </div>
-            </Link>
-
-            {/* Recruiter Card */}
-            <Link
-              href="/employer/opportunities"
-              className="glass-card p-6 rounded-2xl flex flex-col justify-between group hover:border-violet-500/50"
-            >
-              <div className="space-y-3.5">
-                <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center font-bold border border-violet-500/20 group-hover:scale-105 transition-all">
-                  <Building className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono font-bold text-violet-400 uppercase tracking-widest">Industry Recruiter</div>
-                  <h3 className="font-bold text-base text-white group-hover:text-violet-400 transition-colors mt-0.5">
-                    Employer Hub
-                  </h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Define weighted skill requirements (Job DNA) and screen applicants through freeze-frame verified evidence snapshots.
-                </p>
-              </div>
-              <div className="pt-4 flex items-center text-xs font-semibold text-violet-400 group-hover:translate-x-1 transition-transform border-t border-white/10 mt-4">
-                <span>Enter Workspace</span>
-                <ChevronRight className="w-4 h-4 ml-0.5" />
-              </div>
-            </Link>
-
-            {/* College Card */}
-            <Link
-              href="/institution/insights"
-              className="glass-card p-6 rounded-2xl flex flex-col justify-between group hover:border-amber-500/50"
-            >
-              <div className="space-y-3.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold border border-amber-500/20 group-hover:scale-105 transition-all">
-                  <LineChart className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">Dean & Academic Admin</div>
-                  <h3 className="font-bold text-base text-white group-hover:text-amber-400 transition-colors mt-0.5">
-                    College Insights
-                  </h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Detect aggregate cohort skill deficits (e.g. -42% in SQL) and launch 2-day practical bootcamps before placements begin.
-                </p>
-              </div>
-              <div className="pt-4 flex items-center text-xs font-semibold text-amber-400 group-hover:translate-x-1 transition-transform border-t border-white/10 mt-4">
-                <span>Enter Workspace</span>
-                <ChevronRight className="w-4 h-4 ml-0.5" />
-              </div>
-            </Link>
+            ))}
           </div>
         </section>
 
-        {/* ============================================================= */}
-        {/* 4. THE 6-STEP CLOSED LOOP ARCHITECTURE                        */}
-        {/* ============================================================= */}
-        <section className="space-y-6 pt-4">
-          <div className="text-center max-w-md mx-auto space-y-1.5">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              The 6-Step Closed Loop
+        {/* ── 4. ROLE WORKSPACES ── */}
+        <section className="space-y-6">
+          <div className="text-center space-y-2">
+            <div className="section-label justify-center">Four Workspaces</div>
+            <h2 className="text-3xl sm:text-4xl font-black text-text-primary tracking-tight">
+              Every Stakeholder, One Platform
             </h2>
-            <p className="text-xs text-zinc-400">How ProofBridge bridges industry requirements to verified hiring</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                01
-              </div>
-              <h3 className="font-bold text-sm text-white">Industry Job DNA</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Recruiters specify required skills, required proficiency levels (1–4), and percentage weights summing to 100%.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {roles.map(({ href, icon: Icon, label, name, tag, desc, color, ring }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`pb-card p-6 flex flex-col gap-4 group cursor-pointer ring-1 ring-transparent hover:${ring} transition-all`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className={`w-10 h-10 rounded-xl bg-surface-raised border border-border flex items-center justify-center`}>
+                    <Icon className={`w-5 h-5 ${color}`} />
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                </div>
+                <div>
+                  <div className="section-label mb-1">{label}</div>
+                  <h3 className="text-sm font-bold text-text-primary">{name}</h3>
+                  <span className="text-[10px] font-mono text-text-muted">{tag}</span>
+                </div>
+                <p className="text-xs text-text-secondary leading-relaxed">{desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                02
-              </div>
-              <h3 className="font-bold text-sm text-white">Explainable Gap Detection</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Candidate sees their exact baseline score (61%) and knows precisely which missing skill blocks eligibility.
-              </p>
+        {/* ── 5. FORMULA BENTO ── */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Formula card — spans 2 */}
+          <div className="md:col-span-2 pb-card p-6 space-y-4">
+            <div className="section-label">Score Formula</div>
+            <h3 className="text-lg font-black text-text-primary">The Math Is The Trust</h3>
+            <div className="bg-canvas rounded-xl p-4 font-mono text-sm space-y-1 border border-border">
+              <p className="text-text-muted text-xs">-- coverage-v1 deterministic engine</p>
+              <p className="text-accent">coverage_score</p>
+              <p className="text-text-secondary pl-4">= <span className="text-success">SUM</span>(criterion_weight × reviewer_level)</p>
+              <p className="text-text-secondary pl-4">/ <span className="text-success">SUM</span>(criterion_weight × max_level)</p>
+              <p className="text-text-secondary pl-4">× 100</p>
             </div>
+            <p className="text-xs text-text-muted leading-relaxed">
+              No ML, no LLM hallucination risk. Every point is traceable to a named faculty reviewer and a specific rubric criterion. The formula is deterministic: same inputs always produce the same score.
+            </p>
+          </div>
 
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                03
-              </div>
-              <h3 className="font-bold text-sm text-white">Bounded Scoped Task</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Student solves a 2-hour realistic challenge (e.g., messy sales query) and declares AI usage with authentic contribution notes.
-              </p>
-            </div>
-
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                04
-              </div>
-              <h3 className="font-bold text-sm text-white">Faculty Rubric Evaluation</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Accredited professors review submitted code against anchored 4-level rubrics with qualitative justifications.
-              </p>
-            </div>
-
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                05
-              </div>
-              <h3 className="font-bold text-sm text-white">Atomic Score Leap (96%)</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Publishing attainment updates PostgreSQL, atomically granting the missing 35 points and moving coverage to 96%.
-              </p>
-            </div>
-
-            <div className="bg-zinc-950/80 p-5 rounded-2xl border border-white/10 space-y-2.5">
-              <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono font-bold text-xs flex items-center justify-center">
-                06
-              </div>
-              <h3 className="font-bold text-sm text-white">Verified Evidence Shortlist</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Recruiters review frozen tamper-proof snapshots with verified code instead of screening unverified resumes.
-              </p>
+          {/* Stats card */}
+          <div className="pb-card-accent p-6 space-y-5">
+            <div className="section-label">System Stats</div>
+            <div className="space-y-4">
+              {[
+                { label: 'SCORE LEAP',     value: '35%',  sub: '61% → 96% verified' },
+                { label: 'RUBRIC LEVELS',  value: '4',    sub: 'Novice → Expert anchors' },
+                { label: 'PROOF CHAIN',    value: 'SHA-256', sub: 'Immutable hash trail' },
+                { label: 'TIME-BOXED',     value: '2 hrs', sub: 'Challenge duration' },
+              ].map(({ label, value, sub }) => (
+                <div key={label} className="flex items-baseline justify-between border-b border-border pb-2 last:border-0 last:pb-0">
+                  <div>
+                    <div className="text-[9px] font-mono font-bold tracking-widest text-text-muted uppercase">{label}</div>
+                    <div className="text-[10px] text-text-secondary">{sub}</div>
+                  </div>
+                  <span className="metric-value text-xl text-accent">{value}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ============================================================= */}
-        {/* 5. ARCHITECTURAL COMPARISON: ProofBridge vs Traditional ATS   */}
-        {/* ============================================================= */}
-        <section className="glass-card rounded-2xl p-6 sm:p-8 border border-white/15 space-y-6">
-          <div className="text-center max-w-lg mx-auto space-y-1">
-            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              Why ProofBridge Outperforms Traditional Portals
+        {/* ── 6. FINAL CTA ── */}
+        <section className="pb-card-accent rounded-2xl p-8 sm:p-12 text-center space-y-5 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-5">
+            <div className="section-label justify-center">Start Here</div>
+            <h2 className="text-3xl sm:text-5xl font-black text-text-primary tracking-tight">
+              Ready to see the leap?
             </h2>
-            <p className="text-xs text-zinc-400">Deterministic proof vs Keyword ATS Guesswork</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div className="bg-red-950/20 border border-red-500/20 rounded-xl p-5 space-y-3">
-              <div className="text-xs font-mono font-bold text-red-400 uppercase tracking-wider flex items-center space-x-1.5">
-                <AlertTriangle className="w-4 h-4" />
-                <span>Traditional Placement Portal</span>
-              </div>
-              <ul className="text-xs text-zinc-400 space-y-2 leading-relaxed">
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 font-bold">&times;</span>
-                  <span>Unverified keyword-stuffed PDF resumes.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 font-bold">&times;</span>
-                  <span>Black-box ATS ranking that filters out non-keyword talent.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 font-bold">&times;</span>
-                  <span>Recruiters spend &gt; ₹50,000 per hire doing 4 screening interviews.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 font-bold">&times;</span>
-                  <span>Colleges only find out about skill deficits after placements fail.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 space-y-3 shadow-lg glow-pill-emerald">
-              <div className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center space-x-1.5">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>ProofBridge Evidence Infrastructure</span>
-              </div>
-              <ul className="text-xs text-zinc-300 space-y-2 leading-relaxed">
-                <li className="flex items-start space-x-2">
-                  <span className="text-emerald-400 font-bold">&#10003;</span>
-                  <span>Auditable, production-grade code artifacts backed by git proof.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-emerald-400 font-bold">&#10003;</span>
-                  <span>Deterministic math (&Sigma; min(level/req, 1) &times; weight). Zero hallucinations.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-emerald-400 font-bold">&#10003;</span>
-                  <span>Recruiters inspect frozen evidence snapshots and hire with conviction.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-emerald-400 font-bold">&#10003;</span>
-                  <span>College Dean detects cohort gaps (-42% SQL) months before placements.</span>
-                </li>
-              </ul>
+            <p className="text-text-secondary text-sm max-w-xl mx-auto leading-relaxed">
+              Watch the score jump from 61% to 96% in real time when faculty publishes a SQL Level 3 review. That&apos;s ProofBridge working exactly as designed.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link href="/opportunities/40000000-0000-0000-0000-000000000001" className="pb-btn-primary">
+                <Zap className="w-4 h-4" />
+                Watch 61% → 96% Live
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href="/student" className="pb-btn-ghost">
+                <GraduationCap className="w-4 h-4" />
+                Open Student Workspace
+              </Link>
             </div>
           </div>
         </section>
+
       </div>
     </AppShell>
   );

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import {
   GraduationCap,
   ClipboardCheck,
@@ -10,12 +11,11 @@ import {
   Building2,
   Menu,
   X,
-  Sparkles,
-  ArrowRight,
   ShieldCheck,
   Zap,
   Layers,
-  Terminal
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -24,181 +24,191 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const workspaces = [
-    { name: 'Student', href: '/student', icon: GraduationCap, persona: 'Meera Patel', role: 'Candidate (MCA)' },
-    { name: 'Reviewer Queue', href: '/reviewer/queue', icon: ClipboardCheck, persona: 'Dr. Alok Sharma', role: 'Faculty Evaluator' },
-    { name: 'Employer Hub', href: '/employer/opportunities', icon: Briefcase, persona: 'Neha Verma', role: 'Recruiter' },
-    { name: 'College Insights', href: '/institution/insights', icon: Building2, persona: 'Prof. Gupta', role: 'College Dean' },
+    { name: 'Student',         href: '/student',              icon: GraduationCap, persona: 'Meera Patel',   role: 'Candidate · MCA' },
+    { name: 'Reviewer',        href: '/reviewer/queue',        icon: ClipboardCheck, persona: 'Dr. Alok Sharma', role: 'Faculty Evaluator' },
+    { name: 'Employer',        href: '/employer/opportunities', icon: Briefcase,     persona: 'Neha Verma',   role: 'Recruiter' },
+    { name: 'College Insights',href: '/institution/insights',  icon: Building2,     persona: 'Prof. Gupta',  role: 'College Dean' },
   ];
 
-  // Derive active persona based on current route
-  let activePersona = { name: 'Meera Patel', role: 'Student • MCA 2026', initials: 'MP', color: 'from-blue-500 to-indigo-500', glow: 'shadow-blue-500/30' };
-  if (pathname.startsWith('/reviewer')) {
-    activePersona = { name: 'Dr. Alok Sharma', role: 'Faculty Reviewer', initials: 'AS', color: 'from-emerald-500 to-teal-500', glow: 'shadow-emerald-500/30' };
-  } else if (pathname.startsWith('/employer')) {
-    activePersona = { name: 'Neha Verma', role: 'Sample Analytics Recruiter', initials: 'NV', color: 'from-violet-500 to-purple-500', glow: 'shadow-violet-500/30' };
-  } else if (pathname.startsWith('/institution')) {
-    activePersona = { name: 'Prof. Gupta', role: 'College Dean & Admin', initials: 'PG', color: 'from-amber-500 to-orange-500', glow: 'shadow-amber-500/30' };
-  }
+  let persona = { name: 'Meera Patel',    role: 'Student · MCA 2026',    initials: 'MP', ring: 'ring-info/40',   dot: 'bg-info' };
+  if (pathname.startsWith('/reviewer'))   persona = { name: 'Dr. Alok Sharma', role: 'Faculty Reviewer',      initials: 'AS', ring: 'ring-success/40', dot: 'bg-success' };
+  else if (pathname.startsWith('/employer')) persona = { name: 'Neha Verma',      role: 'Sample Analytics Recruiter', initials: 'NV', ring: 'ring-accent/40',  dot: 'bg-accent' };
+  else if (pathname.startsWith('/institution')) persona = { name: 'Prof. Gupta',  role: 'College Dean & Admin', initials: 'PG', ring: 'ring-warning/40', dot: 'bg-warning' };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#09090B] text-zinc-100 selection:bg-blue-600 selection:text-white relative">
-      {/* Background Cyber-Grid & Ambient Lighting */}
-      <div className="fixed inset-0 cyber-grid pointer-events-none z-0" />
-      <div className="fixed inset-0 ambient-spotlight pointer-events-none z-0" />
+    <div className="min-h-screen flex flex-col bg-canvas text-text-primary relative">
+      {/* Dot grid ambient bg */}
+      <div className="dot-grid" />
+      <div className="ambient-bg pointer-events-none fixed inset-0 z-0" />
 
-      {/* Sleek Obsidian Floating Glass Header */}
-      <header className="sticky top-0 z-50 glass-header">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 relative z-10">
-          {/* Brand Logo & Micro Badge */}
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all">
-                <Layers className="w-4 h-4" />
+      {/* ── HEADER ── */}
+      <header className="pb-header sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[60px] flex items-center justify-between gap-4 relative z-10">
+
+          {/* Brand */}
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-8 h-8 rounded-xl bg-accent flex items-center justify-center shadow-accent group-hover:scale-105 transition-transform">
+                <Layers className="w-4 h-4 text-[var(--text-inverse)]" />
               </div>
-              <div className="flex items-baseline space-x-1.5">
-                <span className="font-bold text-base text-white tracking-tight group-hover:text-blue-400 transition-colors">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-bold text-[15px] text-text-primary tracking-tight group-hover:text-accent transition-colors">
                   ProofBridge
                 </span>
-                <span className="text-[10px] font-mono font-bold text-blue-400/80 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20">
+                <span className="text-[10px] font-mono font-bold text-accent bg-accent-soft px-1.5 py-0.5 rounded border border-border-accent">
                   v1.0
                 </span>
               </div>
             </Link>
 
-            {/* Hackathon Beacon Pill */}
-            <div className="hidden xl:flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-medium text-zinc-300">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            {/* Live beacon */}
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-border text-[11px] font-medium text-text-secondary">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-success" />
               </span>
-              <span className="font-semibold text-white">IIC 3.0 MUJ</span>
-              <span className="text-zinc-600">•</span>
-              <span className="text-zinc-400">PS-08</span>
+              <span className="text-text-primary font-semibold">IIC 3.0 MUJ</span>
+              <span className="text-text-muted">·</span>
+              <span className="font-mono text-accent">PS-08</span>
             </div>
           </div>
 
-          {/* Center: Linear-style Segmented Workspace Switcher */}
-          <nav className="hidden md:flex items-center bg-zinc-900/90 p-1 rounded-xl border border-white/10 shadow-inner">
+          {/* Center nav */}
+          <nav className="hidden md:flex items-center gap-0.5 bg-surface p-1 rounded-xl border border-border shadow-sm">
             {workspaces.map((ws) => {
               const Icon = ws.icon;
-              const isActive = pathname === ws.href || (ws.href !== '/' && pathname.startsWith(ws.href));
+              const active = pathname === ws.href || (ws.href !== '/' && pathname.startsWith(ws.href));
               return (
                 <Link
                   key={ws.name}
                   href={ws.href}
-                  className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
-                    isActive
-                      ? 'bg-zinc-800 text-white shadow-sm border border-white/15'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                    active
+                      ? 'bg-surface-raised text-text-primary border border-border-bright shadow-sm'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-400' : 'text-zinc-500'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${active ? 'text-accent' : 'text-text-muted'}`} />
                   <span>{ws.name}</span>
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right: Active Persona Pill & Quick Engine Button */}
-          <div className="flex items-center space-x-3">
+          {/* Right actions */}
+          <div className="flex items-center gap-2.5">
+            {/* Match engine CTA */}
             <Link
               href="/opportunities/40000000-0000-0000-0000-000000000001"
-              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 transition-all shadow-xs"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-accent bg-accent-soft hover:bg-accent/20 border border-border-accent transition-all shadow-sm"
             >
-              <Zap className="w-3.5 h-3.5 text-blue-400" />
-              <span>Match Engine (61% → 96%)</span>
+              <Zap className="w-3.5 h-3.5" />
+              <span className="font-mono">61% → 96%</span>
             </Link>
 
-            {/* Active Persona Pill */}
-            <div className="flex items-center space-x-2.5 bg-zinc-900/90 border border-white/10 rounded-full py-1 pl-3 pr-1.5 shadow-xs">
+            {/* Theme toggle */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-accent hover:border-border-accent transition-all"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark'
+                ? <Sun className="w-3.5 h-3.5" />
+                : <Moon className="w-3.5 h-3.5" />
+              }
+            </button>
+
+            {/* Persona pill */}
+            <div className={`flex items-center gap-2 bg-surface border border-border rounded-full py-1 pl-3 pr-1 ring-1 ${persona.ring}`}>
               <div className="text-right hidden sm:block">
-                <span className="text-xs font-semibold text-zinc-200 block leading-tight">{activePersona.name}</span>
-                <span className="text-[10px] font-medium text-zinc-400 block leading-tight">{activePersona.role}</span>
+                <span className="text-[11px] font-semibold text-text-primary block leading-tight">{persona.name}</span>
+                <span className="text-[10px] text-text-muted block leading-tight">{persona.role}</span>
               </div>
-              <div
-                className={`w-7 h-7 rounded-full bg-gradient-to-tr ${activePersona.color} text-white font-bold text-[11px] flex items-center justify-center shadow-md ${activePersona.glow}`}
-              >
-                {activePersona.initials}
+              <div className={`w-7 h-7 rounded-full ${persona.dot} bg-opacity-20 border border-[var(--border-bright)] flex items-center justify-center font-bold text-[10px] text-text-primary`}>
+                {persona.initials}
               </div>
             </div>
 
-            {/* Mobile menu button */}
+            {/* Mobile toggle */}
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
-              aria-label="Toggle navigation menu"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-border text-text-secondary hover:text-text-primary transition-colors"
+              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-b border-white/10 bg-zinc-950/95 backdrop-blur-xl px-4 py-3 space-y-1">
-            <div className="text-[10px] font-bold text-zinc-500 uppercase px-3 py-1 tracking-wider">
-              Workspaces & Roles
-            </div>
+        {/* Mobile drawer */}
+        {mobileOpen && (
+          <div className="md:hidden border-t border-border bg-surface/95 backdrop-blur-xl px-4 py-3 space-y-1">
+            <div className="section-label mb-2 px-3">Workspaces</div>
             {workspaces.map((ws) => {
               const Icon = ws.icon;
-              const isActive = pathname === ws.href || (ws.href !== '/' && pathname.startsWith(ws.href));
+              const active = pathname === ws.href || (ws.href !== '/' && pathname.startsWith(ws.href));
               return (
                 <Link
                   key={ws.name}
                   href={ws.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-colors ${
-                    isActive ? 'bg-zinc-800 text-white border border-white/15' : 'text-zinc-300 hover:bg-zinc-900'
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                    active ? 'bg-surface-raised text-text-primary border border-border-bright' : 'text-text-secondary hover:bg-surface-hover'
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <Icon className="w-4 h-4 text-blue-400" />
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-4 h-4 text-accent" />
                     <span>{ws.name}</span>
                   </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">
-                    {ws.persona}
-                  </span>
+                  <span className="font-mono text-[10px] text-text-muted">{ws.persona}</span>
                 </Link>
               );
             })}
-            <div className="pt-2">
+            <div className="pt-2 flex gap-2">
               <Link
                 href="/opportunities/40000000-0000-0000-0000-000000000001"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/30"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-accent bg-accent-soft border border-border-accent"
               >
                 <Zap className="w-3.5 h-3.5" />
-                <span>Test Live Match Leap (61% → 96%)</span>
+                <span>Match Leap Demo</span>
               </Link>
+              <button
+                onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }}
+                className="px-3 py-2 rounded-xl text-xs font-bold text-text-secondary bg-surface border border-border"
+              >
+                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Main Content Area */}
+      {/* Main content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {children}
       </main>
 
-      {/* Modern High-End Footer */}
-      <footer className="border-t border-white/10 bg-zinc-950/80 backdrop-blur-xl py-6 mt-20 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-zinc-500 gap-3">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-zinc-300">ProofBridge</span>
-            <span className="text-zinc-700">•</span>
+      {/* Footer */}
+      <footer className="border-t border-border bg-canvas/80 backdrop-blur-xl py-5 mt-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-[11px] text-text-muted gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-text-secondary">ProofBridge</span>
+            <span className="text-text-muted">·</span>
             <span>IIC 3.0 MUJ Final Submission</span>
           </div>
-          <div className="flex items-center space-x-4 text-[11px] font-medium text-zinc-400">
-            <span className="flex items-center space-x-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-zinc-300">Deterministic Engine (coverage-v1)</span>
+          <div className="flex items-center gap-4 font-medium text-text-secondary">
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-success" />
+              <span>Deterministic Engine (coverage-v1)</span>
             </span>
-            <span className="text-zinc-700">•</span>
+            <span className="text-text-muted">·</span>
             <span>Human-Attributed Rubrics</span>
-            <span className="text-zinc-700">•</span>
+            <span className="text-text-muted">·</span>
             <span>Tamper-Resistant Proof</span>
           </div>
         </div>

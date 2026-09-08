@@ -6,45 +6,74 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: ["selector", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        canvas: "#09090B",
-        surface: "#121215",
-        "surface-raised": "#18181B",
-        "text-primary": "#F4F4F5",
-        "text-secondary": "#A1A1AA",
-        "text-muted": "#71717A",
+        /* ── CSS-variable-driven tokens ── */
+        canvas:          "var(--canvas)",
+        surface:         "var(--surface)",
+        "surface-raised":"var(--surface-raised)",
+        "surface-hover": "var(--surface-hover)",
+
+        "text-primary":  "var(--text-primary)",
+        "text-secondary":"var(--text-secondary)",
+        "text-muted":    "var(--text-muted)",
+
         accent: {
-          DEFAULT: "#3B82F6",
-          soft: "rgba(59, 130, 246, 0.12)",
-          hover: "#2563EB",
-          glow: "rgba(59, 130, 246, 0.35)",
+          DEFAULT: "var(--accent)",
+          soft:    "var(--accent-soft)",
+          hover:   "var(--accent-hover)",
+          glow:    "var(--accent-glow)",
+          dim:     "var(--accent-dim)",
         },
-        success: {
-          DEFAULT: "#10B981",
-          soft: "rgba(16, 185, 129, 0.12)",
+
+        success: { DEFAULT: "var(--success)", soft: "var(--success-soft)" },
+        warning: { DEFAULT: "var(--warning)", soft: "var(--warning-soft)" },
+        danger:  { DEFAULT: "var(--danger)",  soft: "var(--danger-soft)"  },
+        info:    { DEFAULT: "var(--info)",    soft: "var(--info-soft)"    },
+
+        border: {
+          DEFAULT: "var(--border)",
+          soft:    "var(--border-soft)",
+          bright:  "var(--border-bright)",
+          accent:  "var(--border-accent)",
         },
-        warning: {
-          DEFAULT: "#F59E0B",
-          soft: "rgba(245, 158, 11, 0.12)",
-        },
-        danger: {
-          DEFAULT: "#EF4444",
-          soft: "rgba(239, 68, 68, 0.12)",
-        },
-        border: "rgba(255, 255, 255, 0.08)",
-        "border-bright": "rgba(255, 255, 255, 0.16)",
+      },
+      fontFamily: {
+        mono: ["ui-monospace", "Cascadia Code", "Fira Code", "monospace"],
       },
       borderRadius: {
         DEFAULT: "10px",
-        md: "14px",
-        lg: "18px",
-        xl: "22px",
-        "2xl": "26px",
+        md:  "12px",
+        lg:  "16px",
+        xl:  "20px",
+        "2xl": "24px",
+        "3xl": "32px",
+      },
+      boxShadow: {
+        sm:     "var(--shadow-sm)",
+        md:     "var(--shadow-md)",
+        lg:     "var(--shadow-lg)",
+        accent: "var(--glow-accent)",
       },
       animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-slow":  "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "fade-in":     "fadeIn 0.4s ease forwards",
+        "slide-up":    "slideUp 0.35s cubic-bezier(0.16,1,0.3,1) forwards",
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: "0" },
+          to:   { opacity: "1" },
+        },
+        slideUp: {
+          from: { opacity: "0", transform: "translateY(12px)" },
+          to:   { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      backgroundImage: {
+        "gradient-amber": "linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%)",
       },
     },
   },

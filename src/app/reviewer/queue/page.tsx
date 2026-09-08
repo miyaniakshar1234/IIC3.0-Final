@@ -12,11 +12,11 @@ import {
   FileText,
   User,
   GraduationCap,
-  Calendar,
-  Sparkles,
   Award,
   Filter,
-  Check
+  Check,
+  Zap,
+  BarChart3,
 } from 'lucide-react';
 
 interface SubmissionItem {
@@ -39,264 +39,181 @@ interface SubmissionItem {
 
 const SUBMISSIONS: SubmissionItem[] = [
   {
-    id: 'sub-sql-001',
-    student_name: 'Meera Patel',
-    student_program: 'MCA 2026',
-    student_institution: 'Demo College of Computing',
-    challenge_title: 'Explain Monthly Sales from Messy Dataset',
-    target_skill: 'SQL (Structured Query Language)',
-    required_level: 3,
-    weight: 35,
-    submitted_time_ago: '2 hours ago',
-    urgency_label: 'Needs Review (< 24h SLA)',
-    urgency_variant: 'amber',
-    status: 'pending',
-    evaluation_url: '/reviewer/evaluations/sub-sql-001',
+    id: 'sub-sql-001', student_name: 'Meera Patel', student_program: 'MCA 2026',
+    student_institution: 'Demo College of Computing', challenge_title: 'Explain Monthly Sales from Messy Dataset',
+    target_skill: 'SQL (Structured Query Language)', required_level: 3, weight: 35,
+    submitted_time_ago: '2 hours ago', urgency_label: 'Needs Review (< 24h SLA)', urgency_variant: 'amber',
+    status: 'pending', evaluation_url: '/reviewer/evaluations/sub-sql-001',
   },
   {
-    id: 'sub-html-002',
-    student_name: 'Aarav Sharma',
-    student_program: 'B.Tech CS 2026',
-    student_institution: 'Demo College of Computing',
-    challenge_title: 'Build Accessible Keyboard Navigation Flow',
-    target_skill: 'HTML/CSS & Accessibility (WCAG 2.2)',
-    required_level: 3,
-    weight: 25,
-    submitted_time_ago: '1 day ago',
-    urgency_label: 'Completed & Published',
-    urgency_variant: 'emerald',
-    status: 'completed',
-    evaluated_level: 3,
-    evaluated_date: 'Sep 07, 2026',
+    id: 'sub-html-002', student_name: 'Aarav Sharma', student_program: 'B.Tech CS 2026',
+    student_institution: 'Demo College of Computing', challenge_title: 'Build Accessible Keyboard Navigation Flow',
+    target_skill: 'HTML/CSS & Accessibility (WCAG 2.2)', required_level: 3, weight: 25,
+    submitted_time_ago: '1 day ago', urgency_label: 'Completed & Published', urgency_variant: 'emerald',
+    status: 'completed', evaluated_level: 3, evaluated_date: 'Sep 07, 2026',
     evaluation_url: '/reviewer/evaluations/sub-html-002',
   },
   {
-    id: 'sub-api-003',
-    student_name: 'Rohan Gupta',
-    student_program: 'MCA 2026',
-    student_institution: 'Demo College of Computing',
-    challenge_title: 'Robust REST Client with Exponential Backoff',
-    target_skill: 'API Integration & Resilience',
-    required_level: 2,
-    weight: 20,
-    submitted_time_ago: '2 days ago',
-    urgency_label: 'Completed & Published',
-    urgency_variant: 'emerald',
-    status: 'completed',
-    evaluated_level: 2,
-    evaluated_date: 'Sep 06, 2026',
-    evaluation_url: '/reviewer/evaluations/sub-api-003',
+    id: 'sub-api-003', student_name: 'Rohan Gupta', student_program: 'MCA 2026',
+    student_institution: 'Demo College of Computing', challenge_title: 'Robust REST Client with Exponential Backoff',
+    target_skill: 'API Integration & Resilience', required_level: 2, weight: 20,
+    submitted_time_ago: '3 hours ago', urgency_label: 'In Progress', urgency_variant: 'blue',
+    status: 'pending', evaluation_url: '/reviewer/evaluations/sub-api-003',
   },
 ];
 
 export default function ReviewerQueuePage() {
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
 
-  const filteredSubmissions = SUBMISSIONS.filter((item) => {
-    if (filter === 'all') return true;
-    return item.status === filter;
-  });
+  const visible = SUBMISSIONS.filter(s => filter === 'all' ? true : s.status === filter);
+  const pending = SUBMISSIONS.filter(s => s.status === 'pending').length;
+  const completed = SUBMISSIONS.filter(s => s.status === 'completed').length;
+
+  const urgencyStyle: Record<string, string> = {
+    amber:   'bg-warning/10 text-warning border-warning/25',
+    blue:    'bg-info/10 text-info border-info/25',
+    emerald: 'bg-success/10 text-success border-success/25',
+  };
 
   return (
     <AppShell>
-      <div className="space-y-8 max-w-6xl mx-auto">
-        {/* Header Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-zinc-900/90 via-zinc-900/50 to-zinc-950 border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5">
-          <div className="absolute -top-24 -right-24 w-72 h-72 bg-accent/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
-            <div className="space-y-1.5">
-              <div className="flex items-center space-x-2 text-xs font-mono font-bold text-accent uppercase tracking-wider">
-                <ClipboardCheck className="w-4 h-4 text-accent" />
-                <span>Verified Faculty Assessment Workspace</span>
+        {/* ── HEADER ── */}
+        <div className="pb-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="section-label mb-1">Reviewer Workspace</div>
+            <h1 className="text-2xl font-black text-text-primary">Evaluation Queue</h1>
+            <p className="text-xs text-text-muted font-mono mt-0.5">Dr. Alok Sharma · Faculty Evaluator · Demo College of Computing</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {pending > 0 && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning/10 border border-warning/30 text-warning text-xs font-bold">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {pending} Pending
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-zinc-100 tracking-tight">
-                Faculty Review Queue • Dr. Alok Sharma
-              </h1>
-              <p className="text-xs sm:text-sm text-zinc-400 font-light">
-                Department of Computer Science • Demo College of Computing
-              </p>
-            </div>
-
-            {/* Live Indicator */}
-            <div className="flex items-center space-x-2 self-start md:self-center px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-semibold text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Active Evaluator Session</span>
-            </div>
-          </div>
-
-          {/* Stat Pills */}
-          <div className="flex flex-wrap gap-3 pt-3 border-t border-white/10 relative z-10">
-            {/* Amber Pill: Pending */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-mono font-semibold shadow-[0_0_12px_rgba(245,158,11,0.12)]">
-              <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              <span>1 Pending Review</span>
-            </div>
-
-            {/* Emerald Pill: Semester Published */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-semibold shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>14 Reviews Published this Semester</span>
-            </div>
-
-            {/* Blue Pill: Turnaround SLA */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/30 text-xs font-mono font-semibold shadow-[0_0_12px_rgba(59,130,246,0.15)]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Turnaround SLA: &lt; 24 Hours</span>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Informational Banner */}
-        <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-5 flex items-start space-x-4 text-xs text-zinc-300 shadow-lg">
-          <div className="w-9 h-9 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0 mt-0.5 border border-accent/30 shadow-[0_0_12px_rgba(59,130,246,0.2)]">
-            <Award className="w-4 h-4" />
-          </div>
-          <div className="space-y-1">
-            <span className="font-bold text-zinc-100 text-sm block">
-              Human-in-the-Loop Integrity Principle
-            </span>
-            <p className="text-zinc-400 leading-relaxed font-light">
-              Every skill badge in ProofBridge is grounded in anchored rubric evaluation by a certified faculty member.
-              When you publish an evaluation, your qualitative rationale and level assessment atomically update the student&apos;s tamper-proof passport.
-            </p>
-          </div>
+        {/* ── STATS ── */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: 'Total Queue',  value: SUBMISSIONS.length, icon: ClipboardCheck, color: 'text-accent'  },
+            { label: 'Pending',      value: pending,            icon: Clock,          color: 'text-warning' },
+            { label: 'Completed',    value: completed,          icon: CheckCircle2,   color: 'text-success' },
+          ].map(({ label, value, icon: Icon, color }) => (
+            <div key={label} className="pb-card p-4 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="section-label text-[9px]">{label}</span>
+                <Icon className={`w-3.5 h-3.5 ${color}`} />
+              </div>
+              <div className={`metric-value text-3xl ${color}`}>{value}</div>
+            </div>
+          ))}
         </div>
 
-        {/* Filter Navigation */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <div className="flex space-x-2">
-            {[
-              { id: 'all', label: 'All Submissions', count: SUBMISSIONS.length },
-              { id: 'pending', label: 'Needs Review', count: 1 },
-              { id: 'completed', label: 'Completed', count: 2 },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id as any)}
-                className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
-                  filter === tab.id
-                    ? 'bg-accent text-white shadow-[0_0_12px_rgba(59,130,246,0.3)]'
-                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900/60'
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                    filter === tab.id
-                      ? 'bg-white/20 text-white'
-                      : 'bg-zinc-800 text-zinc-400'
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          <span className="text-xs font-mono text-zinc-400 hidden sm:inline-block">
-            Sorted by Urgency (Oldest submitted first)
-          </span>
+        {/* ── FILTER TABS ── */}
+        <div className="flex items-center gap-1 bg-surface p-1 rounded-xl border border-border w-fit">
+          {(['all', 'pending', 'completed'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+                filter === f
+                  ? 'bg-surface-raised text-text-primary border border-border-bright shadow-sm'
+                  : 'text-text-muted hover:text-text-primary'
+              }`}
+            >
+              {f} {f === 'pending' ? `(${pending})` : f === 'completed' ? `(${completed})` : `(${SUBMISSIONS.length})`}
+            </button>
+          ))}
         </div>
 
-        {/* Queue Cards */}
-        <div className="space-y-4">
-          {filteredSubmissions.map((item) => {
-            const isPending = item.status === 'pending';
+        {/* ── SUBMISSION CARDS ── */}
+        <div className="space-y-3">
+          {visible.map((sub) => (
+            <div key={sub.id} className="pb-card p-5 flex flex-col sm:flex-row sm:items-start gap-4 hover:border-border-bright transition-all group">
+              {/* Status dot */}
+              <div className="shrink-0 pt-0.5">
+                <div className={`w-2.5 h-2.5 rounded-full ${sub.status === 'pending' ? 'bg-warning animate-pulse-slow' : 'bg-success'}`} />
+              </div>
 
-            return (
-              <div
-                key={item.id}
-                className={`rounded-2xl border p-6 shadow-xl transition-all space-y-4 ${
-                  isPending
-                    ? 'bg-gradient-to-br from-zinc-900/90 to-zinc-950 border-accent/40 shadow-[0_0_30px_rgba(59,130,246,0.08)]'
-                    : 'bg-zinc-900/60 backdrop-blur-xl border-white/10 hover:border-white/20'
-                }`}
-              >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-                  {/* Left: Info */}
-                  <div className="space-y-2.5 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      {/* Urgency Pill */}
-                      <span
-                        className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold border ${
-                          item.urgency_variant === 'amber'
-                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.15)]'
-                            : item.urgency_variant === 'emerald'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                            : 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-                        }`}
-                      >
-                        <Clock className="w-3 h-3" />
-                        <span>{item.urgency_label}</span>
-                      </span>
+              {/* Main info */}
+              <div className="flex-1 space-y-2 min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${urgencyStyle[sub.urgency_variant]}`}>
+                    {sub.urgency_label}
+                  </span>
+                  <span className="text-[10px] text-text-muted font-mono">{sub.submitted_time_ago}</span>
+                </div>
 
-                      {/* Target Skill */}
-                      <span className="text-xs font-mono font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1 rounded-full">
-                        {item.target_skill}
-                      </span>
+                <h3 className="text-sm font-bold text-text-primary leading-snug">{sub.challenge_title}</h3>
 
-                      {/* Required Level */}
-                      <span className="text-xs font-mono text-zinc-400">
-                        Required: Level {item.required_level}
-                      </span>
-                    </div>
+                <div className="flex flex-wrap gap-3 text-[11px] text-text-muted">
+                  <span className="flex items-center gap-1"><User className="w-3 h-3" /> {sub.student_name} · {sub.student_program}</span>
+                  <span className="flex items-center gap-1"><GraduationCap className="w-3 h-3" /> {sub.student_institution}</span>
+                </div>
 
-                    {/* Challenge Title */}
-                    <h2 className="text-xl font-bold text-zinc-100">
-                      {item.challenge_title}
-                    </h2>
-
-                    {/* Student Metadata */}
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400 pt-1 font-mono">
-                      <span className="flex items-center space-x-1.5 font-bold text-zinc-200">
-                        <User className="w-4 h-4 text-accent" />
-                        <span>{item.student_name}</span>
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center space-x-1">
-                        <GraduationCap className="w-3.5 h-3.5 text-zinc-400" />
-                        <span>{item.student_program} • {item.student_institution}</span>
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center space-x-1 text-zinc-400">
-                        <Calendar className="w-3.5 h-3.5 text-zinc-400" />
-                        <span>Submitted {item.submitted_time_ago}</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Right: Actions */}
-                  <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end justify-between gap-3 shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-white/10">
-                    {isPending ? (
-                      <Link
-                        href={item.evaluation_url}
-                        className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-accent text-white font-bold text-xs hover:bg-accent-hover shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-[1.02] transition-all"
-                      >
-                        <span>Evaluate Submission</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    ) : (
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl flex items-center space-x-1.5">
-                          <Check className="w-3.5 h-3.5" />
-                          <span>Awarded Level {item.evaluated_level}</span>
-                        </span>
-                        <Link
-                          href={item.evaluation_url}
-                          className="px-3.5 py-2 rounded-xl border border-white/10 text-xs font-mono font-semibold text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
-                        >
-                          Review Again
-                        </Link>
-                      </div>
-                    )}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="pb-badge"><Award className="w-3 h-3 text-accent" />{sub.target_skill}</span>
+                  <span className="pb-badge">Required L{sub.required_level} · Weight {sub.weight}%</span>
+                  {sub.evaluated_level && (
+                    <span className="pb-badge pb-badge-accent"><Check className="w-3 h-3" />L{sub.evaluated_level} · {sub.evaluated_date}</span>
+                  )}
                 </div>
               </div>
-            );
-          })}
+
+              {/* CTA */}
+              <div className="shrink-0">
+                <Link
+                  href={sub.evaluation_url}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    sub.status === 'pending'
+                      ? 'pb-btn-primary py-2 px-4 text-xs'
+                      : 'pb-btn-ghost py-2 px-4 text-xs'
+                  }`}
+                >
+                  {sub.status === 'pending' ? (
+                    <><Zap className="w-3.5 h-3.5" /> Evaluate Now <ArrowRight className="w-3.5 h-3.5" /></>
+                  ) : (
+                    <><FileText className="w-3.5 h-3.5" /> View Review</>
+                  )}
+                </Link>
+              </div>
+            </div>
+          ))}
+
+          {visible.length === 0 && (
+            <div className="pb-card p-12 text-center">
+              <BarChart3 className="w-10 h-10 text-text-muted mx-auto mb-3 opacity-40" />
+              <p className="text-text-secondary font-semibold">Queue is clear</p>
+              <p className="text-text-muted text-xs mt-1">All submissions in this filter have been evaluated.</p>
+            </div>
+          )}
         </div>
+
+        {/* How rubric scoring works */}
+        <div className="pb-card p-5 space-y-3">
+          <div className="section-label">Rubric Scoring Reference</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[
+              { level: 1, name: 'Novice',     desc: 'Needs scaffolding, basic concepts attempted' },
+              { level: 2, name: 'Developing', desc: 'Core concept understood, gaps remain' },
+              { level: 3, name: 'Proficient', desc: 'Solid execution, meets job standard' },
+              { level: 4, name: 'Expert',     desc: 'Beyond expectations, can mentor others' },
+            ].map(({ level, name, desc }) => (
+              <div key={level} className="bg-canvas rounded-xl p-3 border border-border space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="metric-value text-lg text-accent">L{level}</span>
+                  <span className="text-xs font-bold text-text-primary">{name}</span>
+                </div>
+                <p className="text-[10px] text-text-muted leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </AppShell>
   );
