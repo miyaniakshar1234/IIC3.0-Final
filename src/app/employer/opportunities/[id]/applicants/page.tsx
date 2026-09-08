@@ -24,178 +24,10 @@ import {
   SlidersHorizontal
 } from 'lucide-react';
 
-const DEMO_CANDIDATES: CandidateSnapshotData[] = [
-  {
-    application_id: '70000000-0000-0000-0000-000000000001',
-    version: 1,
-    student_name: 'Meera Patel',
-    student_program: 'MCA 2026',
-    student_institution: 'Manipal University Jaipur (MUJ)',
-    opportunity_title: 'Junior Data Analyst Intern',
-    status: 'submitted',
-    applied_at: '2026-09-08T15:10:00Z',
-    scoring_version: 'coverage-v1',
-    reviewed_coverage: 96,
-    skills: [
-      {
-        skill_id: '10000000-0000-0000-0000-000000000001',
-        skill_name: 'SQL Querying & Data Cleaning',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 35,
-        contribution: 35,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-08T16:00:00Z',
-        evidence_title: 'Cleaned Monthly Sales Pipeline & Cohort Aggregates',
-        criterion_title: 'Query Logic, Filtering & Multi-Table Aggregation',
-        rationale:
-          'Excellent use of CTEs and window LAG for month-over-month growth. Handled null division with NULLIF and validated sentinel values properly.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000002',
-        skill_name: 'Spreadsheets & Pivot Modeling',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 25,
-        contribution: 25,
-        reviewer_name: 'Prof. Anita Desai',
-        reviewed_at: '2026-09-05T10:30:00Z',
-        evidence_title: 'E-Commerce Funnel & Sensitivity Analysis',
-        criterion_title: 'Dynamic Formulas, VLOOKUP/XLOOKUP & Pivot Tables',
-        rationale:
-          'Built parameterized scenario models with clean input separation and documented assumptions.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000003',
-        skill_name: 'Written Technical Communication',
-        required_level: 4,
-        reviewed_level: 3,
-        weight: 16,
-        contribution: 12,
-        reviewer_name: 'Prof. Anita Desai',
-        reviewed_at: '2026-09-05T11:00:00Z',
-        evidence_title: 'Technical Executive Memo on Churn Reduction',
-        criterion_title: 'Clarity, Structure & Audience Adaptation',
-        rationale:
-          'Clear executive structure with bullet points and risk disclosures. Level 4 requires broader competitor benchmarking.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000004',
-        skill_name: 'Analytical Reasoning & Trade-offs',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 24,
-        contribution: 24,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-08T16:00:00Z',
-        evidence_title: 'Cleaned Monthly Sales Pipeline & Cohort Aggregates',
-        criterion_title: 'Data Integrity & Edge-Case Justification',
-        rationale:
-          'Thorough contribution statement explaining regex extraction for customer IDs and transparently detailing indexing trade-offs.',
-      },
-    ],
-    contribution_statement:
-      'I wrote all the SQL queries independently using PostgreSQL 16 syntax. I used Claude 3.5 Sonnet to help construct the initial regex pattern to extract cleaned digits from inconsistent phone and ID fields, which I then manually tested and adapted. If I had more time, I would add partition pruning and composite indexes on (transaction_date, customer_id) for datasets exceeding 10M rows.',
-  },
-  {
-    application_id: '70000000-0000-0000-0000-000000000002',
-    version: 1,
-    student_name: 'Aarav Sharma',
-    student_program: 'B.Tech CS 2026',
-    student_institution: 'Manipal University Jaipur (MUJ)',
-    opportunity_title: 'Junior Data Analyst Intern',
-    status: 'shortlisted',
-    applied_at: '2026-09-07T14:20:00Z',
-    scoring_version: 'coverage-v1',
-    reviewed_coverage: 75,
-    skills: [
-      {
-        skill_id: '10000000-0000-0000-0000-000000000001',
-        skill_name: 'SQL Querying & Data Cleaning',
-        required_level: 3,
-        reviewed_level: 2,
-        weight: 35,
-        contribution: 23,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-06T15:00:00Z',
-        evidence_title: 'Basic Hospital Patient Records Aggregation',
-        criterion_title: 'Aggregation and Filtering',
-        rationale: 'Correct standard queries but missed null revenue handling.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000002',
-        skill_name: 'Spreadsheets & Pivot Modeling',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 25,
-        contribution: 25,
-        reviewer_name: 'Prof. Anita Desai',
-        reviewed_at: '2026-09-04T12:00:00Z',
-        evidence_title: 'Budget Forecast Sheet',
-        criterion_title: 'Formulas & Pivots',
-        rationale: 'Clean workbook with automated formulas.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000004',
-        skill_name: 'Analytical Reasoning & Trade-offs',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 24,
-        contribution: 24,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-06T15:30:00Z',
-        evidence_title: 'Basic Hospital Patient Records Aggregation',
-        criterion_title: 'Analytical Justification',
-        rationale: 'Thoughtful explanation of patient record triage rules.',
-      },
-    ],
-    contribution_statement: 'Worked on Google Sheets and MySQL workbench directly.',
-  },
-  {
-    application_id: '70000000-0000-0000-0000-000000000003',
-    version: 1,
-    student_name: 'Kavita Iyer',
-    student_program: 'MCA 2026',
-    student_institution: 'Manipal University Jaipur (MUJ)',
-    opportunity_title: 'Junior Data Analyst Intern',
-    status: 'submitted',
-    applied_at: '2026-09-08T09:45:00Z',
-    scoring_version: 'coverage-v1',
-    reviewed_coverage: 52,
-    skills: [
-      {
-        skill_id: '10000000-0000-0000-0000-000000000002',
-        skill_name: 'Spreadsheets & Pivot Modeling',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 25,
-        contribution: 25,
-        reviewer_name: 'Prof. Anita Desai',
-        reviewed_at: '2026-09-03T16:00:00Z',
-        evidence_title: 'Sales Dashboard',
-        criterion_title: 'Pivot Charts',
-        rationale: 'Solid visualization and formulas.',
-      },
-      {
-        skill_id: '10000000-0000-0000-0000-000000000004',
-        skill_name: 'Analytical Reasoning & Trade-offs',
-        required_level: 3,
-        reviewed_level: 3,
-        weight: 24,
-        contribution: 24,
-        reviewer_name: 'Dr. Sharma',
-        reviewed_at: '2026-09-03T17:00:00Z',
-        evidence_title: 'Business Memo',
-        criterion_title: 'Problem Framing',
-        rationale: 'Clear rationale and structure.',
-      },
-    ],
-    contribution_statement: 'Spreadsheet models created for classroom project.',
-  },
-];
+
 
 export default function CandidateScreeningPage({ params }: { params: { id: string } }) {
-  const [candidates, setCandidates] = useState<CandidateSnapshotData[]>(DEMO_CANDIDATES);
+  const [candidates, setCandidates] = useState<CandidateSnapshotData[]>([]);
   const [selectedCandidate, setSelectedCandidate] = useState<CandidateSnapshotData | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -205,49 +37,26 @@ export default function CandidateScreeningPage({ params }: { params: { id: strin
 
   useEffect(() => {
     let isMounted = true;
-    async function loadLiveState() {
+    async function loadApplicants() {
       try {
-        const res = await fetch('/api/v1/state', { cache: 'no-store' });
+        const res = await fetch(`/api/v1/opportunities/${params.id}/applicants`, { cache: 'no-store' });
         if (res.ok) {
           const json = await res.json();
           if (isMounted && json.data) {
-            const hasSql = Boolean(json.data.has_verified_sql);
-            setCandidates((prev) =>
-              prev.map((c) => {
-                if (c.student_name === 'Meera Patel') {
-                  return {
-                    ...c,
-                    reviewed_coverage: hasSql ? 96 : 61,
-                    skills: c.skills.map((s) => {
-                      if (s.skill_name.includes('SQL')) {
-                        return {
-                          ...s,
-                          reviewed_level: hasSql ? 3 : 0,
-                          contribution: hasSql ? 35 : 0,
-                          reviewer_name: hasSql ? 'Dr. Sharma' : 'Pending Review',
-                          reviewed_at: hasSql ? (json.data.sql_reviewed_at || '2026-09-08T16:00:00Z') : 'Pending',
-                        };
-                      }
-                      return s;
-                    }),
-                  };
-                }
-                return c;
-              })
-            );
+            setCandidates(json.data);
           }
         }
       } catch (err) {
-        console.warn('Could not load live state for applicants:', err);
+        console.warn('Could not load live applicants:', err);
       }
     }
-    loadLiveState();
-    const interval = setInterval(loadLiveState, 4000);
+    loadApplicants();
+    const interval = setInterval(loadApplicants, 4000);
     return () => {
       isMounted = false;
       clearInterval(interval);
     };
-  }, []);
+  }, [params.id]);
 
   const handleOpenDrawer = (candidate: CandidateSnapshotData) => {
     setSelectedCandidate(candidate);
